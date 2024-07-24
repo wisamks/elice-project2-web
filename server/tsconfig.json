@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "lib": [
+          "ESNext"
+        ],
+        "target": "ESNext",
+        "module": "CommonJS",
+        "typeRoots": ["node_modules/@types"],
+        "moduleResolution": "node",
+        "rootDir": "./src",                                 
+        "outDir": "./dist",
+        "strict": true,
+        "baseUrl": "src",
+        "paths": {
+          "@/*": ["*"],
+        },
+        "allowJs": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true
+    },
+    "include": ["src/**/*.ts", "src/**/*.json", ".env"],
+    "exclude": ["./node_modules", "**/*.spec.ts", "logs"],
+    "ts-node": {
+          "esm": true
+        }
+}
