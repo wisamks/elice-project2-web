@@ -27,3 +27,7 @@ img, input, button{
 a{
     text-decoration: none;
 }
+
+#root{
+    min-width: 1460px;
+}
