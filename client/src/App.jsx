@@ -1,11 +1,24 @@
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
+
 import Footer from "./components/commen/Footer";
+
+import Home from './pages/home/Home';
+import SignIn from './pages/account/SignIn';
+import SignUp from './pages/account/SignUp';
 
 function App() {
   return (
-    <div className="App">
-      샘플 텍스트
-      <Footer />
-    </div>
+    <RecoilRoot>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </RecoilRoot>
   );
 }
 
