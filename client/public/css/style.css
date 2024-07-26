@@ -1,0 +1,33 @@
+:root {
+    --primary-color: #00A040;
+    --secondary-color: #8BC64A;
+    --point-color: #ED1C24;
+    --font-family: Pretendard;
+  }
+
+* {
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: var(--font-family);
+    font-size: 14px;
+    line-height: 20px;
+    color: #222;
+}
+
+ol, ul, li{
+    list-style: none;
+}
+
+img, input, button{
+    vertical-align: top;
+}
+
+a{
+    text-decoration: none;
+}
+
+#root{
+    min-width: 1460px;
+}
