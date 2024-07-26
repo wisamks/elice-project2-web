@@ -15,6 +15,9 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
+//라우터
+app.use('/api/auth', authRouter);
+
 app.get('/', (req: Request, res: Response) => {
     res.send('hello typescript');
 })
