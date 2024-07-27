@@ -7,6 +7,7 @@ export const userState = atom({
         nickname: '',
         email: '',
         phone: '',
+        profile: '',
         isAuthenticated: false,
         platform: '',
     },
