@@ -39,19 +39,17 @@ const AuthenticatedHeader = () => {
             <div className="header-right">
               <div className={`search ${isSearchOpen ? "open" : ""}`}>
                 {isSearchOpen && (
-                  <>
                     <div className="search">
                       <input className="search-input" type="text" placeholder="검색어를 입력하세요." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                      <img className="search-icon-input" src="search-icon.png" alt="search" />
-                      <img className="clear-icon" src="clear-icon.png" alt="clear" onClick={clearSearch} /> 
+                      <img className="search-icon-input" src="/images/search-icon.png" alt="search" />
+                      <img className="clear-icon" src="/images/clear-icon.png" alt="clear" onClick={clearSearch} /> 
                     </div>
-                  </>
                 )}
-                      <img className="search-icon" src="search-icon.png" alt="search" onClick={toggleSearch}/>
+                      <img className="search-icon" src="/images/search-icon.png" alt="search" onClick={toggleSearch}/>
 
               </div>
               <div className="notification">
-                <img className="alram-icon" src="alram.png" alt="알림" />
+                <img className="alram-icon" src="/images/alram.png" alt="알림" />
                 <span className="notification-count">0</span>
               </div>
               <div className="dropdown">
