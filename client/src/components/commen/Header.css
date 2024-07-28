@@ -74,16 +74,16 @@
 }
 
 .search-icon {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     transform: translateY(-1px);
     transform: translateX(-125px);
     cursor: pointer;
 }
 
 .clear-icon {
-    width: 15px;
-    height: 15px;
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -97,8 +97,8 @@
 }
 
 .alram-icon {
-    width: 23px;
-    height: 23px;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
 }
 
