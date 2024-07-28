@@ -29,15 +29,13 @@ const UnauthenticatedHeader = () => {
             <div className="header-right">
               <div className={`search ${isSearchOpen ? "open" : ""}`}>
                 {isSearchOpen && (
-                  <>
                     <div className="search">
                       <input className="search-input" type="text" placeholder="검색어를 입력하세요." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                      <img className="search-icon-input" src="search-icon.png" alt="search" />
-                      <img className="clear-icon" src="clear-icon.png" alt="clear" onClick={clearSearch}/> 
+                      <img className="search-icon-input" src="/images/search-icon.png" alt="search" />
+                      <img className="clear-icon" src="/images/clear-icon.png" alt="clear" onClick={clearSearch}/> 
                     </div>
-                  </>
                 )}
-                      <img className="search-icon" src="search-icon.png" alt="search" onClick={toggleSearch}/>
+                      <img className="search-icon" src="/images/search-icon.png" alt="search" onClick={toggleSearch}/>
 
               </div>
                 <Link to="/" className="auth-button">로그인/회원가입</Link>
