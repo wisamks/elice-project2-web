@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
@@ -6,13 +7,13 @@ const Footer = () => {
             <div className="footer-wrap">
                 <div className="f-menu">
                     <ul>
-                        <li><a href="#">회사소개</a></li>
-                        <li><a href="#">중고거래</a></li>
-                        <li><a href="#">의류수거함 위치</a></li>
-                        <li><a href="#">의류수거함 인증</a></li>
-                        <li><a href="#">리폼정보</a></li>
-                        <li><a href="#">공지사항</a></li>
-                        <li><a href="#">제휴문의</a></li>
+                        <li><Link to="#">회사소개</Link></li>
+                        <li><Link to="#">중고거래</Link></li>
+                        <li><Link to="#">의류수거함 위치</Link></li>
+                        <li><Link to="#">의류수거함 인증</Link></li>
+                        <li><Link to="#">리폼정보</Link></li>
+                        <li><Link to="#">공지사항</Link></li>
+                        <li><Link to="#">제휴문의</Link></li>
                     </ul>
                 </div>
                 <div className="f-corp-info">
@@ -27,7 +28,7 @@ const Footer = () => {
                     <p>
                         <span className='tag'>사업자번호</span>
                         <span className='content'>000-00-00000</span>
-                        <span className='check-corp'><a href='#'>사업자확인</a></span>
+                        <span className='check-corp'><a href='http://www.ftc.go.kr/bizCommPop.do?wrkr_no=0000000000' target='_blank'>사업자확인</a></span>
                     </p>
                     <p>
                         <span className='tag'>주소</span>
@@ -35,15 +36,15 @@ const Footer = () => {
                     </p>
                     <p>
                         <span className='tag'>대표전화</span>
-                        <span className='content'>1544-0000</span>
+                        <span className='content'><a href='tel:1544-0000'>1544-0000</a></span>
                     </p>
                     <p>
                         <span className='tag'>고객문의</span>
-                        <span className='content'>cs@elice.com</span>
+                        <span className='content'><a href='mailto:cs@elice.com'>cs@elice.com</a></span>
                     </p>
                     <p>
                         <span className='tag'>개인정보관리책임자</span>
-                        <span className='content'>김토끼(rabbit@elice.com)</span>
+                        <span className='content'>김토끼(<a href='mailto:rabbit@elice.com'>rabbit@elice.com</a>)</span>
                     </p>
                 </div>
                 <div className="f-policy-menu">
