@@ -8,8 +8,9 @@
     gap: 12px;
 }
 
-.signin-btns p{
+.signin-btns a{
     position: relative;
+    display: block;
     height: 60px;
     border-radius: 8px;
 
@@ -33,9 +34,10 @@
 .signin-btn-google{
     box-sizing: border-box;
     border: 1px solid #ddd;
+    color: #222;
 }
 
-.signin-btns p img{
+.signin-btns a img{
     position: absolute;
     top: 18px;
     left: 20px;
