@@ -1,11 +1,11 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
+
+import { loginController } from '../controllers/authController';
 
 const router = Router();
 
 // 로그인
-router.post('/login', (req: Request, res: Response) => {
-    res.send('로그인');
-});
+router.post('/login', loginController)
 
 // 회원가입 (비활성화) - 확인필요
 router.post('/join', (req: Request, res: Response) => {

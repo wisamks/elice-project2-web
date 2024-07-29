@@ -10,6 +10,7 @@ const dbConfig = {
     port: 3306,
     password: process.env.MYSQL_PW,
     database: process.env.MYSQL_NAME,
+    waitForConnections: true,
 };
 
 const pool = mysql.createPool(dbConfig);
