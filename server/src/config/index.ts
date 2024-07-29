@@ -1,5 +1,5 @@
 // 설정
-import pool from './db';
+import pool from '@_config/db';
 import dotenv from 'dotenv';
 dotenv.config();
 

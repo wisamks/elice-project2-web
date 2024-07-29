@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+// authService를 모아두는 클래스
 class authService {
     static async loginService (token: string, sns_code: string) {
         try {

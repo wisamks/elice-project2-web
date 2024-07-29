@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 
-import { loginController } from '../controllers/authController';
+import { loginController } from '@_controllers/authController';
 
 const router = Router();
 
