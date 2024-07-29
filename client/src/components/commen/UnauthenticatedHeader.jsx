@@ -38,7 +38,7 @@ const UnauthenticatedHeader = () => {
                       <img className="search-icon" src="/images/search-icon.png" alt="search" onClick={toggleSearch}/>
 
               </div>
-                <Link to="/" className="auth-button">로그인/회원가입</Link>
+                <Link to="sign-in" className="auth-button">로그인/회원가입</Link>
             </div>
           </div>
         </header>
