@@ -11,8 +11,12 @@ const UnauthenticatedHeader = () => {
     setIsSearchOpen(!isSearchOpen);
   };
 
-  const clearSearch = () => {
+  const handleClear = () => {
     setSearchTerm("");
+  };
+
+  const handleSearchTermChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
     return (
@@ -31,15 +35,15 @@ const UnauthenticatedHeader = () => {
               <div className={`search ${isSearchOpen ? "open" : ""}`}>
                 {isSearchOpen && (
                     <div className="search">
-                      <input className="search-input" type="text" placeholder="검색어를 입력하세요." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                      <input className="search-input" type="text" placeholder="검색어를 입력하세요." value={searchTerm} onChange={handleSearchTermChange} />
                       <img className="search-icon-input" src="/images/search-icon.png" alt="search" />
-                      <img className="clear-icon" src="/images/clear-icon.png" alt="clear" onClick={clearSearch}/> 
+                      <img className="clear-icon" src="/images/clear-icon.png" alt="취소" onClick={handleClear}/> 
                     </div>
                 )}
-                      <img className="search-icon" src="/images/search-icon.png" alt="search" onClick={toggleSearch}/>
+                <img className="search-icon" src="/images/search-icon.png" alt="검색" onClick={toggleSearch}/>
 
               </div>
-                <Link to="sign-in" className="auth-button">로그인/회원가입</Link>
+                <Link to="/sign-in" className="auth-button">로그인/회원가입</Link>
             </div>
           </div>
         </header>
