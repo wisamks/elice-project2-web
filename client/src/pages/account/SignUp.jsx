@@ -30,7 +30,7 @@ const SignUp = () => {
         }
         //프론트 측 유효성 검사 통과 후 백엔드 측에 닉네임 중복에 대한 유효성 검사 요청
         try {
-            const res = await fetch('/api/', {
+            const res = await fetch('http://localhost:8080/api/auth/nickname', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ const SignUp = () => {
         const isAvailable = await checkNickname();
         if (isAvailable) {
             try {
-                const res = await fetch('/api/auth/join', {
+                const res = await fetch('http://localhost:8080/api/auth/join', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
