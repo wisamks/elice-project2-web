@@ -4,8 +4,8 @@ import authService from '@_services/authService';
 
 const loginController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { token, sns_code } = req.body;
-        const user: any = await authService.loginService(token, sns_code);
+        const { code, sns_code } = req.body;
+        const user: any = await authService.loginService(code, sns_code);
         // 미작성: user 정보를 활용해서 db에서 유저를 찾기. 아마도 sns_code와 email 조합이 가능할 듯.
         // 미작성: 유저를 못 찾았다면 우선 유저 생성
         // 미작성: 유저 id를 가져와서 토큰을 만들 때 집어 넣기

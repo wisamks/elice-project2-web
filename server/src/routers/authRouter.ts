@@ -4,7 +4,7 @@ import { loginController } from '@_controllers/authController';
 
 const router = Router();
 
-// 로그인
+// 로그인 
 router.post('/login', loginController)
 
 // 회원가입 (비활성화) - 확인필요
