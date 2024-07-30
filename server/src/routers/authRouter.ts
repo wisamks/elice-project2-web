@@ -1,14 +1,14 @@
 import { Router, Request, Response, NextFunction } from 'express';
 
-import { loginController } from '@_controllers/authController';
+import authController from '@_controllers/authController';
 
 const router = Router();
 
 // 로그인 
-router.post('/login', loginController);
+router.post('/login', authController.loginController);
 
 // 닉네임 중복 확인
-// router.post('/nickname', nicknameController);
+router.post('/nickname', authController.nicknameController);
 
 // 회원가입 (비활성화) - 확인필요
 router.post('/join', (req: Request, res: Response) => {
