@@ -7,7 +7,7 @@ export const signInController = async (data) => {
         method: 'POST',
         headers:{
             'Content-Type' : 'application/json',
-            'Bearer' : 'data.accessToken',
+            'Authorization': `Bearer ${data.accessToken}`,
         },
         body: JSON.stringify(data)
     });
