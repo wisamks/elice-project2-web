@@ -3,7 +3,7 @@ export type SnsCode = 'google' | 'naver' ;              // snscode 서비스단�
 export interface User {
     id: number;            // readonly?
     email: string;
-    nickname: string | null;            // oauth 후 회원가입 하면서 추가 == 초기 null
+    nickname: string;            // oauth 후 회원가입 하면서 추가 == 초기 null
     image: string | null;       
     name: string;
     snsCode: SnsCode;
@@ -18,6 +18,15 @@ export interface OAuthUserInfo{
     name: string;
     picture?: string,   
     snsCode: SnsCode;        
+}
+
+// joinUser
+export interface JoinUser {
+    email: string;
+    name: string;
+    image?: string;
+    nickname: string;
+    snsCode: SnsCode;
 }
 
 // db에서 자동 생성되는 id, timestamp제외(omit)

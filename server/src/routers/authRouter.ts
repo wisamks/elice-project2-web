@@ -11,9 +11,7 @@ router.post('/login', authController.loginController);
 router.post('/nickname', authController.nicknameController);
 
 // 회원가입 (비활성화) - 확인필요
-router.post('/join', (req: Request, res: Response) => {
-    res.send('회원가입');
-});
+router.post('/join', authController.joinController);
 
 // 로그아웃
 router.post('/logout', (req: Request, res: Response) => {

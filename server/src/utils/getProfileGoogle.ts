@@ -21,19 +21,17 @@ const getProfileGoogle = async (code: string) => {
     
     const accessToken = tokens.access_token;
     
-    console.log(accessToken);
     const response = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
       });
     const profile:any = response.data;
-    console.log(profile);
     return {
-        name: profile.name,
-        email: profile.email,
-        image: profile.picture,
-        // phone: profile.phone,
+        name: profile.name as string,
+        email: profile.email as string,
+        image: profile.picture as string|undefined,
+        snsCode: 'google',
     };
 }
 

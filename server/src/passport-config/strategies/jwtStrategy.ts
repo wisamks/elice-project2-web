@@ -1,14 +1,22 @@
-import {Strategy as JwtStrategy, ExtractJwt, StrategyOptions} from 'passport-jwt';
+import {Strategy as JwtStrategy, StrategyOptions} from 'passport-jwt';
 import jwt from 'jsonwebtoken';
+import {Request} from 'express';
 
 import {jwtAccessTokenSecret} from '@_config';
 
+const cookieExtractor = (req: Request) => {
+  if (req && req.cookies) {
+    console.log(req.cookies.accessToken);
+    return req.cookies.accessToken;
+  }
+  return null;
+}
+
 const opts: StrategyOptions = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: cookieExtractor,
   secretOrKey: jwtAccessTokenSecret,
 };
 
 export default new JwtStrategy(opts, (jwt_payload, done) => {
-  const user = jwt.verify(jwt_payload.accessToken, jwtAccessTokenSecret);
-  return done(null, user);
+  return done(null, {userId: jwt_payload.userId});
 });

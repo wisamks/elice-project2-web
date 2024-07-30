@@ -22,12 +22,11 @@ const getProfileNaver = async (code: string) => {
     
     const result:any = profileResponse.data;
     const profile = result.response;
-    console.log(profile);
     return {
         name: profile.name,
         email: profile.email,
         image: profile.profile_image,
-        phone: profile.mobile,
+        snsCode: 'naver',
     };
 }
 
