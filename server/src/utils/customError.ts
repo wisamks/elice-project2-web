@@ -41,6 +41,16 @@ export class ForbiddenError extends Error {
     }
 }
 
+export class NotFoundError extends Error {
+    statusCode: number;
+
+    constructor(message: string) {
+        super(message);
+        this.statusCode = 404;
+        this.name = 'NotFoundError';
+    }
+}
+
  // ConflictError
  // 현재 리소스 상태와 충돌하여 요청을 완료할 수 없는 경우 발생
  // 예시 : 닉네임 등 이미 존재하는 데이터가 있을 때 사용

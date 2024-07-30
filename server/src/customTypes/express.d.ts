@@ -7,8 +7,5 @@ declare global {
 }
 
 export interface User {
-    name: string;
-    email: string;
-    nickname?: string;
-    phone?: string;
+    userId: number;
 }

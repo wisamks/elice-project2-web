@@ -39,14 +39,11 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 
 // 에러 핸들링 미들웨어
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error(err);
-
-    // 사용자에게는 일반적인 에러 메시지 전달
-    res.status(500).json({
-        status: 'error',
-        message: '에러 발생'
-    });
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (err.statusCode >= 500 || !err.statusCode) {
+        console.error(err);
+    }
+    return res.status(err.statusCode).json({ error: err.message });
 });
 
 

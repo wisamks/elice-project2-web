@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 import { setAccessToken } from '@_utils';
 import authService from '@_services/authService';
 import UserModel from '@_models/userModel';
-import { ConflictError } from '@_/utils/customError';
-import { clientDomain } from '@_/config';
+import { ConflictError, InternalServerError, UnauthorizedError } from '@_/utils/customError';
+import { clientDomain, jwtAccessTokenSecret } from '@_/config';
 import { SnsCode } from '@_/customTypes/userType';
+import { User } from '@_customTypes/express';
 
 class authController {
     // oauth 로그인, 유저가 없다면 회원가입하게 만들기
@@ -52,6 +54,30 @@ class authController {
             const accessToken = authService.joinService(nickname, name, email, image, snsCode as SnsCode);
             res.cookie('accessToken', accessToken, {maxAge: 3600000, httpOnly: true});
             return res.status(303).redirect(clientDomain);
+        } catch(err) {
+            return next(err);
+        }
+    }
+    // 로그아웃
+    static async logoutController (req: Request, res: Response, next: NextFunction) {
+        try {
+            authService.logoutService(res);
+            if (req.cookies.accessToken) {
+                throw new InternalServerError('로그아웃 중 문제가 발생하였습니다.');
+            }
+            return res.status(204).end();
+        } catch(err) {
+            return next(err);
+        }
+    }
+    // 회원 탈퇴
+    static async deleteController (req: Request, res: Response, next: NextFunction) {
+        try {
+            if (typeof(req.user) === 'undefined') {
+                throw new UnauthorizedError('로그인이 필요합니다.');
+            }
+            const currentUser: User = req.user;
+            authService.deleteService(currentUser.userId);
         } catch(err) {
             return next(err);
         }

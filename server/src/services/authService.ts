@@ -3,6 +3,7 @@ import UserModel from '@_models/userModel';
 import { InternalServerError } from '@_/utils/customError';
 import { setAccessToken } from '@_utils';
 import { SnsCode } from '@_/customTypes/userType';
+import {Response} from 'express';
 
 // authService를 모아두는 클래스
 class authService {
@@ -28,6 +29,16 @@ class authService {
             throw new InternalServerError('유저를 생성하는 데 실패했습니다.');
         }
         return setAccessToken(createdUser.id);
+    }
+    // 로그아웃 서비스
+    static async logoutService (res: Response) {
+        // accessToken 삭제
+        res.clearCookie('accessToken');
+        return;
+    }
+    // 회원탈퇴 서비스
+    static async deleteService (userId: number) {
+        await UserModel.softDelete(userId);
     }
 }
 
