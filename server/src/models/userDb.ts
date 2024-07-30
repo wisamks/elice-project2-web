@@ -26,11 +26,6 @@ class UserDb {
         }
     }
 
-    // 쿼리문 실행
-    // protected => userDb 클래스 + 상속 클래스에서만 접근가능
-    // Promise<any> 아무 타입값 반환 가능
-    // connection으로 db연결, execute로 결과 반환
-    // finally는 예외 발생과 관계없이 실행
     protected static async query(sql: string, values: any[] = []): Promise<any> {
         const connection = await this.connectionPromise;            //연결 connection으로 가져오기
         try {
