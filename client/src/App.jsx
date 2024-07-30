@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
+
+import UnauthenticatedHeader from "./components/common/UnauthenticatedHeader";
+import AuthenticateHeader from "./components/common/AuthenticatedHeader";
+import Footer from "./components/common/Footer";
+
+import Home from './pages/home/Home';
+import SignIn from './pages/account/SignIn';
+import SignUp from './pages/account/SignUp';
+import GoogleCallback from './components/account/callback/GoogleCallback';
+import NaverCallback from './components/account/callback/NaverCallback';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <RecoilRoot>
+      <Router>
+        <UnauthenticatedHeader />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/oauth2callback/google" element={<GoogleCallback />} />
+          <Route path="/oauth2callback/naver" element={<NaverCallback />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </RecoilRoot>
   );
 }
 
