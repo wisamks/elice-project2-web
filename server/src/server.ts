@@ -39,6 +39,17 @@ app.get('/profile', authenticateAccessToken, (req: Request, res: Response) => {
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 
+// 에러 핸들링 미들웨어
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(err);
+
+    // 사용자에게는 일반적인 에러 메시지 전달
+    res.status(500).json({
+        status: 'error',
+        message: '에러 발생'
+    });
+});
+
 app.listen(port, () => {
     console.log(`server started on Port ${port}`);
 });
