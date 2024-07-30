@@ -6,7 +6,8 @@ export const signInController = async (data) => {
     const response = await fetch(fetchURI, {
         method: 'POST',
         headers:{
-            'Content-Type' : 'application/json'
+            'Content-Type' : 'application/json',
+            'Authorization': `Bearer ${data.accessToken}`,
         },
         body: JSON.stringify(data)
     });
