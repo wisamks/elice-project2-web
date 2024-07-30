@@ -1,64 +1,15 @@
-import axios from 'axios';
-import { googleClientId, googleClientPw, googleRedirectUri, naverClientId, naverClientPw, naverRedirectUri } from '@_config';
-import qs from 'querystring';
+import { getProfileGoogle, getProfileNaver } from '@_utils';
 
 // authService를 모아두는 클래스
 class authService {
     static async loginService (code: string, sns_code: string) {
         try {
-            let profile;
+            let user;
             if (sns_code === 'google') {
-                const tokenData = qs.stringify({
-                    code: code,
-                    client_id: googleClientId,
-                    client_secret: googleClientPw,
-                    redirect_uri: googleRedirectUri,
-                    grant_type: 'authorization_code'
-                });
-              
-                const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', tokenData, {
-                    headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                });
-
-                const tokens: any = tokenResponse.data;
-
-                const accessToken = tokens.access_token;
-        
-                const response = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', {
-                    headers: {
-                      Authorization: `Bearer ${accessToken}`
-                    }
-                  });
-                profile = response.data;
+                user = getProfileGoogle(code);
             } else if (sns_code === 'naver') {
-                const tokenResponse: Axios.AxiosXHR<any> = await axios.get('https://nid.naver.com/oauth2.0/token', {
-                    params: {
-                        grant_type: 'authorization_code',
-                        client_id: naverClientId,
-                        client_secret: naverClientPw,
-                        code,
-                    }
-                });
-        
-                const accessToken = tokenResponse.data.access_token;
-                // 사용자 프로필 요청
-                const profileResponse = await axios.get('https://openapi.naver.com/v1/nid/me', {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    }
-                });
-                
-                const result:any = profileResponse.data;
-                profile = result.response;
+                user = getProfileNaver(code);
             }
-            console.log(profile);
-            const user = {
-                name: profile.name,
-                email: profile.email
-            };
-            console.log(user);
             return user;
         } catch (err) {
             if (err instanceof Error) {

@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 
+import { clientDomain } from '@_config';
 import { serverPort } from '@_config';
 import authRouter from '@_routers/authRouter';
 import usersRouter from '@_routers/usersRouter';
@@ -10,8 +11,6 @@ import authenticateAccessToken from '@_middlewares/authenticateJWT';
 import passportConfig from '@_passport-config';
 passportConfig();
 
-const clientDomain = 'http://localhost:3000';
-const port: number = Number(serverPort);
 const app: Application = express();
 // 클라이언트가 다른 포트에서 api를 호출할 수 있게 하는 설정
 app.use(cors({
@@ -39,6 +38,6 @@ app.get('/profile', authenticateAccessToken, (req: Request, res: Response) => {
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 
-app.listen(port, () => {
-    console.log(`server started on Port ${port}`);
+app.listen(serverPort, () => {
+    console.log(`server started on Port ${serverPort}`);
 });
