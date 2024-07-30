@@ -12,10 +12,12 @@ const GoogleLogin = () => {
     const link = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&state={state}`;
 
     return (
-        <a href={link} className="signin-btn-google">
-            <img src='/images/ico-symbol-google.png' />
-            구글 로그인/회원가입
-        </a>
+        <p>
+            <a href={link} className="signin-btn-google">
+                <span className='ico'><img src='/images/ico-symbol-google.png' alt='구글' /></span>
+                구글 로그인/회원가입
+            </a>
+        </p>
     );
 };
 
