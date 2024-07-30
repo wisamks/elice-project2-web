@@ -11,7 +11,7 @@ const loginController = async (req: Request, res: Response, next: NextFunction) 
         // 미작성: 유저 id를 가져와서 토큰을 만들 때 집어 넣기
         // 이후 패스포트에서 뜯어서 id를 req.user에 넣게 만들고 그 때부터 로그인한 유저는 해당 아이디로 조회하여 확인
         const accessToken = setAccessToken(res, user);
-        return res.status(200).json({ accesstoken: accessToken });
+        return res.status(200).json({ accessToken });
     } catch (err) {
         return next(err);
     }

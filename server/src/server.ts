@@ -10,7 +10,7 @@ import authenticateAccessToken from '@_middlewares/authenticateJWT';
 import passportConfig from '@_passport-config';
 passportConfig();
 
-const clientDomain = 'localhost:3000';
+const clientDomain = 'http://localhost:3000';
 const port: number = Number(serverPort);
 const app: Application = express();
 // 클라이언트가 다른 포트에서 api를 호출할 수 있게 하는 설정

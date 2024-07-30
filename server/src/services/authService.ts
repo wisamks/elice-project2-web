@@ -8,37 +8,24 @@ class authService {
         try {
             let profile;
             if (sns_code === 'google') {
-                // const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', new URLSearchParams({
-                //     code,
-                //     client_id: googleClientId,
-                //     client_secret: googleClientPw,
-                //     redirect_uri: googleRedirectUri,
-                //     grant_type: 'authorization_code'
-                // }).toString(), {
-                //     headers: {
-                //         'Content-Type': 'application/x-www-form-urlencoded'
-                //     }
-                // });
                 const tokenData = qs.stringify({
                     code: code,
                     client_id: googleClientId,
                     client_secret: googleClientPw,
                     redirect_uri: googleRedirectUri,
                     grant_type: 'authorization_code'
-                  });
+                });
               
-                  const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', tokenData, {
+                const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', tokenData, {
                     headers: {
                       'Content-Type': 'application/x-www-form-urlencoded'
                     }
-                  });
+                });
 
-                  const tokens: any = tokenResponse.data;
-                  console.log(tokens);
+                const tokens: any = tokenResponse.data;
 
-                  const accessToken = tokens.access_token;
+                const accessToken = tokens.access_token;
         
-                console.log(accessToken);
                 const response = await axios.get('https://www.googleapis.com/oauth2/v1/userinfo?alt=json', {
                     headers: {
                       Authorization: `Bearer ${accessToken}`
@@ -56,7 +43,6 @@ class authService {
                 });
         
                 const accessToken = tokenResponse.data.access_token;
-                console.log(accessToken);
                 // 사용자 프로필 요청
                 const profileResponse = await axios.get('https://openapi.naver.com/v1/nid/me', {
                     headers: {
@@ -67,10 +53,12 @@ class authService {
                 const result:any = profileResponse.data;
                 profile = result.response;
             }
+            console.log(profile);
             const user = {
                 name: profile.name,
                 email: profile.email
             };
+            console.log(user);
             return user;
         } catch (err) {
             if (err instanceof Error) {
