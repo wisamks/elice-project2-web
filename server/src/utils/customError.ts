@@ -13,7 +13,6 @@ export class BadRequestError extends Error {
     }
 }
 
-
  // UnauthorizedError
  // 인증이 필요하지만 실패했거나 아직 제공되지 않은 경우 발생하는 에러
  // 예시 : 인증되지 않은 사용자 로그인, 유효하지 않은 토근으로 접근 시도할 때
@@ -50,12 +49,10 @@ export class ConflictError extends Error {
     statusCode: number;
 
     constructor(message: string) {
-        super(message); // 부모 클래스 (Error)의 생성자를 호출하여 메시지를 설정합니다.
-        this.statusCode = 409; // HTTP 상태 코드를 409으로 설정합니다.
-        this.name = 'ConflictError'; // 에러 이름을 'ConflictError'로 설정합니다.
-    }
+        super(message); 
+        this.statusCode = 409; 
+        this.name = 'ConflictError'; 
 }
-
 
  // InternalServerError
  // 서버에서 예기치 않은 조건이 발생하여 요청을 처리할 수 없는 경우 발생하는 에러
