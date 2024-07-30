@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
-import UnauthenticatedHeader from "./components/commen/UnauthenticatedHeader";
-import AuthenticateHeader from "./components/commen/AuthenticatedHeader";
-import Footer from "./components/commen/Footer";
+import UnauthenticatedHeader from "./components/common/UnauthenticatedHeader";
+import AuthenticateHeader from "./components/common/AuthenticatedHeader";
+import Footer from "./components/common/Footer";
 
 import Home from './pages/home/Home';
 import SignIn from './pages/account/SignIn';
