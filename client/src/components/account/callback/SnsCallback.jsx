@@ -35,7 +35,7 @@ const SnsCallback = ({ platform }) => {
         } else {
             console.log('로그인 재시도');
         }
-    }, [location])
+    }, [location, platform])
 
     return(
         <div>로딩중...</div>
