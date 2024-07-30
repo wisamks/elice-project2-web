@@ -1,4 +1,4 @@
-import '../../styles/account-commen.css';
+import '../../styles/account-common.css';
 import './SignUp.css';
 
 const SignUp = () => {

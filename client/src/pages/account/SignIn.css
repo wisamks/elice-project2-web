@@ -37,8 +37,10 @@
     color: #222;
 }
 
-.signin-btns a img{
+.signin-btns .ico{
     position: absolute;
     top: 18px;
     left: 20px;
+
+    height: 24px;
 }

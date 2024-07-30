@@ -1,52 +1,34 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 
-const SnsCallback = ({ platform, apiEndpoint }) => {
+import { apiService } from "../../../services/apiService";
+import { signInController } from "../../../controllers/signInController";
+import { signInModel } from "../../../models/signInModel";
+
+const SnsCallback = ({ platform }) => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const handleHome = () => {
+    const redirectHome = () => {
         navigate('/');
         window.location.reload();
     }
 
-    const handleSignUp = () => {
+    const redirectSignUp = () => {
         navigate('/sign-up');
         window.location.reload();
     }
 
     const handleSignInPost = async (code) => {
         const data = { code };
-
-        try{
-            const response = await fetch(apiEndpoint, {
-                method: 'POST',
-                headers:{
-                    'Content-Type' : 'application/json'
-                },
-                body: JSON.stringify({ data })
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const res = await response.json();
-
-            const accessToken = res.accessToken;
-            Cookies.set('access_token', accessToken, { expires: 1});
-
-            res.isMember ? handleHome() : handleSignUp(); // 백엔드 필드이름 확인
-        } catch (error) {
-            console.error(`Error exchanging code for tokens with ${platform}:`, error);
-        }
+        data.sns_code = platform;
+        const res = await apiService(() => signInController(data), signInModel);
+        res.accesstoken ? redirectHome() : redirectSignUp();
     };
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const code = params.get('code');
-        console.log(code);
 
         if(code){
             handleSignInPost(code);
