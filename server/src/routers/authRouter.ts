@@ -2,6 +2,8 @@ import { Router, Request, Response, NextFunction } from 'express';
 
 import authController from '@_controllers/authController';
 
+import { validateNickname } from '@_middlewares/validateNickname';
+
 const router = Router();
 
 // 로그인 
@@ -36,6 +38,11 @@ router.post('/phone', (req: Request, res: Response) => {
 // 인증번호 확인
 router.post('/code', (req: Request, res: Response) => {
     res.send('인증번호 확인');
+});
+
+// 닉네임 유효성 검사 엔드포인트
+router.post('/validate-nickname', validateNickname, (req, res) => {
+    res.status(200).json({ message: '사용 가능한 닉네임입니다.' });
 });
 
 export default router;
