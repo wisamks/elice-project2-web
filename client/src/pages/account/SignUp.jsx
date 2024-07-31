@@ -120,6 +120,7 @@
 // export default SignUp;
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/account-common.css';
 import './SignUp.css';
 
@@ -185,10 +186,11 @@ const SignUp = () => {
                     body: JSON.stringify({ nickname }),
                     credentials: "include"
                 });
-                const result = await res.json();
-                if (result.success) {
-                    console.log('닉네임 설정 성공');
-                    window.location.href = '/sign-in';
+                if (res.ok) {
+                    console.log('Nickname submission');
+                    useNavigate('/');
+                } else {
+                    console.error('Signup failed:', res.status);
                 }
             } catch (error) {
                 console.error('Nickname submission failed', error);
