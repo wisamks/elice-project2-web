@@ -8,7 +8,10 @@ export const apiService = async (controller, model) => {
 
         const res = await response.json();
 
-        model(res);
+        if(model){
+            model(res);
+        };
+        
         return res;
 
     } catch (error) {
