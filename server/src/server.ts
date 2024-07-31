@@ -43,7 +43,9 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err.statusCode >= 500 || !err.statusCode) {
         console.error(err);
     }
-    return res.status(err.statusCode).json({ error: err.message });
+    const statusCode = err.statusCode >= 400 ? err.statusCode : 400;
+    const message = err.message ? err.message : '에러가 발생했습니다.';
+    return res.status(statusCode).json({ error: message });
 });
 
 

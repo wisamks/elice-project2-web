@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { setToken } from '@_utils';
 import authService from '@_services/authService';
 import UserModel from '@_models/userModel';
-import { ConflictError, InternalServerError, UnauthorizedError } from '@_/utils/customError';
+import { BadRequestError, ConflictError, InternalServerError, UnauthorizedError } from '@_/utils/customError';
 import { clientDomain, jwtAccessTokenSecret } from '@_/config';
 import { SnsCode } from '@_/customTypes/userType';
 import { User } from '@_customTypes/express';
@@ -62,6 +62,9 @@ class authController {
         res.clearCookie('image');
         res.clearCookie('snsCode');
         try {
+            if (!name || !email || !snsCode || !nickname ) {
+                throw new BadRequestError('입력값이 올바르지 않습니다.');
+            }
             const checked = await UserModel.findExistNickname(nickname);
             if (checked) {
                 throw new ConflictError('이미 사용 중인 닉네임입니다.');
@@ -118,7 +121,7 @@ class authController {
             res.cookie('accessToken', accessToken, {maxAge: 3600000, httpOnly: true});
             return res.status(204).end();
         } catch(err) {
-
+            return next(err);
         }
     }
 }

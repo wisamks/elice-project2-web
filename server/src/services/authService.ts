@@ -57,7 +57,7 @@ class authService {
         if (!foundToken) {
             throw new ForbiddenError('잘못된 접근입니다.');
         }
-        return jwt.verify(refreshToken, jwtRefreshTokenSecret);
+        return jwt.verify(foundToken, jwtRefreshTokenSecret);
     }
     // refresh db 생성
     static async createRefresh (userId: number, refreshToken: string) {
