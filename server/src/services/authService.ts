@@ -23,7 +23,7 @@ class authService {
             }
         }
     }
-    static async joinService (nickname: string, name: string, email: string, image?: string, snsCode: SnsCode) {
+    static async joinService (nickname: string, name: string, email: string, snsCode: SnsCode, image?: string) {
         const createdUser = await UserModel.initiateUserFromOauth({nickname, name, email, image, snsCode});
         if (!createdUser) {
             throw new InternalServerError('유저를 생성하는 데 실패했습니다.');
@@ -34,11 +34,15 @@ class authService {
     static async logoutService (res: Response) {
         // accessToken 삭제
         res.clearCookie('accessToken');
+        // refreshToken 구현 시 추가
+        // res.clearCookie('refreshToken')
+
         return;
     }
     // 회원탈퇴 서비스
     static async deleteService (userId: number) {
         await UserModel.softDelete(userId);
+        return;
     }
 }
 

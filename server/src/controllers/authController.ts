@@ -26,7 +26,6 @@ class authController {
             // 유저 id를 가져와서 토큰을 만들 때 집어 넣기
             // 이후 패스포트에서 뜯어서 id를 req.user에 넣게 만들고 그 때부터 로그인한 유저는 해당 아이디로 조회하여 확인
             const accessToken = setAccessToken(foundUser.id);
-            console.log(foundUser.id);
             res.cookie('accessToken', accessToken, {domain: 'localhost', maxAge: 3600000, httpOnly: true})
             return res.status(200).json({ hasUser: true });
         } catch (err) {
@@ -37,8 +36,8 @@ class authController {
     static async nicknameController (req: Request, res: Response, next: NextFunction) {
         const { nickname } = req.body;
         try {
-            const foundUser = await UserModel.findExistNickname(nickname);
-            if (foundUser) {
+            const checked = await UserModel.findExistNickname(nickname);
+            if (checked) {
                 throw new ConflictError('이미 사용 중인 닉네임입니다.');
             }
             return res.status(204).end();
@@ -51,9 +50,13 @@ class authController {
         const { nickname } = req.body;
         const { name, email, image, snsCode } = req.cookies.profile;
         try {
-            const accessToken = authService.joinService(nickname, name, email, image, snsCode as SnsCode);
+            const checked = await UserModel.findExistNickname(nickname);
+            if (checked) {
+                throw new ConflictError('이미 사용 중인 닉네임입니다.');
+            }
+            const accessToken = await authService.joinService(nickname, name, email, image, snsCode as SnsCode);
             res.cookie('accessToken', accessToken, {maxAge: 3600000, httpOnly: true});
-            return res.status(303).redirect(clientDomain);
+            return res.status(204).end();
         } catch(err) {
             return next(err);
         }
@@ -62,7 +65,7 @@ class authController {
     static async logoutController (req: Request, res: Response, next: NextFunction) {
         try {
             authService.logoutService(res);
-            if (req.cookies.accessToken) {
+            if (req.cookies.accessToken || req.cookies.refreshToken) {
                 throw new InternalServerError('로그아웃 중 문제가 발생하였습니다.');
             }
             return res.status(204).end();
@@ -76,8 +79,14 @@ class authController {
             if (typeof(req.user) === 'undefined') {
                 throw new UnauthorizedError('로그인이 필요합니다.');
             }
-            const currentUser: User = req.user;
-            authService.deleteService(currentUser.userId);
+            const user = req.user as User;
+            const userId = user.userId;
+            authService.deleteService(userId);
+            authService.logoutService(res);
+            // if (req.cookies.accessToken || req.cookies.refreshToken) {
+            //     throw new InternalServerError('회원탈퇴 중 문제가 발생하였습니다.');
+            // }
+            return res.status(204).end();
         } catch(err) {
             return next(err);
         }

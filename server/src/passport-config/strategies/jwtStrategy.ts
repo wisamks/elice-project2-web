@@ -6,7 +6,6 @@ import {jwtAccessTokenSecret} from '@_config';
 
 const cookieExtractor = (req: Request) => {
   if (req && req.cookies) {
-    console.log(req.cookies.accessToken);
     return req.cookies.accessToken;
   }
   return null;

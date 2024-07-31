@@ -3,6 +3,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import authController from '@_controllers/authController';
 
 import { validateNickname } from '@_middlewares/validateNickname';
+import authenticateAccessToken from '@_middlewares/authenticateJWT';
 
 const router = Router();
 
@@ -16,10 +17,10 @@ router.post('/nickname', authController.nicknameController);
 router.post('/join', authController.joinController);
 
 // 로그아웃
-router.post('/logout', authController.logoutController);
+router.post('/logout', authenticateAccessToken, authController.logoutController);
 
 // 회원탈퇴
-router.delete('/', authController.deleteController);
+router.delete('/', authenticateAccessToken, authController.deleteController);
 
 // // 이메일 인증
 // router.post('/email', (req: Request, res: Response) => {

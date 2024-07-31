@@ -32,7 +32,7 @@ class UserModel extends UserDb {
         const { email, name, nickname, image, snsCode } = userData;
 
         const sql = `
-            INSERT INTO users (email, name, nickname, image, snsCode)
+            INSERT INTO user (email, name, nickname, image, sns_code)
             VALUES (?, ?, ?, ?, ?)
         `;
 
@@ -83,10 +83,10 @@ class UserModel extends UserDb {
     public static async findExistNickname(nickname: string): Promise<boolean> {
         const sql = 'SELECT COUNT(*) as count FROM user WHERE nickname = ? AND deleted_at IS NULL';
         try {
-            const result: any = await this.findOne(sql, [nickname]);
-            return result.count > 0;
+            const result: { count: number } = await this.findOne(sql, [nickname]);
+            return result.count > 0;        // count: n or 0
         } catch (err) {
-            console.error('already existed nickname:', err);
+            console.error('findExistNickname fail:', err);
             throw err;
         }
     }
