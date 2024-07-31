@@ -13,12 +13,14 @@ class authController {
         try {
             const { code, sns_code } = req.body;
             const user: any = await authService.getUserFromSns(code, sns_code);
-            
             // user 정보를 활용해서 db에서 유저를 찾기. 아마도 sns_code와 email 조합이 가능할 듯.
             const foundUser = await UserModel.findByOauth(user.email, sns_code);
             // 유저를 못 찾았다면 회원가입 시키기
             if (!foundUser) {
-                res.cookie('profile', user, {maxAge: 3600000, httpOnly: true});
+                res.cookie('name', user.name, {maxAge: 3600000, httpOnly: true});
+                res.cookie('email', user.email, {maxAge: 3600000, httpOnly: true});
+                res.cookie('image', user.image, {maxAge: 3600000, httpOnly: true});
+                res.cookie('snsCode', user.snsCode, {maxAge: 3600000, httpOnly: true});
                 return res.status(200).json({ hasUser: false });
             }
     
@@ -51,14 +53,20 @@ class authController {
     // 회원가입
     static async join (req: Request, res: Response, next: NextFunction) {
         const { nickname } = req.body;
-        const { name, email, image, snsCode } = req.cookies.profile;
-        res.clearCookie('profile');
+        const name = req.cookies.name;
+        const email = req.cookies.email;
+        const image = req.cookies.image;
+        const snsCode: SnsCode = req.cookies.snsCode;
+        res.clearCookie('name');
+        res.clearCookie('email');
+        res.clearCookie('image');
+        res.clearCookie('snsCode');
         try {
             const checked = await UserModel.findExistNickname(nickname);
             if (checked) {
                 throw new ConflictError('이미 사용 중인 닉네임입니다.');
             }
-            const {userId, accessToken, refreshToken} = await authService.createUser(nickname, name, email, image, snsCode as SnsCode);
+            const {userId, accessToken, refreshToken} = await authService.createUser(nickname, name, email, snsCode, image);
             res.cookie('accessToken', accessToken, {maxAge: 3600000, httpOnly: true}); // 1시간 https만 쓰면 secure
             res.cookie('refreshToken', refreshToken, {maxAge: 86400000, httpOnly: true}); // 24시간
             await authService.createRefresh(userId, refreshToken);
