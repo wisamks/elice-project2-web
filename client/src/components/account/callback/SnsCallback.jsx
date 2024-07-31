@@ -23,7 +23,7 @@ const SnsCallback = ({ platform }) => {
         data.sns_code = platform;
         console.log('data : ', data);
         const res = await apiService(() => signInController(data));
-        res.accessToken ? redirectHome() : redirectSignUp();
+        res.hasUser ? redirectHome() : redirectSignUp();
     };
 
     useEffect(() => {
