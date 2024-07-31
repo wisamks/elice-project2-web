@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
+import Cookies from 'js-cookie';
+
 import UnauthenticatedHeader from "./components/common/UnauthenticatedHeader";
 import AuthenticateHeader from "./components/common/AuthenticatedHeader";
 import Footer from "./components/common/Footer";
@@ -12,10 +14,12 @@ import GoogleCallback from './components/account/callback/GoogleCallback';
 import NaverCallback from './components/account/callback/NaverCallback';
 
 function App() {
+  const accessToken = Cookies.get('access_token');
+
   return (
     <RecoilRoot>
       <Router>
-        <UnauthenticatedHeader />
+      {accessToken ? <AuthenticateHeader /> : <UnauthenticatedHeader />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sign-in" element={<SignIn />} />
