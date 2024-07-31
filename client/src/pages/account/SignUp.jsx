@@ -129,6 +129,8 @@ const SignUp = () => {
     const [isNicknameValid, setIsNicknameValid] = useState(false);
     const [validationMessage, setValidationMessage] = useState('');
 
+    const navigate = useNavigate();
+
     const handleNicknameChange = (e) => {
         setNickname(e.target.value);
         setIsNicknameValid(false);
@@ -188,7 +190,7 @@ const SignUp = () => {
                 });
                 if (res.ok) {
                     console.log('Nickname submission');
-                    useNavigate('/');
+                    navigate('/');
                 } else {
                     console.error('Signup failed:', res.status);
                 }
