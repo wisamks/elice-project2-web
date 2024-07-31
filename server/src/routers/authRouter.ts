@@ -8,19 +8,22 @@ import authenticateAccessToken from '@_middlewares/authenticateJWT';
 const router = Router();
 
 // 로그인 
-router.post('/login', authController.loginController);
+router.post('/login', authController.login);
 
 // 닉네임 중복 확인
-router.post('/nickname', authController.nicknameController);
+router.post('/nickname', authController.checkNickname);
 
 // 회원가입
-router.post('/join', authController.joinController);
+router.post('/join', authController.join);
 
 // 로그아웃
-router.post('/logout', authenticateAccessToken, authController.logoutController);
+router.post('/logout', authenticateAccessToken, authController.logout);
 
 // 회원탈퇴
-router.delete('/', authenticateAccessToken, authController.deleteController);
+router.delete('/', authenticateAccessToken, authController.delete);
+
+// refresh 토큰으로 accessToken 재발급
+router.post('/token', authController.getTokenFromRefresh);
 
 // // 이메일 인증
 // router.post('/email', (req: Request, res: Response) => {
