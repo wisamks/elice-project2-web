@@ -2,6 +2,7 @@
 // 중고거래 게시판 서비스
 class ExchangePostsService {
     // 페이지네이션을 진행하여 필요한 게시글들 불러오는 서비스
+    static async getAllPosts() {}
     static async getPostsCount(categoryId: number) {
         // categoryId를 넣으면 
         // post테이블에 user 테이블과 post_exchange_detail 테이블을 join하고

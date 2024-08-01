@@ -23,7 +23,7 @@ router.post('/logout', authenticateAccessToken, AuthController.logout);
 router.delete('/', authenticateAccessToken, AuthController.delete);
 
 // accessToken 유효한지 확인
-router.get('/', authenticateAccessToken, (req, res) => {
+router.get('/token', authenticateAccessToken, (req, res) => {
     res.status(200).json({ message: "로그인이 되어있습니다."});
 });
 

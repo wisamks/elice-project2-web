@@ -1,0 +1,86 @@
+.ItemCardHorizontal{
+    padding: 24px 0;
+}
+
+.ItemCardHorizontal a{
+    display: flex;
+    gap: 24px;
+}
+
+.ItemCardHorizontal .item-photo{
+    flex-shrink: 0;
+
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ItemCardHorizontal .item-photo img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ItemCardHorizontal .item-sale-info{
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.ItemCardHorizontal .item-sale-info .item-info{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ItemCardHorizontal .item-sale-info .item-info .item-name{
+    font-size: 16px;
+    font-weight: 500;
+    color: #222;
+}
+
+.ItemCardHorizontal .item-sale-info .user-info{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 8px;
+}
+
+.ItemCardHorizontal .item-sale-info .user-info .user-profile{
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.ItemCardHorizontal .item-sale-info .user-info .user-profile img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ItemCardHorizontal .item-sale-info .user-info .user-name{
+    color: #666;
+}
+
+.ItemCardHorizontal .item-sale-info .item-location-date{
+    display: flex;
+    gap: 12px;
+
+    font-size: 15px;
+    color: #333;
+}
+
+.ItemCardHorizontal .item-sale-info .item-location-date .sale-location::after{
+    content: "";
+    display: inline-block;
+    vertical-align: top;
+    width: 2px;
+    height: 2px;
+    margin: 9px 0 0 12px;
+    background-color: #555;
+}

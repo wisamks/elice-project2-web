@@ -33,13 +33,17 @@ class ExchangePostsController {
     }
     // 게시글 생성
     static async createPost(req: Request, res: Response, next: NextFunction) {
-        // body 입력값 
-        const obj = {
-            sort: 'sale',
-            target: 'male',
-            item: 'top',
-            location: '강남구'
-        }
+        // body 입력값 예시
+        // const obj = {
+        //     sort: 'sale',
+        //     target: 'male',
+        //     item: 'top',
+        //     location: '강남구',
+        //     title: '제목', 
+        //     price: 7000,
+        //     images: [],
+        //     content: 'as;dghasdfkajsdga',
+        // }
     }
     // 게시글 수정
     static async updatePost(req: Request, res: Response, next: NextFunction) {}
