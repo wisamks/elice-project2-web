@@ -1,0 +1,13 @@
+.view-similar-item .title{
+    margin-bottom: 32px;
+
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.7;
+}
+
+.view-similar-item-list ul{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 13px;
+}

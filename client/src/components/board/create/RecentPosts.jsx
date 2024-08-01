@@ -1,4 +1,4 @@
-import ItemCardHorizontal from "../itemCard/ItemCardHorizontal";
+import ItemCardHorizontal from "../../itemCard/ItemCardHorizontal";
 
 import './RecentPosts.css'
 

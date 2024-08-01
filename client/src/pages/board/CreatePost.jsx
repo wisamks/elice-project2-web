@@ -1,5 +1,5 @@
-import BoardForm from '../../components/board/BoardForm';
-import RecentPosts from '../../components/board/RecentPosts';
+import BoardForm from '../../components/board/create/BoardForm';
+import RecentPosts from '../../components/board/create/RecentPosts';
 
 import './CreatePost.css'
 
