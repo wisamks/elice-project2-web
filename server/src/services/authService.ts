@@ -1,23 +1,24 @@
 import jwt from 'jsonwebtoken';
 import {Response} from 'express';
 
-import { getProfileGoogle, getProfileNaver, setToken } from '@_utils';
+import { setToken } from '@_utils';
 import UserModel from '@_models/userModel';
 import { ForbiddenError, InternalServerError } from '@_/utils/customError';
 import { SnsCode } from '@_/customTypes/userType';
 import { jwtRefreshTokenSecret } from '@_config';
 import TokenModel from '@_models/tokenModel';
+import AxiosModel from '@_/models/axiosModel';
 
 // authService를 모아두는 클래스
-class authService {
+class AuthService {
     // sns에서 유저 정보 불러오기
     static async getUserFromSns (code: string, sns_code: string) {
         try {
             let user: any;
             if (sns_code === 'google') {
-                user = getProfileGoogle(code);
+                user = AxiosModel.getProfileGoogle(code);
             } else if (sns_code === 'naver') {
-                user = getProfileNaver(code);
+                user = AxiosModel.getProfileNaver(code);
             }
             return user;
         } catch (err) {
@@ -77,4 +78,4 @@ class authService {
     }
 }
 
-export default authService;
+export default AuthService;
