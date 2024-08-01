@@ -23,12 +23,12 @@ router.post('/logout', authenticateAccessToken, AuthController.logout);
 router.delete('/', authenticateAccessToken, AuthController.delete);
 
 // accessToken 유효한지 확인
-router.get('/token', authenticateAccessToken, (req, res) => {
+router.get('/access', authenticateAccessToken, (req, res) => {
     res.status(200).json({ message: "로그인이 되어있습니다."});
 });
 
 // refresh 토큰으로 accessToken 재발급
-router.post('/token', AuthController.getTokenFromRefresh);
+router.post('/refresh', AuthController.getTokenFromRefresh);
 
 // // 이메일 인증
 // router.post('/email', (req: Request, res: Response) => {
