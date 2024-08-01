@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 
-import authController from '@_controllers/authController';
+import AuthController from '@_controllers/authController';
 
 import { validateNickname } from '@_middlewares/validateNickname';
 import authenticateAccessToken from '@_middlewares/authenticateJWT';
@@ -8,22 +8,22 @@ import authenticateAccessToken from '@_middlewares/authenticateJWT';
 const router = Router();
 
 // 로그인 
-router.post('/login', authController.login);
+router.post('/login', AuthController.login);
 
 // 닉네임 중복 확인
-router.post('/nickname', authController.checkNickname);
+router.post('/nickname', AuthController.checkNickname);
 
 // 회원가입
-router.post('/join', authController.join);
+router.post('/join', AuthController.join);
 
 // 로그아웃
-router.post('/logout', authenticateAccessToken, authController.logout);
+router.post('/logout', authenticateAccessToken, AuthController.logout);
 
 // 회원탈퇴
-router.delete('/', authenticateAccessToken, authController.delete);
+router.delete('/', authenticateAccessToken, AuthController.delete);
 
 // refresh 토큰으로 accessToken 재발급
-router.post('/token', authController.getTokenFromRefresh);
+router.post('/token', AuthController.getTokenFromRefresh);
 
 // // 이메일 인증
 // router.post('/email', (req: Request, res: Response) => {

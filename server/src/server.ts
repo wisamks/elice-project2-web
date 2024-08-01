@@ -7,6 +7,8 @@ import { clientDomain } from '@_config';
 import { serverPort } from '@_config';
 import authRouter from '@_routers/authRouter';
 import usersRouter from '@_routers/usersRouter';
+import exchangePostsRouter from '@_routers/exchangePostsRouter';
+
 import authenticateAccessToken from '@_middlewares/authenticateJWT';
 import passportConfig from '@_passport-config';
 passportConfig();
@@ -37,6 +39,7 @@ app.get('/profile', authenticateAccessToken, (req: Request, res: Response) => {
 //라우터
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/exchange-posts', exchangePostsRouter);
 
 // 에러 핸들링 미들웨어
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
