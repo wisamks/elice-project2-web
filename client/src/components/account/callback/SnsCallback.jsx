@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { apiService } from "../../../services/apiService";
 import { signInController } from "../../../controllers/signInController";
+import apiInterceptors from "../../../services/apiInterceptors";
 
 const SnsCallback = ({ platform }) => {
     const location = useLocation();
@@ -19,18 +20,19 @@ const SnsCallback = ({ platform }) => {
     }
 
     const handleSignInPost = async (code) => {
-        const data = { code };
-        data.sns_code = platform;
-        console.log('data : ', data);
-        const res = await apiService(() => signInController(data));
+        const data = { 
+            code, 
+            sns_code: platform
+        };
+
+        const res = await apiService((apiClient) => signInController(apiClient, data));
         res.hasUser ? redirectHome() : redirectSignUp();
     };
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const code = params.get('code');
-        console.log('code : ', code);
-
+        
         if(code){
             handleSignInPost(code);
         } else {

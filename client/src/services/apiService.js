@@ -1,12 +1,14 @@
+import apiInterceptors from "./apiInterceptors";
+
 export const apiService = async (controller, model) => {
     try{
-        const response = await controller();
+        const response = await controller(apiInterceptors);
 
-        if (!response.ok) {
+        if (response.status !== 200) {
             throw new Error('Network response was not ok');
         }
 
-        const res = await response.json();
+        const res = response.data;
 
         if(model){
             model(res);
