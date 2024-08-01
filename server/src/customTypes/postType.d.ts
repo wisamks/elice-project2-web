@@ -1,0 +1,50 @@
+export enum PostStatus {
+    진행중 = '진행중',
+    예약중 = '예약중',
+    거래완료 = '거래완료'
+}
+
+export interface Post {
+    post_id: number;       // (PK)
+    user_id: number;       // userid - FK(user table)
+    category_id: number;   // categoryid - FK (category table)
+    title: string;         
+    content: string;       
+    status: PostStatus;    
+    created_at: Date;      
+    updated_at: Date;      
+    deleted_at: Date | null; 
+}
+
+// postExchangeDetail
+export interface PostExchangeDetail {
+    post_id: number;  // post id - PK, FK
+    item: string;     
+    target: string;   
+    location: string; 
+    price: number;    // 0 or (price > 0) ?
+}
+
+// post + postExchangeDetail (조회용!)
+export interface PostWithDetails extends Post, PostExchangeDetail {
+    nickname: string;    // 게시글 작성자의 닉네임 (User 테이블에서 가져옴)
+    user_image: string;  // 게시글 작성자의 프로필 이미지 URL (User 테이블에서 가져옴)
+}
+
+// 새 게시글 생성 시 필요한 데이터 타입
+export type PostCreationData = Omit<Post, 'post_id' | 'created_at' | 'updated_at' | 'deleted_at'> & PostExchangeDetail;
+
+// 게시글 수정 시 사용할 수 있는 부분적 데이터 타입
+export type PostUpdateData = Partial<Pick<Post, 'title' | 'content' | 'status'>> & Partial<PostExchangeDetail>;
+
+
+
+// 검색용 진행 예정
+export interface PostSearchCriteria {
+    category_id?: number;
+    user_id?: number;
+    status?: PostStatus;
+    start_date?: Date;
+    end_date?: Date;
+    keyword?: string;
+}

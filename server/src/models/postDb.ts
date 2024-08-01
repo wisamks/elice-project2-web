@@ -1,17 +1,17 @@
-import { Pool } from 'mysql2/promise'; 
+import { Pool } from 'mysql2/promise';
 import { pool as dbPool } from '@_config/index';
 
-class UserDb {
+class PostDb {
     private static pool: Pool = dbPool;
 
-    // 매 쿼리마다 새로운 커넥션을 가져오는 방식으로 수정
+    // 매 쿼리마다 새로운 커넥션을 가져오는 방식
     protected static async query(sql: string, values: any[] = []): Promise<any> {
         const connection = await this.pool.getConnection();
         try {
             const [results] = await connection.execute(sql, values);
             return results;
         } catch (err) {
-            console.error('Query execution fail: ', err);
+            console.error('Query execution failed: ', err);
             throw err;
         } finally {
             connection.release();
@@ -36,6 +36,12 @@ class UserDb {
         const result: any = await this.query(sql, values);
         return result.affectedRows;
     }
+
+    protected static async delete(sql: string, values: any[] = []): Promise<number> {
+        const result: any = await this.query(sql, values);
+        return result.affectedRows;
+    }
 }
 
-export default UserDb;
+export default PostDb;
+

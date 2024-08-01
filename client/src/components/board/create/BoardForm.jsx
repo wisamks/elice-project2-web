@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import InputRadioGroup from '../input/InputRadioGroup';
-import InputImageFile from '../input/InputImageFile';
+import InputRadioGroup from '../../input/InputRadioGroup';
+import InputImageFile from '../../input/InputImageFile';
 
-import { formatNumberToCommaString, formatCommaStringToNumber } from '../../utils/numbers';
+import { formatNumberToCommaString, formatCommaStringToNumber } from '../../../utils/numbers';
 
 import './BoardForm.css';
 
