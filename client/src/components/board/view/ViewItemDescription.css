@@ -1,0 +1,17 @@
+.view-post-item-description{
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+
+.view-post-item-description h3{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.view-post-item-description .item-description{
+    min-height: 350px;
+
+    font-size: 16px;
+    line-height: 1.7;
+}
