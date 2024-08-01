@@ -1,0 +1,104 @@
+.board-form-content{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    width: 930px;
+}
+
+.board-form-content h3{
+    margin-bottom: 12px;
+
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.board-form-content .input-radio-wrap{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    width: 790px;
+}
+
+.board-form-content .locations .input-radio-wrap{
+    gap: 8px;
+}
+
+.board-form-content .locations .input-radio-wrap p{
+    width: 80px;
+}
+
+.board-form-side{
+    width: 420px;
+}
+
+.board-form-content .title p{
+    width: 720px;
+}
+
+.board-form-content .title .input-box{
+    display: block;
+    height: 38px;
+    padding: 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.board-form-content .title input, .board-form-content .price input{
+    font-size: 16px;
+}
+
+.board-form-content .price p{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 288px;
+    height: 38px;
+    padding: 0 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;    
+    
+    font-size: 16px;
+}
+
+.board-form-content .price .input-box{
+    display: block;
+    width: 260px;
+    height: 38px;
+    text-align: right;
+}
+
+.board-form-content .price .input-box input{
+    text-align: right;
+}
+
+.board-form-content .images ul{
+    display: flex;
+    gap: 8px;
+}
+
+.board-form-content .post-content .post-content-box textarea{
+    width: calc(100% - 50px);
+    height: 250px;
+    padding: 24px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.board-form-content .form-buttons{
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+
+    padding-top: 20px;
+}
+
+.board-form-content .form-buttons p{
+    width: 240px;
+    height: 60px;
+
+    font-size: 18px;
+    font-weight: 600;
+}
