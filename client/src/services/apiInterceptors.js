@@ -37,7 +37,7 @@ apiInterceptors.interceptors.response.use(
                         return apiInterceptors(error.config);
                     } catch (refreshError) {
                         console.log('Token refresh failed:', refreshError);
-                        window.location.href = '/login';
+                        window.location.href = '/sign-in';
                     }
                 }
             } else if (status === 403){
