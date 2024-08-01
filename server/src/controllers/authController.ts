@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { setToken } from '@_utils';
 import AuthService from '@_services/authService';
 import UserModel from '@_models/userModel';
-import { BadRequestError, ConflictError, InternalServerError, UnauthorizedError } from '@_/utils/customError';
+import { BadRequestError, ConflictError, ForbiddenError, InternalServerError, UnauthorizedError } from '@_/utils/customError';
 import { clientDomain, jwtAccessTokenSecret } from '@_/config';
 import { SnsCode } from '@_/customTypes/userType';
 import { User } from '@_customTypes/express';
@@ -63,7 +63,7 @@ class AuthController {
         res.clearCookie('snsCode');
         try {
             if (!name || !email || !snsCode || !nickname ) {
-                throw new BadRequestError('입력값이 올바르지 않습니다.');
+                throw new ForbiddenError('잘못된 접근입니다.');
             }
             const checked = await UserModel.findExistNickname(nickname);
             if (checked) {
@@ -83,9 +83,6 @@ class AuthController {
         try {
             AuthService.deleteRefresh(req.cookies.refreshToken);
             AuthService.deleteTokens(res);
-            if (req.cookies.accessToken || req.cookies.refreshToken) {
-                throw new InternalServerError('로그아웃 중 문제가 발생하였습니다.');
-            }
             return res.status(204).end();
         } catch(err) {
             return next(err);
@@ -102,9 +99,6 @@ class AuthController {
             AuthService.deleteRefresh(req.cookies.refreshToken);
             AuthService.deleteUser(userId);
             AuthService.deleteTokens(res);
-            if (req.cookies.accessToken || req.cookies.refreshToken) {
-                throw new InternalServerError('회원탈퇴 중 문제가 발생하였습니다.');
-            }
             return res.status(204).end();
         } catch(err) {
             return next(err);

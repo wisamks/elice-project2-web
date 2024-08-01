@@ -1,0 +1,48 @@
+.input-radio-wrap p{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-radio-wrap span{
+    position: relative;
+}
+
+.input-radio span::before{
+    content: "";
+    display: block;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-radio-active span::before{
+    border-color: var(--primary-color);
+}
+
+.input-radio-active span::after{
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background-color: var(--primary-color);
+}
+
+.input-radio span input{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    opacity: 0;
+    z-index: -100;
+}
+
+.input-radio label{
+    color: #555;
+}
