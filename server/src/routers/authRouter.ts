@@ -22,6 +22,11 @@ router.post('/logout', authenticateAccessToken, AuthController.logout);
 // 회원탈퇴
 router.delete('/', authenticateAccessToken, AuthController.delete);
 
+// accessToken 유효한지 확인
+router.get('/', authenticateAccessToken, (req, res) => {
+    res.status(200).json({ message: "로그인이 되어있습니다."});
+});
+
 // refresh 토큰으로 accessToken 재발급
 router.post('/token', AuthController.getTokenFromRefresh);
 
