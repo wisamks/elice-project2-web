@@ -1,15 +1,10 @@
 import { baseURI } from "./baseURI";
 
-export const signInController = async (data) => {
+export const signInController = async (apiClient, data) => {
     const fetchURI = baseURI + '/api/auth/login'
 
-    const response = await fetch(fetchURI, {
-        method: 'POST',
-        headers:{
-            'Content-Type' : 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(data)
+    const response = await apiClient.post(fetchURI, data, {
+        withCredentials: true,
     });
 
     return response;
