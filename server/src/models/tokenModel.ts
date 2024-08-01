@@ -4,31 +4,17 @@ import { pool as dbPool } from '@_config/index';
 
 class TokenModel {
     private static pool: Pool = dbPool;
-    private static connectionPromise: Promise<PoolConnection>;
-
-    static {
-        this.initDb();
-    }
-
-    private static async initDb(): Promise<void> {  
-        try {
-            this.connectionPromise = this.pool.getConnection();
-        } catch (err) {
-            console.error('DB connection iniit fail: ', err)
-            process.exit(1);                //init 실패하면 종료
-        }
-    }
 
     protected static async query(sql: string, values: any[] = []): Promise<any> {
-        const connection = await this.connectionPromise;            //연결 connection으로 가져오기
+        const connection = await this.pool.getConnection();
         try {
             const [results] = await connection.execute(sql, values);
-            return results;                                       
+            return results;
         } catch (err) {
-            console.error('Query execution fail: ', err);
+            console.error('Query execution failed: ', err);
             throw err;
         } finally {
-            connection.release();               // 오류랑 상관없이 연결한걸 pool로 반환
+            connection.release();
         }
     }
 
