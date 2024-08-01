@@ -55,7 +55,8 @@ apiInterceptors.interceptors.response.use(
 
 async function handleTokenRefresh() {
     try {
-        const response = await apiInterceptors.post('/auth/refresh');
+        const path = baseURI + '/auth/refresh';
+        const response = await apiInterceptors.post(path);
         return response.data.token;
     } catch (error) {
         throw new Error('Failed to refresh token');
