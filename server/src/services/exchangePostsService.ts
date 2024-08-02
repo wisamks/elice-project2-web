@@ -1,7 +1,7 @@
 import { NotFoundError, ForbiddenError, InternalServerError } from "@_/utils/customError";
 import PostModel from "@_/models/postModel";
 import PhotoModel from "@_/models/photoModel";
-import { PostCreationData } from "@_/customTypes/postType";
+import { PostCreationData, PostUpdateData } from "@_/customTypes/postType";
 
 
 // 중고거래 게시판 서비스
@@ -54,6 +54,55 @@ class ExchangePostsService {
 			throw err;
 		}
 	}
+
+    // 게시글 수정
+    static async updatePost(postId: number, userId: number, updateData: PostUpdateData, newImages?: string[]): Promise<void> {
+        // 게시글 존재 유무 판단 및 권한 확인
+        const post = await PostModel.findById(postId);
+        if (!post) {
+            throw new NotFoundError('게시글을 찾을 수 없습니다.');
+        }
+        if (post.user_id !== userId) {
+            throw new ForbiddenError('게시글을 수정할 권한이 없습니다.');
+        }
+
+        // 게시글 정보 업데이트
+        const updatedPost = await PostModel.updatePost(postId, updateData);
+        if (!updatedPost) {
+            throw new InternalServerError('게시글 업데이트에 실패했습니다.');
+        }
+
+        // 이미지 업데이트(photoModel 사용)
+        if (newImages !== undefined) {
+            // 기존 이미지 조회
+            const existingPhotos = await PhotoModel.getPhotosByPostId(postId);
+
+            // newimage 비어있으면 삭제
+            // 기존이랑 비교 후 삭제할 이미지와 추가할 이미지 확인
+            if (newImages.length === 0) {
+                // 모든 이미지 삭제(photomodel)
+                await PhotoModel.deleteAllPhotos(postId);
+            } else {
+                // 삭제할 이미지 처리
+                for (const photo of existingPhotos) {
+                    if (!newImages.includes(photo.url)) {
+                        await PhotoModel.deletePhoto(photo.id);
+                    }
+                }
+
+                // 추가할 이미지 처리
+                // existingUrl은 게시글에서 가져온 사진에서 가져온 url 들
+                // imgaesToAdd는 새로 추가하는 사진 url
+                // photoModel 사용해서 내용 판별 후 이미지 추가
+                const existingUrls = existingPhotos.map(photo => photo.url);
+                const imagesToAdd = newImages.filter(url => !existingUrls.includes(url));
+                if (imagesToAdd.length > 0) {
+                    await PhotoModel.createPhotos(postId, imagesToAdd);
+                }
+            }
+        }
+    }
+
     // 게시글 삭제
     static async deletePost(postId: number, userId: number): Promise<void> {
         const post = await PostModel.findById(postId);
@@ -70,7 +119,7 @@ class ExchangePostsService {
         await PhotoModel.deleteAllPhotos(postId);
 
         if (!deleted) {
-          throw new Error('게시글 삭제에 실패했습니다.');
+          throw new InternalServerError('게시글 삭제에 실패했습니다.');
         }
         
       }

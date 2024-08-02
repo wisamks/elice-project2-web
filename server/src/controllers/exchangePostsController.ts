@@ -1,8 +1,8 @@
 import {Request, Response, NextFunction} from 'express';
 import ExchangePostsService from '@_services/exchangePostsService';
-import { BadRequestError, UnauthorizedError } from '@_/utils/customError';
+import { BadRequestError, UnauthorizedError, ForbiddenError } from '@_/utils/customError';
 import { ReqUser } from '@_/customTypes/express';
-import { PostStatus } from '@_/customTypes/postType';
+import { PostStatus, PostSort, PostUpdateData } from '@_/customTypes/postType';
 
 // 중고거래 게시판 컨트롤러
 class ExchangePostsController {
@@ -55,26 +55,53 @@ class ExchangePostsController {
         }
         
     }
+
+
     // 게시글 수정
     static async updatePost(req: Request, res: Response, next: NextFunction) {
-        // const obj = {
-        //     sort: '판매',
-        //     target: 'male',
-        //     item: 'top',
-        //     location: '강남구',
-        //     title: '제목', 
-        //     price: 7000,
-        //     images: [],
-        //     content: 'as;dghasdfkajsdga',
-        // }
-        // 1. const userId = req.user.userId;
-        // 2. postId 패스파라미터로 받아오기
-        // 3. postId로 게시글 찾아서 userId 일치하는지 확인 -> 아니면 403 에러, 못 찾았으면 404 에러
-        // 4-1. postId로 title, content수정 post 테이블
-        // 4-2. postId로 sort, target, item, location, price 수정 post_exchange_detail 테이블
-        // 4-3. postId로 images수정
-        // 5. 성공 시 204 No Content 응답
+        try {
+            const user = req.user as ReqUser;
+            const postId = req.params.postId;
+            const { sort, target, item, location, title, price, images, content, status } = req.body;
+
+            const updateData: PostUpdateData = {
+                sort: sort as PostSort,
+                target,
+                item,
+                location,
+                title,
+                price: price !== undefined ? +price : undefined,
+                content,
+                status: status as PostStatus
+            };
+
+            await ExchangePostsService.updatePost(+postId, user.userId, updateData, images);
+    
+            res.status(204).end();
+        } catch (error) {
+            next(error);
+        }
     }
+
+    // static async updatePost(req: Request, res: Response, next: NextFunction) {
+    //     // const obj = {
+    //     //     sort: '판매',
+    //     //     target: 'male',
+    //     //     item: 'top',
+    //     //     location: '강남구',
+    //     //     title: '제목', 
+    //     //     price: 7000,
+    //     //     images: [],
+    //     //     content: 'as;dghasdfkajsdga',
+    //     // }
+    //     // 1. const userId = req.user.userId;
+    //     // 2. postId 패스파라미터로 받아오기
+    //     // 3. postId로 게시글 찾아서 userId 일치하는지 확인 -> 아니면 403 에러, 못 찾았으면 404 에러
+    //     // 4-1. postId로 title, content수정 post 테이블
+    //     // 4-2. postId로 sort, target, item, location, price 수정 post_exchange_detail 테이블
+    //     // 4-3. postId로 images수정
+    //     // 5. 성공 시 204 No Content 응답
+    // }
 
     // ReqUser = req.user
     static async deletePost(req: Request, res: Response, next: NextFunction) {
