@@ -10,12 +10,12 @@ const router = Router();
 // 쿼리 파라미터의 page와 perPage가 숫자 형태를 한 string이 맞는지 joi 검사
 router.get('/', ExchangePostsController.findPosts);
 // 게시글 조회
-router.get('/:postExchangeId', ExchangePostsController.findOnePost);
+router.get('/:postId', ExchangePostsController.findOnePost);
 // 게시글 생성
 router.post('/', authenticateJWT, ExchangePostsController.createPost);
 // 게시글 수정
-router.put('/:postExchangeId', authenticateJWT, ExchangePostsController.updatePost);
+router.put('/:postId', authenticateJWT, ExchangePostsController.updatePost);
 // 게시글 삭제
-router.delete('/:PostExchangeId', authenticateJWT, ExchangePostsController.deletePost);
+router.delete('/:postId', authenticateJWT, ExchangePostsController.deletePost);
 
 export default router;

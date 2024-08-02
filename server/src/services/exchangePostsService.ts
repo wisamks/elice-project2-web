@@ -1,5 +1,7 @@
-import { NotFoundError, ForbiddenError } from "@_/utils/customError";
+import { NotFoundError, ForbiddenError, InternalServerError } from "@_/utils/customError";
 import PostModel from "@_/models/postModel";
+import PhotoModel from "@_/models/photoModel";
+import { PostCreationData } from "@_/customTypes/postType";
 
 
 // 중고거래 게시판 서비스
@@ -35,7 +37,23 @@ class ExchangePostsService {
     static async checkMyFavorite() {
         // userId와 postId를 넣으면 favorite 테이블에서 찾아서 해당 정보를 뱉어주는 함수
     }
-
+    // 중고거래 게시글 생성
+    static async createPost(postContent: PostCreationData) {
+		const createdPost = await PostModel.createPost(postContent);
+		if (!createdPost) {
+			throw new InternalServerError('게시글을 생성하는 데 실패했습니다.');
+		}
+		return createdPost;
+    }
+	// 게시글 이미지 생성
+	static async createImages(postId: number, images: Array<string>) {
+		try {
+			const createdImages = await PhotoModel.createPhotos(postId, images);
+			return;
+		} catch(err) {
+			throw err;
+		}
+	}
     // 게시글 삭제
     static async deletePost(postId: number, userId: number): Promise<void> {
         const post = await PostModel.findById(postId);
@@ -49,6 +67,7 @@ class ExchangePostsService {
         }
         // model이용 소프트 델리트 구현
         const deleted = await PostModel.softDeletePost(postId);
+        await PhotoModel.deleteAllPhotos(postId);
 
         if (!deleted) {
           throw new Error('게시글 삭제에 실패했습니다.');

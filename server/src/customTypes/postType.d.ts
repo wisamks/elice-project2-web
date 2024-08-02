@@ -1,8 +1,10 @@
 export enum PostStatus {
-    진행중 = '진행중',
-    예약중 = '예약중',
-    거래완료 = '거래완료'
+    '예약' = '예약',
+    '진행' = '진행',
+    '완료' = '완료'
 }
+
+export type PostSort = '판매' | '나눔';
 
 export interface Post {
     post_id: number;       // (PK)
@@ -18,11 +20,11 @@ export interface Post {
 
 // postExchangeDetail
 export interface PostExchangeDetail {
-    post_id: number;  // post id - PK, FK
     item: string;     
     target: string;   
     location: string; 
     price: number;    // 0 or (price > 0) ?
+    sort: PostSort;
 }
 
 // post + postExchangeDetail (조회용!)

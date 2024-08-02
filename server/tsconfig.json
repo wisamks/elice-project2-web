@@ -49,8 +49,5 @@
         "forceConsistentCasingInFileNames": true,
     },
     "include": ["src/**/*.ts", "src/**/*.json", ".env", "src/passport-config/strategies/googleStrategy.js"],
-    "exclude": ["./node_modules", "**/*.spec.ts", "logs"],
-    "ts-node": {
-          "esm": true
-        }
+    "exclude": ["./node_modules", "**/*.spec.ts", "logs"]
 }
