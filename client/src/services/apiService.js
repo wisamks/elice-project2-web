@@ -4,7 +4,7 @@ export const apiService = async (controller, model) => {
     try{
         const response = await controller(apiInterceptors);
 
-        if (response.status !== 200) {
+        if (response.status !== 200 && response.status !== 204) {
             throw new Error('Network response was not ok');
         }
 
