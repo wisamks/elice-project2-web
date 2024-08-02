@@ -77,3 +77,35 @@ export class InternalServerError extends Error {
         this.name = 'InternalServerError'; 
     }
 }
+
+// DatabaseConnectionError
+// DB 와 서버 연결 실패 시 발생하는 error
+// 
+export class DatabaseConnectionError extends Error {
+    statusCode: number;
+
+    constructor(message: string = 'DB connection failed') {
+        super(message);
+        this.statusCode = 500;
+        this.name = 'DatabaseConnectionError';
+    }
+}
+
+// SQL 쿼리 실패 시 발생하는 error
+export class QueryExecutionError extends Error {
+    statusCode: number;
+
+    constructor(message: string = 'Query execution failed') {
+        super(message);
+        this.statusCode = 500;
+        this.name = 'QueryExecutionError';
+    }
+}
+
+// 데이터를 못찾았을때 발생 에러 = notFoundError 랑 같음(확장)
+export class DataNotFoundError extends NotFoundError {
+    constructor(message: string = 'Data Not found') {
+        super(message);
+        this.name = 'DataNotFoundError';
+    }
+}
