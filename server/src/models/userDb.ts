@@ -1,18 +1,24 @@
 import { Pool } from 'mysql2/promise'; 
 import { pool as dbPool } from '@_config/index';
+import { DatabaseConnectionError, QueryExecutionError, DataNotFoundError } from "@_utils/customError";      
+// low-level의 에러처리는 최대한 많은 정보 반환하는것이 좋음
 
 class UserDb {
     private static pool: Pool = dbPool;
 
-    // 매 쿼리마다 새로운 커넥션을 가져오는 방식으로 수정
     protected static async query(sql: string, values: any[] = []): Promise<any> {
-        const connection = await this.pool.getConnection();
+        let connection;
+        try {
+            connection = await this.pool.getConnection();
+        } catch (err) {
+            throw new DatabaseConnectionError('Failed to connect to the DB');
+        }
+
         try {
             const [results] = await connection.execute(sql, values);
             return results;
         } catch (err) {
-            console.error('Query execution fail: ', err);
-            throw err;
+            throw new QueryExecutionError(`Failed to execute query: ${sql}`);           // 실패한 쿼리 알려주기
         } finally {
             connection.release();
         }
@@ -20,7 +26,10 @@ class UserDb {
 
     protected static async findOne(sql: string, values: any[] = []): Promise<any | null> {
         const results = await this.query(sql, values);
-        return results.length ? results[0] : null;
+        if (results.length === 0) {
+            throw new DataNotFoundError(`No data found for query: ${sql}`);             // 실패한 쿼리 알려주기
+        }
+        return results[0];
     }
 
     protected static async findMany(sql: string, values: any[] = []): Promise<any[]> {
@@ -39,3 +48,4 @@ class UserDb {
 }
 
 export default UserDb;
+

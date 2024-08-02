@@ -1,30 +1,42 @@
 import UserDb from "@_models/userDb";
 import { User, UserCreationData, UserUpdateData, OAuthUserInfo, SnsCode, JoinUser } from "@_/customTypes/userType";
+import { NotFoundError, BadRequestError, ConflictError, DataNotFoundError, QueryExecutionError } from "@_utils/customError";
+// low-level의 오류를 high-level로 전달해서 변환하기
 
 
 class UserModel extends UserDb {
     public static async initiateUserFromOauth(oauthUserInfo: JoinUser): Promise<User> {
-        // 유저 확인
-        const existingUser = await this.findByOauth(oauthUserInfo.email, oauthUserInfo.snsCode);
-        if (existingUser) {
-            return existingUser;
+        try {
+            const existingUser = await this.findByOauth(oauthUserInfo.email, oauthUserInfo.snsCode);
+            if (existingUser) {
+                return existingUser;
+            }
+            return await this.createInitialUser(oauthUserInfo);
+        } catch (err) {
+            if (err instanceof QueryExecutionError) {
+                throw new BadRequestError('Failed to initiate user from OAuth');
+            }
+            throw err;
         }
-
-        return await this.createInitialUser(oauthUserInfo);
     }
     
-    // oauth 제공자 + email로 조회
     public static async findByOauth(email: string, snsCode: SnsCode): Promise<User | null> {
         const sql = 'SELECT * FROM user WHERE email = ? AND sns_code = ? AND deleted_at IS NULL';
-        return await this.findOne(sql, [email, snsCode]);
+        try {
+            return await this.findOne(sql, [email, snsCode]);
+        } catch (err) {
+            if (err instanceof DataNotFoundError) {            
+                return null;
+            }
+            throw err;
+        }
     }
 
-    // oauth데이터 기반 필드 넣기 nickname null 상태
     private static async createInitialUser(oauthUserInfo: JoinUser): Promise<User> {
         const userData: UserCreationData = {
             email: oauthUserInfo.email,
             name: oauthUserInfo.name,
-            nickname: oauthUserInfo.nickname, // 닉네임 입력 전 
+            nickname: oauthUserInfo.nickname,
             image: oauthUserInfo.image || null,
             snsCode: oauthUserInfo.snsCode
         };
@@ -48,12 +60,13 @@ class UserModel extends UserDb {
                 deletedAt: null
             } as User;
         } catch (err) {
-            console.error('cannot user create: ', err);
+            if (err instanceof QueryExecutionError) {
+                throw new ConflictError('User already exists or invalid data');
+            }
             throw err;
         }
     }
 
-    // 필드 추가 완료 데이터    
     public static async completeRegistration(id: number, nickname: string): Promise<User | null> {
         const sql = `
             UPDATE user 
@@ -68,30 +81,38 @@ class UserModel extends UserDb {
             }
             return null;
         } catch (err) {
-            console.error('cannot complete user :', err);
+            if (err instanceof QueryExecutionError) {
+                throw new BadRequestError('Failed to complete user registration');
+            }
             throw err;
         }
     }
 
-    // id로 조회
     public static async findById(id: number): Promise<User | null> {
         const sql = `SELECT * FROM user WHERE id = ? AND deleted_at IS NULL`;
-        return await this.findOne(sql, [id]);
+        try {
+            return await this.findOne(sql, [id]);
+        } catch (err) {
+            if (err instanceof DataNotFoundError) {
+                return null;
+            }
+            throw err;
+        }
     }
 
-    // 닉네임 있는지 조회 
     public static async findExistNickname(nickname: string): Promise<boolean> {
         const sql = 'SELECT COUNT(*) as count FROM user WHERE nickname = ? AND deleted_at IS NULL';
         try {
             const result: { count: number } = await this.findOne(sql, [nickname]);
-            return result.count > 0;        // count: n or 0
+            return result.count > 0;
         } catch (err) {
-            console.error('findExistNickname fail:', err);
+            if (err instanceof DataNotFoundError) {
+                return false;
+            }
             throw err;
         }
     }
 
-    // updateuser는 변경 예정
     public static async updateUser(id: number, updatedData: UserUpdateData): Promise<User | null> {
         const updateFields: string[] = [];
         const updateValues: any[] = [];
@@ -120,24 +141,26 @@ class UserModel extends UserDb {
             await super.update(sql, updateValues);
             return this.findById(id);
         } catch (err) {
-            console.error('cannot update user: ', err);
+            if (err instanceof QueryExecutionError) {
+                throw new ConflictError('Failed to update user');
+            }
             throw err;
         }
     }
-    // soft delete
+
     public static async softDelete(id: number): Promise<boolean> {
         const sql = 'UPDATE user SET deleted_at = CURRENT_TIMESTAMP WHERE id = ? AND deleted_at IS NULL';
-
         try {
             const result = await this.update(sql, [id]);
             return result > 0;
         } catch (err) {
-            console.error('cannot softdelete:', err);
+            if (err instanceof QueryExecutionError) {
+                throw new BadRequestError('Failed to delete user');
+            }
             throw err;
         }
     }
 }
 
-
-
 export default UserModel;
+
