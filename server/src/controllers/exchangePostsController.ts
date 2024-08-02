@@ -2,6 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 import ExchangePostsService from '@_services/exchangePostsService';
 import { BadRequestError, UnauthorizedError } from '@_/utils/customError';
 import { ReqUser } from '@_/customTypes/express';
+import { PostStatus } from '@_/customTypes/postType';
 
 // 중고거래 게시판 컨트롤러
 class ExchangePostsController {
@@ -37,32 +38,27 @@ class ExchangePostsController {
     }
     // 게시글 생성
     static async createPost(req: Request, res: Response, next: NextFunction) {
-        // body 입력값 예시
-        // const obj = {
-        //     sort: 'sale',
-        //     target: 'male',
-        //     item: 'top',
-        //     location: '강남구',
-        //     title: '제목', 
-        //     price: 7000,
-        //     images: [],
-        //     content: 'as;dghasdfkajsdga',
-        // }
-        // 1. const userId = req.user.userId; 
-        // 2-1. sort에 따라 activityId 조회
-        // 2-2. categoryId 는 '중고거래'로 조회? 굳이 필요한가?
-        // 3. title, content, userId, activityId(있다면), categoryId를 이용해서 1차적으로 post에 넣기
-        // 4-1. 생성된 postId를 이용해서 sort, target, item, location, price, status='진행'을 post_exchange_detail에 집어넣기
-        // 4-2. 생성된 postId를 이용해서 이미지는 이미지 생성 서비스에서 이미지 생성 model로 넘기고 promise.all로 한 번에 처리하기
-        // 5. 생성된 postId를 반환 201응답
+        // sort에 따라 activityId 조회 -> 포인트 구현 시
         const currUser = req.user as ReqUser;
         const userId = currUser.userId;
         const {sort, target, item, location, title, price, images, content} = req.body;
+        const category_id = 1;
+        const status = '진행' as PostStatus;
+        const postContent = {user_id: userId, sort, category_id, title, content, status, item, target, location, price: +price};
+        try {
+            const createdPost = await ExchangePostsService.createPost(postContent);
+            const postId = createdPost.post_id;
+            await ExchangePostsService.createImages(postId, images);
+            return res.status(201).json({postId});
+        } catch(err) {
+            return next(err);
+        }
+        
     }
     // 게시글 수정
     static async updatePost(req: Request, res: Response, next: NextFunction) {
         // const obj = {
-        //     sort: 'sale',
+        //     sort: '판매',
         //     target: 'male',
         //     item: 'top',
         //     location: '강남구',
@@ -84,10 +80,9 @@ class ExchangePostsController {
     static async deletePost(req: Request, res: Response, next: NextFunction) {
         try {
           const user = req.user as ReqUser;
-          const postId = req.params.postId as unknown as number;        // 타입에러 떠서 가이드 대로 변경 - 미들웨어에서 postId 검증 완료
-
+          const postId = req.params.postId;        // 타입에러 떠서 가이드 대로 변경 - 미들웨어에서 postId 검증 완료
           // model -> service 이용해서 게시글 삭제(비즈니스로직은 서비스로..분리)
-          await ExchangePostsService.deletePost(postId, user.userId);
+          await ExchangePostsService.deletePost(+postId, user.userId);
     
           res.status(204).end();
         } catch (error) {

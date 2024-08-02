@@ -105,12 +105,12 @@ class AuthController {
         }
     }
     static async getTokenFromRefresh (req: Request, res: Response, next: NextFunction) {
-        const { refreshToken } = req.cookies.refreshToken;
+        const { refreshToken } = req.cookies;
         try {
             if (!refreshToken) {
                 throw new UnauthorizedError('로그인이 필요합니다.');
             }
-            const payload: any = AuthService.validateRefresh(refreshToken);
+            const payload: any = await AuthService.validateRefresh(refreshToken);
             const accessToken = setToken(payload.userId);
             res.cookie('accessToken', accessToken, {maxAge: 3600000, httpOnly: true});
             return res.status(204).end();
