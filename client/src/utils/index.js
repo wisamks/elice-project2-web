@@ -8,6 +8,14 @@ export const formatCommaStringToNumber = (formattedNumber) => {
     return Number(formattedNumber.replace(/,/g, ''));
 };
 
+// 날짜 표시형식 -> 2024.7.15
+export const formatDateToString = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1);
+    const day = String(date.getDate());
+    return `${year}.${month}.${day}`;
+};
+
 // 포커스 이동
 export const focusInput = (ref) => {
     if (ref && ref.current) {

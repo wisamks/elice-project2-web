@@ -7,7 +7,7 @@ const BoardPage = () => {
     return(
         <Routes>
           <Route path="/create" element={<CreatePost />} />
-          <Route path="/view" element={<ViewPost />} />
+          <Route path="/view/:postId" element={<ViewPost />} />
         </Routes>
     )
 };
