@@ -82,20 +82,9 @@ class ExchangePostsController {
     // ReqUser = req.user
     static async deletePost(req: Request, res: Response, next: NextFunction) {
         try {
-          const user = req.user as ReqUser | undefined;
-          
-          // 사용자 확인 => 없으면 에러
-          if (!user) {
-            throw new UnauthorizedError('사용자 인증이 필요합니다.');
-          }
+          const user = req.user as ReqUser;
+          const postId = req.params.postId as unknown as number;        // 타입에러 떠서 가이드 대로 변경 - 미들웨어에서 postId 검증 완료
 
-          // params에서 postId추출 radix 지정으로 변경안되게(10, 8, 16)진수 등..
-          const postId = parseInt(req.params.postId, 10);
-          
-          // postId가 유요하지 않은 경우
-          if (isNaN(postId)) {
-            throw new BadRequestError('유효하지 않은 게시글 ID입니다.');
-          }
           // model -> service 이용해서 게시글 삭제(비즈니스로직은 서비스로..분리)
           await ExchangePostsService.deletePost(postId, user.userId);
     
