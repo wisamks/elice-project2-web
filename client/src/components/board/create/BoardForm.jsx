@@ -18,7 +18,8 @@ const BoardForm = () => {
     const [selectedItemType, setSelectedItemType] = useState(0);
     const [selectedLocationType, setSelectedLocationType] = useState(0);
 
-    const [title, setTitle] = useState('');
+    const [title, setTitle] = useState('');    
+    const [titleError, setTitleError] = useState('');
     const [price, setPrice] = useState('');
 
     const [images, setImages] = useState([
@@ -39,6 +40,11 @@ const BoardForm = () => {
     const handleChangeTitle = (e) => {
         const value = e.target.value;
         setTitle(value);
+        if(value.length > 50){
+            setTitleError('제목은 50자 이하로 입력하세요.')
+        } else {
+            setTitleError('');
+        };
     };
 
     const handleChangePrice = (e) => {
@@ -114,7 +120,7 @@ const BoardForm = () => {
             />
             <div className="row title">
                 <h3>제목</h3>
-                <p>
+                <p className={titleError ? "error-input" : ""}>
                     <span className="input-box">
                         <input
                             type="text"
@@ -125,6 +131,7 @@ const BoardForm = () => {
                         />
                     </span>
                 </p>
+                {titleError && <p className="error-msg">{titleError}</p>}
             </div>
             <div className="row price">
                 <h3>가격</h3>
