@@ -8,9 +8,9 @@ import { formatNumberToCommaString, formatCommaStringToNumber, focusInput, scrol
 import { apiService } from "../../../services/apiService";
 import { postExchangePost } from '../../../controllers/exchangePostController';
 
-import './BoardForm.css';
+import './CreateForm.css';
 
-const BoardForm = () => {
+const CreateForm = () => {
     const transactionTypes = ['판매', '나눔'];
     const targets = ['남성', '여성', '아동'];
     const items = ['상의', '하의', '원피스', '셋업', '아우터'];
@@ -65,11 +65,12 @@ const BoardForm = () => {
         }
     };
 
-    const setImgSrc = (index, imgSrc) => {
+    const setImgSrc = (index, imgSrc, file) => {
         const setImg = images.map((img, idx) => {
             if(idx === index){
                 return {
                     imgSrc, 
+                    file,
                     isDefault: false
                 };
             }
@@ -83,6 +84,7 @@ const BoardForm = () => {
             if(idx === index){
                 return {
                     imgSrc: '../images/ico-camera.png', 
+                    file: null,
                     isDefault: true
                 };
             }
@@ -91,7 +93,7 @@ const BoardForm = () => {
         setImages(resetImg);
     }
 
-    const handleSetImgSrc = (idx) => (imgSrc) => setImgSrc(idx, imgSrc);
+    const handleSetImgSrc = (idx) => (imgSrc, file) => setImgSrc(idx, imgSrc, file);
     const handleResetImgSrc = (idx) => () => resetImgSrc(idx);
 
     const handleChangeContent = (e) => setContent(e.target.value);
@@ -116,23 +118,28 @@ const BoardForm = () => {
         if(!validateSubmit(!isValidImg, '이미지를 한 장 이상 업로드해주세요.', imgSectionRef, true)) return;
         if(!validateSubmit(!content, '내용을 입력해주세요.', contentRef)) return;
 
-        const data = {
-            title,
-            content,
-            image: images.filter(image => !image.isDefault).map(image => image.imgSrc),
-            sort: transactionTypes[selectedTransactionType],
-            target: targets[selectedTargetType],
-            item: items[selectedItemType],
-            price: Number(price),
-            location: locations[selectedLocationType],
-        }
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('target', targets[selectedTargetType]);
+        formData.append('item', items[selectedItemType]);
+        formData.append('price', Number(price));
+        formData.append('location', locations[selectedLocationType]);
+        formData.append('sort', transactionTypes[selectedTransactionType]);
 
-        const res = await apiService((apiClient) => postExchangePost(apiClient, data));
+        const validImages = images.filter(image => !image.isDefault);
+        validImages.forEach(image => {
+            formData.append('images', image.file);
+        });
+
+        const res = await apiService((apiClient) => postExchangePost(apiClient, formData));
 
         if(res.status === 201){
             const { postId } = res.data;
             window.location.href=`/board/view/${postId}`;
         }
+
+        handleResetForm();
     };
 
     const handleResetForm = () => {
@@ -257,4 +264,4 @@ const BoardForm = () => {
     );
 };
 
-export default BoardForm;
+export default CreateForm;

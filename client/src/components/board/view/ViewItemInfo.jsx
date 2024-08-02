@@ -28,13 +28,13 @@ const ViewItemInfo = ({
 
     const getStatusText = (sort, status) => {
         if (sort === '나눔') {
-            if (status === '진행') return '나눔진행';
-            if (status === '예약') return '나눔예약';
-            if (status === '마감') return '나눔마감';
+            if (status === '진행') return '나눔 진행';
+            if (status === '예약') return '나눔 예약';
+            if (status === '마감') return '나눔 마감';
         } else if (sort === '판매') {
-            if (status === '진행') return '판매진행';
-            if (status === '예약') return '판매예약';
-            if (status === '마감') return '판매마감';
+            if (status === '진행') return '판매 진행';
+            if (status === '예약') return '판매 예약';
+            if (status === '마감') return '판매 마감';
         }
         return '';
     };
@@ -56,7 +56,7 @@ const ViewItemInfo = ({
             </div>
             <div className="row2">
                 <div className="user-info">
-                    <p className="user-profile"><img src={`"../images/profile/${userImage}"`} alt={nickname} /></p>
+                    <p className="user-profile"><img src={userImage} alt={nickname} /></p>
                     <p className="user-name">{nickname}</p>
                 </div>
                 <div className="item-location-date">

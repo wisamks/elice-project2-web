@@ -10,25 +10,30 @@ import ViewSimilarItem from '../../components/board/view/ViewSimilarItem';
 import { getExchangePost } from '../../controllers/exchangePostController';
 import { apiService } from '../../services/apiService';
 
-import './ViewPost.css'
+import './BoardStyle.css'
 
 const ViewPost = () => {
     const navigate = useNavigate();
     const { postId } = useParams();
     const [post, setPost] = useState({});
 
-    useEffect(async () => {
-        if(postId){
-            const res = await apiService((apiClient) => getExchangePost(apiClient, postId));
-            setPost(res.data);
-        }
+    useEffect(() => {
+        const fetchPost = async () => {
+            if (postId) {
+                const res = await apiService((apiClient) => getExchangePost(apiClient, postId));
+                if (res && res.data) {
+                    setPost(res.data);
+                }
+            }
+        };
+        fetchPost();
     }, [postId]);
 
     const handleGoBack = () => {
         navigate(-1);
     };
 
-    if (!post){
+    if (!post) {
         return <div>게시글 정보를 로딩중입니다.</div>
     }
 
@@ -44,7 +49,7 @@ const ViewPost = () => {
                 <ViewPhoto photos={post.photos} />
             </div>
             <div className="view-post-row3">
-                <ViewItemInfo  
+                <ViewItemInfo
                     sort={post.sort}
                     status={post.status}
                     item={post.item}
@@ -55,7 +60,7 @@ const ViewPost = () => {
                     location={post.location}
                     createdAt={post.createdAt}
                 />
-            </div>            
+            </div>
             <div className="view-post-row4">
                 <div className="view-post-row4-column1">
                     <div className="view-post-row4-column1-1">

@@ -1,14 +1,14 @@
-import BoardForm from '../../components/board/create/BoardForm';
+import CreateForm from '../../components/board/create/CreateForm';
 import RecentPosts from '../../components/board/create/RecentPosts';
 
-import './CreatePost.css'
+import './BoardStyle.css'
 
 const CreatePost = () => {
     return (
         <div className="create-post">
             <h1 className="page-title">중고거래 등록하기</h1>
             <div className="create-post-wrap">
-                <BoardForm />
+                <CreateForm />
                 <RecentPosts />
             </div>
         </div>

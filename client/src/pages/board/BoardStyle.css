@@ -1,3 +1,15 @@
+.create-post, .edit-post{
+    width: 1440px;
+    margin: 0px auto;
+}
+
+.create-post-wrap, .edit-post-wrap{
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 120px;
+}
+
 .view-post{
     width: 1440px;
     margin: 60px auto 120px auto;
