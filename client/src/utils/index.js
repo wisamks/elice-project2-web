@@ -1,1 +1,30 @@
-// 유틸
+// 숫자 세 자리 콤마, 문자형으로 변환 됨
+export const formatNumberToCommaString = (number) => {
+    return number ? Number(number).toLocaleString() : number;
+};
+
+// 콤마 지우고 숫자형으로 변환
+export const formatCommaStringToNumber = (formattedNumber) => {
+    return Number(formattedNumber.replace(/,/g, ''));
+};
+
+// 포커스 이동
+export const focusInput = (ref) => {
+    if (ref && ref.current) {
+        ref.current.focus();
+    }
+};
+
+// 스크롤 위치 이동
+export const scrollToSection = (ref, offset = -100) => {
+    if (ref && ref.current) {
+        const targetPosition = ref.current.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = targetPosition + offset;
+
+        window.scrollTo({
+            top : offsetPosition,
+            behavior: 'smooth'
+        });
+    }
+};
+

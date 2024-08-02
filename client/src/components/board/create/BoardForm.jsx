@@ -3,13 +3,12 @@ import { useState, useRef } from 'react';
 import InputRadioGroup from '../../input/InputRadioGroup';
 import InputImageFile from '../../input/InputImageFile';
 
-import { formatNumberToCommaString, formatCommaStringToNumber } from '../../../utils/numbers';
+import { formatNumberToCommaString, formatCommaStringToNumber, focusInput, scrollToSection } from '../../../utils';
 
 import { apiService } from "../../../services/apiService";
-import { signInController } from "../../../controllers/signInController";
+import { exchangePostController } from '../../../controllers/exchangePostController';
 
 import './BoardForm.css';
-import { exchangePostController } from '../../../controllers/exchangePostController';
 
 const BoardForm = () => {
     const transactionTypes = ['판매', '나눔'];
@@ -97,18 +96,6 @@ const BoardForm = () => {
 
     const handleChangeContent = (e) => setContent(e.target.value);
 
-    const focusInput = (ref) => {
-        if(ref && ref.current){
-            ref.current.focus();
-        }
-    };
-
-    const scrollToSection = (ref) => {
-        if(ref && ref.current){
-            ref.current.scrollIntoView({behavior: 'smooth', block: 'start'});
-        }
-    };
-
     const validateSubmit = (condition, msg, target, isSection = false) => {
         if(condition){
             alert(msg);
@@ -149,18 +136,23 @@ const BoardForm = () => {
     };
 
     const handleResetForm = () => {
-        alert('작성중인 게시글을 모두 지우시겠습니까?');
-        setSelectedTransactionType(0);
-        setSelectedTargetType(0);
-        setSelectedItemType(0);
-        setSelectedLocationType(0);
-        setTitle('');
-        setTitleError('');
-        setPrice('');
-        setImages(defaultPhoto);
-        setContent('');
-        scrollToSection(formTopRef);
-    }
+        if(!title && !price && !content && images.every(image => image.isDefault)){
+            return;
+        }
+
+        if(window.confirm('작성중인 게시글을 모두 지우시겠습니까?')){
+            setSelectedTransactionType(0);
+            setSelectedTargetType(0);
+            setSelectedItemType(0);
+            setSelectedLocationType(0);
+            setTitle('');
+            setTitleError('');
+            setPrice('');
+            setImages(defaultPhoto);
+            setContent('');
+            scrollToSection(formTopRef);
+        }
+    };
 
     return (
         <div className="board-form-content" ref={formTopRef}>
