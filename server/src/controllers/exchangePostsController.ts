@@ -58,6 +58,7 @@ class ExchangePostsController {
         // 5. 생성된 postId를 반환 201응답
         const currUser = req.user as ReqUser;
         const userId = currUser.userId;
+        const {sort, target, item, location, title, price, images, content} = req.body;
     }
     // 게시글 수정
     static async updatePost(req: Request, res: Response, next: NextFunction) {

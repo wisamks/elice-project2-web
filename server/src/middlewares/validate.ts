@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { nicknameSchema } from './schemas/nicknameSchema';
-import { postSchema } from './schemas/postSchema';
-// import { findExistNickname } from '../models/userModel';
+import { nicknameSchema } from '@_middlewares/schemas/nicknameSchema';
+import { postSchema } from '@_middlewares/schemas/postSchema';
+// import { findExistNickname } from '@_models/userModel';
 
 // 닉네임 유효성 검사
 export async function validateNickname(req: Request, res: Response, next: NextFunction) {
