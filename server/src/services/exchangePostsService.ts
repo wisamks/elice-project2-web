@@ -1,3 +1,6 @@
+import { NotFoundError, ForbiddenError } from "@_/utils/customError";
+import PostModel from "@_/models/postModel";
+
 
 // 중고거래 게시판 서비스
 class ExchangePostsService {
@@ -32,6 +35,26 @@ class ExchangePostsService {
     static async checkMyFavorite() {
         // userId와 postId를 넣으면 favorite 테이블에서 찾아서 해당 정보를 뱉어주는 함수
     }
+
+    // 게시글 삭제
+    static async deletePost(postId: number, userId: number): Promise<void> {
+        const post = await PostModel.findById(postId);
+        // postId 없으면 
+        if (!post) {
+          throw new NotFoundError('게시글을 찾을 수 없습니다.');
+        }
+        // userId 불일치 경우 에러
+        if (post.user_id !== userId) {
+          throw new ForbiddenError('게시글을 삭제할 권한이 없습니다.');
+        }
+        // model이용 소프트 델리트 구현
+        const deleted = await PostModel.softDeletePost(postId);
+
+        if (!deleted) {
+          throw new Error('게시글 삭제에 실패했습니다.');
+        }
+        
+      }
 }
 
 export default ExchangePostsService;

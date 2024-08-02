@@ -1,7 +1,6 @@
 import {Request, Response, NextFunction} from 'express';
-
 import ExchangePostsService from '@_services/exchangePostsService';
-import { BadRequestError } from '@_/utils/customError';
+import { BadRequestError, UnauthorizedError } from '@_/utils/customError';
 import { ReqUser } from '@_/customTypes/express';
 
 // 중고거래 게시판 컨트롤러
@@ -80,14 +79,41 @@ class ExchangePostsController {
         // 4-3. postId로 images수정
         // 5. 성공 시 204 No Content 응답
     }
-    // 게시글 삭제
+
+    // ReqUser = req.user
     static async deletePost(req: Request, res: Response, next: NextFunction) {
-        // 1. const userId = req.user.userId;
-        // 2. postId 패스 파라미터로 받아오기
-        // 3. postId로 조회 없으면 404, 있는데 userId가 다르면 403
-        // 4. softdelete 하기
-        // 5. 204 No Content 응답
-    }
+        try {
+          const user = req.user as ReqUser | undefined;
+          
+          // 사용자 확인 => 없으면 에러
+          if (!user) {
+            throw new UnauthorizedError('사용자 인증이 필요합니다.');
+          }
+
+          // params에서 postId추출 radix 지정으로 변경안되게(10, 8, 16)진수 등..
+          const postId = parseInt(req.params.postId, 10);
+          
+          // postId가 유요하지 않은 경우
+          if (isNaN(postId)) {
+            throw new BadRequestError('유효하지 않은 게시글 ID입니다.');
+          }
+          // model -> service 이용해서 게시글 삭제(비즈니스로직은 서비스로..분리)
+          await ExchangePostsService.deletePost(postId, user.userId);
+    
+          res.status(204).end();
+        } catch (error) {
+          next(error);
+        }
+      }
+
+    // // 게시글 삭제
+    // static async deletePost(req: Request, res: Response, next: NextFunction) {
+    //     // 1. const userId = req.user.userId;
+    //     // 2. postId 패스 파라미터로 받아오기
+    //     // 3. postId로 조회 없으면 404, 있는데 userId가 다르면 403
+    //     // 4. softdelete 하기
+    //     // 5. 204 No Content 응답
+    // }
 }
 
 export default ExchangePostsController;
