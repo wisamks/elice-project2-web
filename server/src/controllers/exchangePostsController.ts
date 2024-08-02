@@ -1,21 +1,21 @@
 import {Request, Response, NextFunction} from 'express';
 
 import ExchangePostsService from '@_services/exchangePostsService';
+import { BadRequestError } from '@_/utils/customError';
 
 // 중고거래 게시판 컨트롤러
 class ExchangePostsController {
     // 목록 조회
     static async findPosts(req: Request, res: Response, next: NextFunction) {
-        // 쿼리 파라미터로 페이지와 페이지 별 게시글 개수 가져오기(number 변환 잊지 말기)
-        // 쿼리 파라미터로 카테고리 아이디를 가져와서 필요한 게시글 구분하기
-        // 이후 필터 관련 변수들 추가되면 추가하기
-        const {perPage, page, categoryId} = req.query;
+        // 이후 필터 관련 변수들 추가되면 미들웨어 이용해서 추가하기
+        
         // 1. 페이지네이션을 진행하여 필요한 게시글들 불러오는 서비스
-        const _categoryId = Number(categoryId);
-        const _page = page ? Number(page) : 1;
-        const _perPage = perPage ? Number(perPage) : 40;
-        const totalPostsCount = ExchangePostsService.getPostsCount(_categoryId);
-        const foundPosts = ExchangePostsService.getPosts(_categoryId, _page, _perPage);
+        if (req.pagination === undefined) {
+            throw new BadRequestError('입력값이 올바르지 않습니다.');
+        }
+        const {page, perPage, categoryId} = req.pagination;
+        const totalPostsCount = ExchangePostsService.getPostsCount(categoryId);
+        const foundPosts = ExchangePostsService.getPosts(categoryId, page, perPage);
         // 2. 각 게시글 당 댓글 개수를 조회하는 서비스
         // const commentsCountedPosts = ExchangePostsService.getCommentsCount();
         // 3. 사진 테이블에서 is_main을 확인해서 대문 이미지를 찾는 서비스
@@ -44,9 +44,27 @@ class ExchangePostsController {
         //     images: [],
         //     content: 'as;dghasdfkajsdga',
         // }
+        // 1. const userId = req.user.userId; 
+        // 2-1. sort에 따라 activityId 조회
+        // 2-2. categoryId 는 '중고거래'로 조회? 굳이 필요한가?
+        // 3. title, content, userId, activityId(있다면), categoryId를 이용해서 1차적으로 post에 넣기
+        // 4-1. 생성된 postId를 이용해서 sort, target, item, location, price, status='진행'을 post_exchange_detail에 집어넣기
+        // 4-2. 생성된 postId를 이용해서 이미지는 이미지 생성 서비스에서 이미지 생성 model로 넘기고 promise.all로 한 번에 처리하기
+        // 5. 생성된 postId를 반환 201응답
     }
     // 게시글 수정
-    static async updatePost(req: Request, res: Response, next: NextFunction) {}
+    static async updatePost(req: Request, res: Response, next: NextFunction) {
+        // const obj = {
+        //     sort: 'sale',
+        //     target: 'male',
+        //     item: 'top',
+        //     location: '강남구',
+        //     title: '제목', 
+        //     price: 7000,
+        //     images: [],
+        //     content: 'as;dghasdfkajsdga',
+        // }
+    }
     // 게시글 삭제
     static async deletePost(req: Request, res: Response, next: NextFunction) {}
 }
