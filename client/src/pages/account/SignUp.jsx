@@ -121,7 +121,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../styles/account-common.css';
+import './account-common.css';
 import './SignUp.css';
 
 const SignUp = () => {
