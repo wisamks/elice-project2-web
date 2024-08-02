@@ -1,10 +1,16 @@
 import { useState, useRef } from 'react';
+import { useRecoilState } from 'recoil';
+import { 
+    itemTypeState,
+    locationTypeState,
+    titleState,
+    priceState,
+} from '../../../atom/boardState';
 
 import InputRadioGroup from '../../input/InputRadioGroup';
 import InputImageFile from '../../input/InputImageFile';
 
 import { formatNumberToCommaString, formatCommaStringToNumber, focusInput, scrollToSection } from '../../../utils';
-
 import { apiService } from "../../../services/apiService";
 import { exchangePostController } from '../../../controllers/exchangePostController';
 
@@ -30,14 +36,14 @@ const BoardForm = () => {
         }
     ];
 
+    const [selectedItemType, setSelectedItemType] = useRecoilState(itemTypeState);
+    const [selectedLocationType, setSelectedLocationType] = useRecoilState(locationTypeState);
+    const [title, setTitle] = useRecoilState(titleState);
+    const [price, setPrice] = useRecoilState(priceState);
+
     const [selectedTransactionType, setSelectedTransactionType] = useState(0);
     const [selectedTargetType, setSelectedTargetType] = useState(0);
-    const [selectedItemType, setSelectedItemType] = useState(0);
-    const [selectedLocationType, setSelectedLocationType] = useState(0);
-
-    const [title, setTitle] = useState('');    
     const [titleError, setTitleError] = useState('');
-    const [price, setPrice] = useState('');
     const [content, setContent] = useState('');
     const [images, setImages] = useState(defaultPhoto);
 
