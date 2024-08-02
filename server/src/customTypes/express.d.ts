@@ -1,11 +1,18 @@
-export interface User {
+export interface ReqUser {
 	userId: number;
+}
+
+interface Pagination {
+	page: number;
+	perPage: number;
+	categoryId: number;
 }
 
 declare global {
 	namespace Express {
 		interface Request {
-			user?: User;
+			user?: ReqUser;
+			pagination?: Pagination;
 		}
 	}
 }

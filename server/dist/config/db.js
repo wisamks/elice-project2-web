@@ -13,6 +13,7 @@ const dbConfig = {
     port: 3306,
     password: process.env.MYSQL_PW,
     database: process.env.MYSQL_NAME,
+    waitForConnections: true,
 };
 const pool = promise_1.default.createPool(dbConfig);
 exports.default = pool;

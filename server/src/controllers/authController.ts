@@ -5,7 +5,7 @@ import UserModel from '@_models/userModel';
 import { BadRequestError, ConflictError, ForbiddenError, InternalServerError, UnauthorizedError } from '@_/utils/customError';
 import { clientDomain, jwtAccessTokenSecret } from '@_/config';
 import { SnsCode } from '@_/customTypes/userType';
-import { User } from '@_customTypes/express';
+import { ReqUser } from '@_customTypes/express';
 
 class AuthController {
     // oauth 로그인, 유저가 없다면 회원가입하게 만들기
@@ -94,7 +94,7 @@ class AuthController {
             if (typeof(req.user) === 'undefined') {
                 throw new UnauthorizedError('로그인이 필요합니다.');
             }
-            const user = req.user as User;
+            const user = req.user as ReqUser;
             const userId = user.userId;
             AuthService.deleteRefresh(req.cookies.refreshToken);
             AuthService.deleteUser(userId);
