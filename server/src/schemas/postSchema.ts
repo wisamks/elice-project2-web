@@ -17,14 +17,14 @@ export const postSchema = Joi.object({
         .valid('상의', '하의', '원피스', '셋업', '아우터')
         .required().messages({
             'any.required': '아이템을 선택해야 합니다.'
-        })
+        }),
     location: Joi.string()
         .valid('강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구',
                '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구',
                '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구')
         .required().messages({
             'any.required': '거래위치를 선택해야 합니다.'
-        })
+        }),
     title: Joi.string()
         .max(50).message('제목은 최대 50글자까지 가능합니다.')
         .required().messages({

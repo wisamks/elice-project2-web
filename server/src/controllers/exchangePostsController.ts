@@ -2,6 +2,7 @@ import {Request, Response, NextFunction} from 'express';
 
 import ExchangePostsService from '@_services/exchangePostsService';
 import { BadRequestError } from '@_/utils/customError';
+import { ReqUser } from '@_/customTypes/express';
 
 // 중고거래 게시판 컨트롤러
 class ExchangePostsController {
@@ -55,6 +56,8 @@ class ExchangePostsController {
         // 4-1. 생성된 postId를 이용해서 sort, target, item, location, price, status='진행'을 post_exchange_detail에 집어넣기
         // 4-2. 생성된 postId를 이용해서 이미지는 이미지 생성 서비스에서 이미지 생성 model로 넘기고 promise.all로 한 번에 처리하기
         // 5. 생성된 postId를 반환 201응답
+        const currUser = req.user as ReqUser;
+        const userId = currUser.userId;
     }
     // 게시글 수정
     static async updatePost(req: Request, res: Response, next: NextFunction) {

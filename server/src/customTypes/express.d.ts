@@ -1,4 +1,4 @@
-export interface User {
+export interface ReqUser {
 	userId: number;
 }
 
@@ -11,7 +11,7 @@ interface Pagination {
 declare global {
 	namespace Express {
 		interface Request {
-			user?: User;
+			user?: ReqUser;
 			pagination?: Pagination;
 		}
 	}
