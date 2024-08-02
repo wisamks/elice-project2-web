@@ -24,12 +24,16 @@ class ExchangePostsController {
     }
     // 게시글 조회
     static async findOnePost(req: Request, res: Response, next: NextFunction) {
-        // 클라에서 받아오는 정보
-        // postId path로 받아오기
-        // 1. 사진 3개 리밋, 총 개수
-        // 2. 게시글 하나 정보 목록에서 얻는 거 + 좋아요 수 + 상세 설명
-        // 3. 비슷한 상품 조회 목록 조회 filter 걸어서 limit 8개
-        // 4. 댓글 조회 따로 api 호출
+        // 1. postId path로 받아오기 
+        // 2-1. postId로 게시글 가져오기 -> 없으면 404
+        // 2-2. postId로 사진 가져오기 3개
+        // 2-3. postId로 사진 총 개수 가져오기
+        // 2-4. postId로 사진에서 is_main이 true인 거 찾기
+        // 2-5. postId로 댓글 개수 조회
+        // 2-6. postId로 좋아요 개수 조회
+        // 2-7. userId와 postId 집어넣어서 좋아요 검색
+        // 3. 가져온 게시글의 filter들을 이용해서 중고거래 게시판 목록 1페이지 8개를 출력
+        // 댓글은 따로 클라이언트에게 api조회 시키기
     }
     // 게시글 생성
     static async createPost(req: Request, res: Response, next: NextFunction) {
@@ -64,9 +68,22 @@ class ExchangePostsController {
         //     images: [],
         //     content: 'as;dghasdfkajsdga',
         // }
+        // 1. const userId = req.user.userId;
+        // 2. postId 패스파라미터로 받아오기
+        // 3. postId로 게시글 찾아서 userId 일치하는지 확인 -> 아니면 403 에러, 못 찾았으면 404 에러
+        // 4-1. postId로 title, content수정 post 테이블
+        // 4-2. postId로 sort, target, item, location, price 수정 post_exchange_detail 테이블
+        // 4-3. postId로 images수정
+        // 5. 성공 시 204 No Content 응답
     }
     // 게시글 삭제
-    static async deletePost(req: Request, res: Response, next: NextFunction) {}
+    static async deletePost(req: Request, res: Response, next: NextFunction) {
+        // 1. const userId = req.user.userId;
+        // 2. postId 패스 파라미터로 받아오기
+        // 3. postId로 조회 없으면 404, 있는데 userId가 다르면 403
+        // 4. softdelete 하기
+        // 5. 204 No Content 응답
+    }
 }
 
 export default ExchangePostsController;
