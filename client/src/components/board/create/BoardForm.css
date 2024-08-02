@@ -45,8 +45,18 @@
     border-radius: 8px;
 }
 
+.board-form-content .title .error-input .input-box{
+    border-color: var(--point-color);
+}
+
 .board-form-content .title input, .board-form-content .price input{
     font-size: 16px;
+}
+
+.error-msg{
+    margin-top: 8px;
+    text-align: right;
+    color: var(--point-color);
 }
 
 .board-form-content .price p{
