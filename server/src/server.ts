@@ -8,6 +8,7 @@ import { serverPort } from '@_config';
 import authRouter from '@_routers/authRouter';
 import usersRouter from '@_routers/usersRouter';
 import exchangePostsRouter from '@_routers/exchangePostsRouter';
+import imagesRouter from '@_routers/imagesRouter';
 
 import passportConfig from '@_passport-config';
 passportConfig();
@@ -31,6 +32,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 //라우터
+app.use('/api/images', imagesRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/exchange-posts', exchangePostsRouter);
