@@ -82,18 +82,44 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
         }
     };
 
-    const setImgSrc = (index, imgSrc, file) => {
-        const setImg = images.map((img, idx) => {
-            if(idx === index){
-                return {
-                    imgSrc, 
-                    file,
-                    isDefault: false
-                };
+    const setImgSrc = async (index, imgSrc, file) => {
+        const uploadImage = async (file) => {
+            const formData = new FormData();
+            formData.append('image', file);
+        
+            try {
+                const response = await fetch('http://localhost:8080/api/images/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+        
+                if (!response.ok) {
+                    throw new Error('Image upload failed');
+                }
+        
+                const data = await response.json();
+                return data.images;
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                return null;
             }
-            return img;
-        });
-        setImages(setImg);
+        };
+
+        const imageUrls = await uploadImage(file);
+
+        if (imageUrls && imageUrls.length > 0) {
+            const setImg = images.map((img, idx) => {
+                if(idx === index){
+                    return {
+                        imgSrc: imageUrls[0],
+                        file,
+                        isDefault: false
+                    };
+                }
+                return img;
+            });
+            setImages(setImg);
+        }
     };
 
     const resetImgSrc = (index) => {
@@ -135,21 +161,21 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
         if(!validateSubmit(!isValidImg, '이미지를 한 장 이상 업로드해주세요.', imgSectionRef, true)) return;
         if(!validateSubmit(!content, '내용을 입력해주세요.', contentRef)) return;
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
-        formData.append('target', targets[selectedTargetType]);
-        formData.append('item', items[selectedItemType]);
-        formData.append('price', Number(price));
-        formData.append('location', locations[selectedLocationType]);
-        formData.append('sort', sortTypes[selectedSortType]);
-
         const validImages = images.filter(image => !image.isDefault);
-        validImages.forEach(image => {
-            formData.append('images', image.file);
-        });
+        const imageUrls = validImages.map(image => image.imgSrc);
 
-        onSubmit(formData);
+        const data = {
+            title,
+            content,
+            target: targets[selectedTargetType],
+            item: items[selectedItemType],
+            price: Number(price),
+            location: locations[selectedLocationType],
+            sort: sortTypes[selectedSortType],
+            images: imageUrls
+        };
+
+        onSubmit(data);
     };
 
     const handleResetForm = () => {
