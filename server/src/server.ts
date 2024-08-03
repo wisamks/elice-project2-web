@@ -9,7 +9,6 @@ import authRouter from '@_routers/authRouter';
 import usersRouter from '@_routers/usersRouter';
 import exchangePostsRouter from '@_routers/exchangePostsRouter';
 
-import authenticateAccessToken from '@_middlewares/authenticateJWT';
 import passportConfig from '@_passport-config';
 passportConfig();
 
@@ -26,14 +25,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 app.use(passport.initialize()); // 패스포트 초기화
 
-// 임시 동작 확인용: 나중에 삭제
+// 임시 동작 확인용: 나중에 삭제!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!꼭!!!!!!!!!!!!!!!!!!!!!!!
 app.get('/', (req: Request, res: Response) => {
     res.send('hello typescript');
-})
-
-// 임시 jwt 인증 관련 테스트용: 나중에 로그인 완성되면 삭제하기
-app.get('/profile', authenticateAccessToken, (req: Request, res: Response) => {
-    return res.json(req.user);
 })
 
 //라우터

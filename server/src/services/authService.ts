@@ -54,11 +54,15 @@ class AuthService {
     }
     // refresh 유효성 검증
     static async validateRefresh (refreshToken: string) {
-        const foundToken = await TokenModel.findOne(refreshToken);
-        if (!foundToken) {
-            throw new ForbiddenError('잘못된 접근입니다.');
+        try {
+            const foundToken = await TokenModel.findOne(refreshToken);
+            if (!foundToken) {
+                throw new ForbiddenError('잘못된 접근입니다.');
+            }
+            return jwt.verify(foundToken.token, jwtRefreshTokenSecret, { algorithms: ['HS256'] });
+        } catch(err) {
+            throw err;
         }
-        return jwt.verify(foundToken, jwtRefreshTokenSecret);
     }
     // refresh db 생성
     static async createRefresh (userId: number, refreshToken: string) {

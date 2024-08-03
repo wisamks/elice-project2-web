@@ -17,6 +17,13 @@ const serverPort = process.env.SERVER_PORT as string;
 const jwtAccessTokenSecret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
 const jwtRefreshTokenSecret = process.env.JWT_REFRESH_TOKEN_SECRET as string;
 
+const pointMap = {
+    '출석': 30,
+    '인증': 80,
+    '나눔': 120,
+    '리폼': 200,
+};
+
 export {
     clientDomain,
 
@@ -32,4 +39,6 @@ export {
     serverPort,
     jwtAccessTokenSecret,
     jwtRefreshTokenSecret,
+
+    pointMap,
 };

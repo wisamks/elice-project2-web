@@ -4,24 +4,24 @@ import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria,
 class PostModel extends PostDb {
 
     public static async createPost(postData: PostCreationData): Promise<Post> {
-        const { user_id, category_id, title, content, status, item, target, location, price } = postData;
+        const { user_id, category_id, title, content, status, item, target, location, price, sort } = postData;
 
         // post create 쿼리
         const postSql = `
-            INSERT INTO post (user_id, category_id, title, content, status)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO post (user_id, category_id, title, content)
+            VALUES (?, ?, ?, ?)
         `;
 
-        const postValues = [user_id, category_id, title, content, status];
+        const postValues = [user_id, category_id, title, content];
         const post_id = await this.insert(postSql, postValues);
 
         // postExchangeDetail create 쿼리
         const detailSql = `
-            INSERT INTO post_exchange_detail (post_id, item, target, location, price)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO post_exchange_detail (post_id, item, target, location, price, status, sort)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
         
-        const detailValues = [post_id, item, target, location, price];
+        const detailValues = [post_id, item, target, location, price, status, sort];
         await this.insert(detailSql, detailValues);
 
         return {
@@ -35,6 +35,7 @@ class PostModel extends PostDb {
             target,
             location,
             price,
+            sort,
             created_at: new Date(),
             updated_at: new Date(),
             deleted_at: null
@@ -46,11 +47,12 @@ class PostModel extends PostDb {
         const sql = `
             SELECT p.*, ped.*, u.nickname, u.image as user_image
             FROM post p
-            JOIN post_exchange_detail ped ON p.post_id = ped.post_id
-            JOIN user u ON p.user_id = u.user_id
-            WHERE p.post_id = ? AND p.deleted_at IS NULL
+            JOIN post_exchange_detail ped ON p.id = ped.post_id
+            JOIN user u ON p.user_id = u.id
+            WHERE p.id = ? AND p.deleted_at IS NULL
         `;
-        return await this.findOne(sql, [post_id]);
+        const result =  await this.findOne(sql, [post_id]);
+        return result;
     }
 
     public static async updatePost(post_id: number, updateData: PostUpdateData): Promise<PostWithDetails | null> {
@@ -111,7 +113,7 @@ class PostModel extends PostDb {
     }
 
     public static async softDeletePost(post_id: number): Promise<boolean> {
-        const sql = 'UPDATE post SET deleted_at = CURRENT_TIMESTAMP WHERE post_id = ? AND deleted_at IS NULL';
+        const sql = 'UPDATE post SET deleted_at = CURRENT_TIMESTAMP WHERE id = ? AND deleted_at IS NULL';
         const result = await this.update(sql, [post_id]);
         return result > 0;
     }

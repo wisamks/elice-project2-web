@@ -5,7 +5,7 @@ import UserModel from '@_models/userModel';
 import { BadRequestError, ConflictError, ForbiddenError, InternalServerError, UnauthorizedError } from '@_/utils/customError';
 import { clientDomain, jwtAccessTokenSecret } from '@_/config';
 import { SnsCode } from '@_/customTypes/userType';
-import { User } from '@_customTypes/express';
+import { ReqUser } from '@_customTypes/express';
 
 class AuthController {
     // oauth 로그인, 유저가 없다면 회원가입하게 만들기
@@ -27,7 +27,7 @@ class AuthController {
             // 유저 id를 가져와서 토큰을 만들 때 집어 넣기
             // 이후 패스포트에서 뜯어서 id를 req.user에 넣게 만들고 그 때부터 로그인한 유저는 해당 아이디로 조회하여 확인
             const accessToken = setToken(foundUser.id);
-            const refreshToken = setToken(foundUser.id);
+            const refreshToken = setToken(foundUser.id, true);
             await AuthService.createRefresh(foundUser.id, refreshToken);
 
             res.cookie('accessToken', accessToken, {maxAge: 3600000, httpOnly: true}) // domain: 'localhost', 잘 안 되면 옵션으로 추가해보기
@@ -94,7 +94,7 @@ class AuthController {
             if (typeof(req.user) === 'undefined') {
                 throw new UnauthorizedError('로그인이 필요합니다.');
             }
-            const user = req.user as User;
+            const user = req.user as ReqUser;
             const userId = user.userId;
             AuthService.deleteRefresh(req.cookies.refreshToken);
             AuthService.deleteUser(userId);
@@ -105,12 +105,12 @@ class AuthController {
         }
     }
     static async getTokenFromRefresh (req: Request, res: Response, next: NextFunction) {
-        const { refreshToken } = req.cookies.refreshToken;
+        const { refreshToken } = req.cookies;
         try {
             if (!refreshToken) {
                 throw new UnauthorizedError('로그인이 필요합니다.');
             }
-            const payload: any = AuthService.validateRefresh(refreshToken);
+            const payload: any = await AuthService.validateRefresh(refreshToken);
             const accessToken = setToken(payload.userId);
             res.cookie('accessToken', accessToken, {maxAge: 3600000, httpOnly: true});
             return res.status(204).end();

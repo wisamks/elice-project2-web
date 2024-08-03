@@ -1,8 +1,8 @@
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response } from 'express';
 
 import AuthController from '@_controllers/authController';
 
-import { validateNickname } from '@_middlewares/validateNickname';
+import { validateNickname } from '@_middlewares/validate';
 import authenticateAccessToken from '@_middlewares/authenticateJWT';
 
 const router = Router();
@@ -11,7 +11,7 @@ const router = Router();
 router.post('/login', AuthController.login);
 
 // 닉네임 중복 확인
-router.post('/nickname', AuthController.checkNickname);
+router.post('/nickname', validateNickname, AuthController.checkNickname);
 
 // 회원가입
 router.post('/join', AuthController.join);
@@ -23,7 +23,7 @@ router.post('/logout', authenticateAccessToken, AuthController.logout);
 router.delete('/', authenticateAccessToken, AuthController.delete);
 
 // accessToken 유효한지 확인
-router.get('/access', authenticateAccessToken, (req, res) => {
+router.get('/access', authenticateAccessToken, (req: Request, res: Response) => {
     res.status(200).json({ message: "로그인이 되어있습니다."});
 });
 
