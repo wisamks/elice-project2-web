@@ -5,8 +5,6 @@ import { authenticateAccessToken } from '@_/middlewares';
 
 const router = Router();
 
-router.post('/', authenticateAccessToken, FavoriteController.createFavorite);
-
-router.delete('/', authenticateAccessToken, FavoriteController.deleteFavorite);
+router.post('/', authenticateAccessToken, FavoriteController.toggleFavorite);
 
 export default router;

@@ -9,6 +9,7 @@ import authRouter from '@_routers/authRouter';
 import usersRouter from '@_routers/usersRouter';
 import exchangePostsRouter from '@_routers/exchangePostsRouter';
 import favoriteRouter from '@_routers/favoriteRouter';
+import { getUserByToken } from '@_middlewares';
 
 import passportConfig from '@_passport-config';
 passportConfig();
@@ -25,6 +26,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 app.use(passport.initialize()); // 패스포트 초기화
+
+app.use(getUserByToken);
 
 // 임시 동작 확인용: 나중에 삭제!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!꼭!!!!!!!!!!!!!!!!!!!!!!!
 app.get('/', (req: Request, res: Response) => {

@@ -1,11 +1,11 @@
 import FavoriteModel from "@_/models/favoriteModel";
 
 class FavoriteService {
-    static async createFavorite(postId: number, userId: number) {
-        return await FavoriteModel.create(postId, userId);
-    }
-
-    static async deleteFavorite(postId: number, userId: number) {
+    static async toggleFavorite(postId: number, userId: number) {
+        const foundFavorite = await FavoriteModel.findOneByUserId(postId, userId);
+        if (!foundFavorite) {
+            return await FavoriteModel.create(postId, userId);
+        }
         return await FavoriteModel.deleteOne(postId, userId);
     }
 }

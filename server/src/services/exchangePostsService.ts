@@ -16,7 +16,7 @@ class ExchangePostsService {
         // 전체 게시글 수를 세는 함수
         return await PostModel.getPostsCount(categoryId);
     }
-    static async getPosts(paginations: Paginations, filters: Filters | undefined) {
+    static async getPosts(paginations: Paginations, filters: Filters | undefined, userId: number|undefined) {
         // categoryId, page, perPage를 넣으면 
         // post테이블에 user 테이블과 post_exchange_detail 테이블을 join하고
         // 페이지네이션을 진행하여 게시글 배열을 뱉어주는 함수
@@ -28,8 +28,12 @@ class ExchangePostsService {
         //     } * perPage개
         // ]
         const foundPosts = await PostModel.getPosts(paginations, filters);
-        return foundPosts.map(foundPost => (
-            {
+        const posts = await Promise.all(foundPosts.map(async (foundPost) => {
+            if (!userId) {
+                return false;
+            }
+            const isMyFavorite = await FavoriteModel.findOneByUserId(foundPost.id, userId);
+            return {
                 postId: foundPost.id,
                 userId: foundPost.user_id,
                 nickname: foundPost.nickname,
@@ -44,9 +48,12 @@ class ExchangePostsService {
                 status: foundPost.status,
                 target: foundPost.target,
                 item: foundPost.item,
-                sort: foundPost.sort,                    
+                sort: foundPost.sort,
+                isMyFavorite: !!isMyFavorite,                    
             }
-        ));
+        }))
+        console.log(posts);
+        return posts;
     }
     // 각 게시글 당 댓글 개수를 조회하는 서비스
     static async getCommentsCount(postId: number) {
@@ -92,7 +99,8 @@ class ExchangePostsService {
         if (!userId) {
             return false;
         }
-        return await FavoriteModel.findOneByUserId(postId, userId);
+        const foundFavorite = await FavoriteModel.findOneByUserId(postId, userId);
+        return foundFavorite;
     }
     // 중고거래 게시글 생성
     static async createPost(postContent: PostCreationData) {
@@ -176,9 +184,6 @@ class ExchangePostsService {
         if (!deleted) {
             throw new InternalServerError('게시글 삭제에 실패했습니다.');
         }
-        // 댓글
-        // 좋아요
-        // 사진
         await Promise.all([
             PhotoModel.deleteByPostId(postId),
             FavoriteModel.deleteByPostId(postId),

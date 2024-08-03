@@ -14,8 +14,10 @@ class ExchangePostsController {
         if (req.paginations === undefined) {
             throw new BadRequestError('입력값이 올바르지 않습니다.');
         }
+        const user = req.user as ReqUser;
+        const userId = user.userId;
         const totalPostsCount = await ExchangePostsService.getPostsCount(req.paginations.categoryId = 1);
-        const foundPosts = await ExchangePostsService.getPosts(req.paginations, req.filters);
+        const foundPosts = await ExchangePostsService.getPosts(req.paginations, req.filters, userId);
         // 2. 각 게시글 당 댓글 개수를 조회하는 서비스
         // const commentsCountedPosts = ExchangePostsService.getCommentsCount();
         // 3. 사진 테이블에서 is_main을 확인해서 대문 이미지를 찾는 서비스
@@ -67,7 +69,7 @@ class ExchangePostsController {
                 page: 1,
                 perPage: 8,
                 categoryId: 1,
-            }, filters);
+            }, filters, _userId);
             return res.status(200).json({
                 post: {
                     postId: foundPost.id,
@@ -99,7 +101,7 @@ class ExchangePostsController {
                     thumbnailId: foundThumbnail.id,
                     thumbnailUrl: foundThumbnail.url,
                 },
-                isMyFavorite,
+                isMyFavorite: !!isMyFavorite,
                 filteredPosts: foundFilteredPosts,
             });
         } catch(err) {
