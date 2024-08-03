@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import InputRadioGroup from '../../input/InputRadioGroup';
 import InputImageFile from '../../input/InputImageFile';
@@ -8,10 +8,10 @@ import { formatNumberToCommaString, formatCommaStringToNumber, focusInput, scrol
 import { apiService } from "../../../services/apiService";
 import { postExchangePost } from '../../../controllers/exchangePostController';
 
-import './CreateForm.css';
+import './PostForm.css';
 
-const CreateForm = () => {
-    const transactionTypes = ['판매', '나눔'];
+const PostForm = ({ initialPost, onSubmit, formType }) => {
+    const sortTypes = ['판매', '나눔'];
     const targets = ['남성', '여성', '아동'];
     const items = ['상의', '하의', '원피스', '셋업', '아우터'];
     const locations = ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중량구']
@@ -30,7 +30,7 @@ const CreateForm = () => {
         }
     ];
 
-    const [selectedTransactionType, setSelectedTransactionType] = useState(0);
+    const [selectedSortType, setSelectedSortType] = useState(0);
     const [selectedTargetType, setSelectedTargetType] = useState(0);
     const [selectedItemType, setSelectedItemType] = useState(0);
     const [selectedLocationType, setSelectedLocationType] = useState(0);
@@ -46,6 +46,26 @@ const CreateForm = () => {
     const priceRef = useRef({});
     const imgSectionRef = useRef({});
     const contentRef = useRef({});
+
+    useEffect(() => {
+        if(initialPost){
+            setSelectedSortType(sortTypes.indexOf(initialPost.sort));
+            setSelectedTargetType(targets.indexOf(initialPost.target));
+            setSelectedItemType(items.indexOf(initialPost.item));
+            setSelectedLocationType(locations.indexOf(initialPost.location));
+
+            setTitle(initialPost.title);
+            setPrice(initialPost.price);
+            setContent(initialPost.content);
+
+            setImages(
+                initialPost.photos.map(photo => ({
+                    imgSrc : photo,
+                    isDefault: false
+                })).concat(defaultPhoto.slice(initialPost.photos.length))
+            );
+        }
+    }, [initialPost]);
 
     const handleChangeTitle = (e) => {
         const value = e.target.value;
@@ -125,21 +145,14 @@ const CreateForm = () => {
         formData.append('item', items[selectedItemType]);
         formData.append('price', Number(price));
         formData.append('location', locations[selectedLocationType]);
-        formData.append('sort', transactionTypes[selectedTransactionType]);
+        formData.append('sort', sortTypes[selectedSortType]);
 
         const validImages = images.filter(image => !image.isDefault);
         validImages.forEach(image => {
             formData.append('images', image.file);
         });
 
-        const res = await apiService((apiClient) => postExchangePost(apiClient, formData));
-
-        if(res.status === 201){
-            const { postId } = res.data;
-            window.location.href=`/board/view/${postId}`;
-        }
-
-        handleResetForm();
+        onSubmit(formData);
     };
 
     const handleResetForm = () => {
@@ -148,7 +161,7 @@ const CreateForm = () => {
         }
 
         if(window.confirm('작성중인 게시글을 모두 지우시겠습니까?')){
-            setSelectedTransactionType(0);
+            setSelectedSortType(0);
             setSelectedTargetType(0);
             setSelectedItemType(0);
             setSelectedLocationType(0);
@@ -165,11 +178,11 @@ const CreateForm = () => {
         <div className="board-form-content" ref={formTopRef}>
             <InputRadioGroup
                 title="거래유형"
-                id="transaction-type"
-                className="transaction"
-                options={transactionTypes}
-                selectedOption={selectedTransactionType}
-                handleRadioClick={setSelectedTransactionType}
+                id="sort-type"
+                className="sort"
+                options={sortTypes}
+                selectedOption={selectedSortType}
+                handleRadioClick={setSelectedSortType}
             />
             <InputRadioGroup
                 title="대상"
@@ -257,11 +270,13 @@ const CreateForm = () => {
                     <span className='btn-cancel-full'>취소하기</span>
                 </p>
                 <p className='btn-submit' onClick={handleSubmitForm}>
-                    <span className='btn-primary-full'>등록하기</span>
+                    <span className='btn-primary-full'>
+                        {formType === 'edit' ? '수정하기' : '등록하기'}
+                    </span>
                 </p>
             </div>
         </div>
     );
 };
 
-export default CreateForm;
+export default PostForm;

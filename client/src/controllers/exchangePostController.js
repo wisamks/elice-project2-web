@@ -1,5 +1,13 @@
 import { baseURI } from "./baseURI";
 
+export const getExchangePost = async (apiClient, postId) => {
+    const fetchURI = baseURI + `/api/exchange-posts/${postId}`;
+    const response = await apiClient.get(fetchURI, {
+        withCredentials: true,
+    });
+    return response;
+};
+
 export const postExchangePost = async (apiClient, data) => {
     const fetchURI = baseURI + '/api/exchange-posts/'
 
@@ -7,14 +15,6 @@ export const postExchangePost = async (apiClient, data) => {
         withCredentials: true,
     });
 
-    return response;
-};
-
-export const getExchangePost = async (apiClient, postId) => {
-    const fetchURI = baseURI + `/api/exchange-posts/${postId}`;
-    const response = await apiClient.get(fetchURI, {
-        withCredentials: true,
-    });
     return response;
 };
 

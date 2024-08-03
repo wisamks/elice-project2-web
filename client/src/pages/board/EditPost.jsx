@@ -1,8 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-import EditForm from '../../components/board/edit/EditForm';
+import PostForm from '../../components/board/PostForm';
 import RecentPosts from '../../components/board/create/RecentPosts';
+
+import { apiService } from '../../services/apiService';
+import { getExchangePost, updateExchangePost } from '../../controllers/exchangePostController';
 
 import './BoardStyle.css'
 
@@ -38,7 +41,7 @@ const EditPost = () => {
         <div className="edit-post">
             <h1 className="page-title">게시글 수정하기</h1>
             <div className="edit-post-wrap">
-                <EditForm post={post} onSubmit={onSubmit} />
+                <PostForm initialPost={post} onSubmit={onSubmit} formType="edit" />
                 <RecentPosts />
             </div>
         </div>
