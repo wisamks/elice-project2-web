@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import PostForm from '../../components/board/PostForm';
-import RecentPosts from '../../components/board/create/RecentPosts';
+import RecentPosts from '../../components/post/RecentPosts';
 
 import { apiService } from '../../services/apiService';
 import { postExchangePost } from '../../controllers/exchangePostController';

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import PostForm from '../../components/board/PostForm';
-import RecentPosts from '../../components/board/create/RecentPosts';
+import RecentPosts from '../../components/post/RecentPosts';
 
 import { apiService } from '../../services/apiService';
 import { getExchangePost, updateExchangePost } from '../../controllers/exchangePostController';

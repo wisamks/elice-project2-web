@@ -1,5 +1,5 @@
-import ItemCardHorizontal from "../../itemCard/ItemCardHorizontal";
-import { formatDateToString } from "../../../utils";
+import ItemCardHorizontal from '../itemCard/ItemCardHorizontal';
+import { formatDateToString } from "../../utils";
 
 import './RecentPosts.css'
 

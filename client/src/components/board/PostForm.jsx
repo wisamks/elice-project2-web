@@ -1,12 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 
-import InputRadioGroup from '../../input/InputRadioGroup';
-import InputImageFile from '../../input/InputImageFile';
+import InputRadioGroup from '../input/InputRadioGroup';
+import InputImageFile from '../input/InputImageFile';
 
-import { formatNumberToCommaString, formatCommaStringToNumber, focusInput, scrollToSection } from '../../../utils';
-
-import { apiService } from "../../../services/apiService";
-import { postExchangePost } from '../../../controllers/exchangePostController';
+import { formatNumberToCommaString, formatCommaStringToNumber, focusInput, scrollToSection } from '../../utils';
 
 import './PostForm.css';
 

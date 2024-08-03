@@ -1,3 +1,4 @@
+/* 생성, 수정 페이지 */
 .create-post, .edit-post{
     width: 1440px;
     margin: 0px auto;
@@ -10,6 +11,7 @@
     margin-bottom: 120px;
 }
 
+/* 상세 페이지 */
 .view-post{
     width: 1440px;
     margin: 60px auto 120px auto;
@@ -65,3 +67,5 @@
     width: 423px;
     padding: 60px 0 0 40px;
 }
+
+/* 목록 페이지 */
