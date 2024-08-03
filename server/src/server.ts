@@ -8,6 +8,7 @@ import { serverPort } from '@_config';
 import authRouter from '@_routers/authRouter';
 import usersRouter from '@_routers/usersRouter';
 import exchangePostsRouter from '@_routers/exchangePostsRouter';
+import favoriteRouter from '@_routers/favoriteRouter';
 
 import passportConfig from '@_passport-config';
 passportConfig();
@@ -34,6 +35,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/exchange-posts', exchangePostsRouter);
+app.use('/api/favorite', favoriteRouter);
 
 // 에러 핸들링 미들웨어
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

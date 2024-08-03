@@ -20,10 +20,21 @@ class FavoriteModel extends PostDb {
         return result;
     }
 
-    public static async deleteAllByPostId(postId: number) {
+    public static async deleteOne(postId: number, userId: number) {
+        const sql = `UPDATE favorite SET deleted_at = CURRENT_TIMESTAMP WHERE post_id = ? AND user_id = ? AND deleted_at IS NULL`;
+        return await this.update(sql, [postId, userId]);
+    }
+
+    public static async deleteByPostId(postId: number) {
         const sql = `UPDATE favorite SET deleted_at = CURRENT_TIMESTAMP WHERE post_id = ? AND deleted_at IS NULL`;
-        const result = await this.update(sql, [postId]);
-        return result;
+        await this.update(sql, [postId]);
+        return;
+    }
+
+    public static async deleteByUserId(userId: number) {
+        const sql = `UPDATE favorite SET deleted_at = CURRENT_TIMESTAMP WHERE user_id = ? AND deleted_at IS NULL`;
+        await this.update(sql, [userId]);
+        return;
     }
 }
 

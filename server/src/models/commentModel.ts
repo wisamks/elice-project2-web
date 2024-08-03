@@ -21,9 +21,15 @@ class CommentModel extends PostDb {
 
     public static async updateOneById(commentId: number) {}
 
-    public static async deleteByPostId(postId: number) {}
+    public static async deleteByPostId(postId: number) {
+        const sql = `UPDATE comment SET deleted_at = CURRENT_TIMESTAMP WHERE post_id = ? AND deleted_at IS NULL`;
+        return await this.update(sql, [postId]);
+    }
 
-    public static async deleteByUserId(userId: number) {}
+    public static async deleteByUserId(userId: number) {
+        const sql = `UPDATE comment SET deleted_at = CURRENT_TIMESTAMP WHERE user_id = ? AND deleted_at IS NULL`;
+        return await this.update(sql, [userId]);
+    }
 
     public static async deleteById(commentId: number) {}
 }

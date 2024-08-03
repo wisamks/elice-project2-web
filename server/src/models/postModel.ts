@@ -118,6 +118,12 @@ class PostModel extends PostDb {
         const result = await this.update(sql, [post_id]);
         return result > 0;
     }
+
+    public static async deleteByUserId(userId: number) {
+        const sql = 'UPDATE post SET deleted_at = CURRENT_TIMESTAMP WHERE user_id = ? AND deleted_at IS NULL';
+        await this.update(sql, [userId]);
+        return;
+    }
 // -------------------------------------------------------------------------------------
 // 아래부터는 작동유무 확인 및 다른 모델 정의 필요
     // category_id에 해당하는 게시글 조회

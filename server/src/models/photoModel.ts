@@ -9,12 +9,16 @@ class PhotoModel extends PostDb {
         return result;
     }
 
-    public static async deleteAllPhotos(postId: number) {
+    public static async deleteByPostId(postId: number) {
         const sql = `UPDATE photo SET deleted_at = CURRENT_TIMESTAMP WHERE post_id = ? AND deleted_at IS NULL`;
         const data = [postId];
         const result = await this.update(sql, data);
-        console.log(result);
         return;
+    }
+
+    public static async deleteByUserId(userId: number) {
+        const sql = `UPDATE photo SET deleted_at = CURRENT_TIMESTAMP WHERE user_id = ? AND deleted_at IS NULL`;
+        return await this.update(sql, [userId]);
     }
 
     public static async deletePhoto(photoId: number) {

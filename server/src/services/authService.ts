@@ -8,6 +8,10 @@ import { JoinUser } from '@_/customTypes/userType';
 import { jwtRefreshTokenSecret } from '@_config';
 import TokenModel from '@_models/tokenModel';
 import AxiosModel from '@_/models/axiosModel';
+import FavoriteModel from '@_/models/favoriteModel';
+import CommentModel from '@_/models/commentModel';
+import PostModel from '@_/models/postModel';
+import PhotoModel from '@_/models/photoModel';
 
 // authService를 모아두는 클래스
 class AuthService {
@@ -52,6 +56,23 @@ class AuthService {
         await UserModel.softDelete(userId);
         return;
     }
+    static async deleteFavorites (userId: number) {
+        await FavoriteModel.deleteByUserId(userId);
+        return;
+    }
+    static async deletePosts (userId: number) {
+        await PostModel.deleteByUserId(userId);
+        return;
+    }
+    static async deleteComments (userId: number) {
+        await CommentModel.deleteByUserId(userId);
+        return;
+    }
+    static async deletePhotos (userId: number) {
+        await PhotoModel.deleteByUserId(userId);
+        return;
+    }
+
     // refresh 유효성 검증
     static async validateRefresh (refreshToken: string) {
         try {

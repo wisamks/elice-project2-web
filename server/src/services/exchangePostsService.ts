@@ -138,7 +138,7 @@ class ExchangePostsService {
             // 기존이랑 비교 후 삭제할 이미지와 추가할 이미지 확인
             if (newImages.length === 0) {
                 // 모든 이미지 삭제(photomodel)
-                await PhotoModel.deleteAllPhotos(postId);
+                await PhotoModel.deleteByPostId(postId);
             } else {
                 // 삭제할 이미지 처리
                 for (const photo of existingPhotos) {
@@ -173,12 +173,18 @@ class ExchangePostsService {
         }
         // model이용 소프트 델리트 구현
         const deleted = await PostModel.softDeletePost(postId);
-        await PhotoModel.deleteAllPhotos(postId);
-
         if (!deleted) {
-          throw new InternalServerError('게시글 삭제에 실패했습니다.');
+            throw new InternalServerError('게시글 삭제에 실패했습니다.');
         }
-        
+        // 댓글
+        // 좋아요
+        // 사진
+        await Promise.all([
+            PhotoModel.deleteByPostId(postId),
+            FavoriteModel.deleteByPostId(postId),
+            CommentModel.deleteByPostId(postId),
+        ]);
+        return;
       }
 }
 
