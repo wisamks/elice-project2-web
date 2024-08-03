@@ -1,0 +1,24 @@
+.ItemCardVertical205 a{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ItemCardVertical205 .item-photo{
+    width: 205px;
+    height: 270px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ItemCardVertical205 .item-photo img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ItemCardVertical205 .item-name{
+    font-size: 16px;
+    font-weight: 500;
+    color: #222;
+}

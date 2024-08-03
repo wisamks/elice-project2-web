@@ -1,2 +1,31 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.jwtRefreshTokenSecret = exports.jwtAccessTokenSecret = exports.serverPort = exports.naverRedirectUri = exports.naverClientPw = exports.naverClientId = exports.googleRedirectUri = exports.googleClientPw = exports.googleClientId = exports.pool = exports.clientDomain = void 0;
 // 설정
+const db_1 = __importDefault(require("./db"));
+exports.pool = db_1.default;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const clientDomain = process.env.LOCAL_CLIENT_DOMAIN;
+exports.clientDomain = clientDomain;
+const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+exports.googleClientId = googleClientId;
+const googleClientPw = process.env.REACT_APP_GOOGLE_CLIENT_SECRET;
+exports.googleClientPw = googleClientPw;
+const googleRedirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
+exports.googleRedirectUri = googleRedirectUri;
+const naverClientId = process.env.REACT_APP_NAVER_CLIENT_ID;
+exports.naverClientId = naverClientId;
+const naverClientPw = process.env.REACT_APP_NAVER_CLIENT_SECRET;
+exports.naverClientPw = naverClientPw;
+const naverRedirectUri = process.env.REACT_APP__NAVER_REDIRECT_URI;
+exports.naverRedirectUri = naverRedirectUri;
+const serverPort = process.env.SERVER_PORT;
+exports.serverPort = serverPort;
+const jwtAccessTokenSecret = process.env.JWT_ACCESS_TOKEN_SECRET;
+exports.jwtAccessTokenSecret = jwtAccessTokenSecret;
+const jwtRefreshTokenSecret = process.env.JWT_REFRESH_TOKEN_SECRET;
+exports.jwtRefreshTokenSecret = jwtRefreshTokenSecret;

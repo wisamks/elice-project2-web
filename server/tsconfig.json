@@ -5,24 +5,49 @@
         ],
         "target": "ESNext",
         "module": "CommonJS",
-        "typeRoots": ["node_modules/@types"],
+        "typeRoots": ["node_modules/@types", "./src/customTypes"],
         "moduleResolution": "node",
         "rootDir": "./src",                                 
         "outDir": "./dist",
         "strict": true,
         "baseUrl": "src",
         "paths": {
-          "@/*": ["*"],
+          "@_/*": ["./*"],
+
+          "@_config/*": ["./config/*"],
+          "@_config": ["./config/index.ts"],
+
+          "@_controllers/*": ["./controllers/*"],
+          "@_controllers": ["./controllers/index.ts"],
+
+          "@_customTypes/*": ["./customTypes/*"],
+          "@_customTypes": ["./customTypes/index.ts"],
+
+          "@_middlewares/*": ["./middlewares/*"],
+          "@_middlewares": ["./middlewares/index.ts"],
+
+          "@_models/*": ["./models/*"],
+          "@_models": ["./models/index.ts"],
+
+          "@_passport-config/*": ["./passport-config/*"],
+          "@_passport-config": ["./passport-config/index.ts"],
+
+          "@_routers/*": ["./routers/*"],
+          "@_routers": ["./routers/index.ts"],
+
+          "@_services/*": ["./services/*"],
+          "@_services": ["./services/index.ts"],
+
+          "@_utils/*": ["./utils/*"],
+          "@_utils": ["./utils/index.ts"],
         },
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "experimentalDecorators": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
     },
-    "include": ["src/**/*.ts", "src/**/*.json", ".env"],
-    "exclude": ["./node_modules", "**/*.spec.ts", "logs"],
-    "ts-node": {
-          "esm": true
-        }
+    "include": ["src/**/*.ts", "src/**/*.json", ".env", "src/passport-config/strategies/googleStrategy.js"],
+    "exclude": ["./node_modules", "**/*.spec.ts", "logs"]
 }

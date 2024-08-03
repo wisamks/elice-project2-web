@@ -1,0 +1,188 @@
+/* .SignUp{
+    min-height: 530px;
+}
+
+.signup-form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+
+    margin-bottom: 48px;
+
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+.signup-input-wrap{
+    display: flex;
+    width: 480px;
+    height: 60px;
+    box-sizing: border-box;
+
+    padding: 15px 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.signup-input-wrap label{
+    display: block;
+    width: 80px;
+}
+
+.signup-input-box input{
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.signup-phone-wrap{
+    display: flex;
+    width: 358px;
+}
+
+.signup-phone-default{
+    width: 62px;
+}
+
+.signup-input-phone-num{
+    width: 205px;
+    margin-right: 32px;
+}
+
+.signup-btn-phone-auth{
+    color: #00A040;
+    cursor: pointer;
+}
+
+.signup-auth-wrap{
+    display: flex;
+    justify-content: space-between;
+
+    width: 288px;
+}
+
+.signup-auth-input-box{
+    width: 158px;
+    height: 38px;
+    padding: 0 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.signup-btn-phone-auth-submit{
+    width: 78px;
+}
+
+.signup-btn-submit{
+    height: 60px;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.validation-message {
+    font-size: 12px;
+    white-space: nowrap;
+} */
+
+
+.SignUp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signup-form {
+    height: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 28px;
+}
+
+.signup-input-wrap {
+    display: flex;
+    width: 480px;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 15px 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.signup-input-wrap label {
+    width: 80px;
+    margin-right: 10px;
+}
+
+
+
+.signup-input-box input {
+    width: 100%;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+}
+
+.signup-btn-submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 480px;
+    height: 60px;
+    background-color: #00A040;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.signup-btn-submit span {
+    width: 100%;
+    text-align: center;
+}
+
+.validation-btn{
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-size: 16px;
+    color: #00A040;
+    background-color: white;
+    border: 1px solid #00A040;
+    border-radius: 7px;
+    padding: 7px;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.validation-message {
+
+    margin-left: auto;
+    padding-right: 16px;
+    font-size: 16px;
+    white-space: nowrap;
+    height: 20px;
+}
+
+.account-wrap {
+    width: 480px;
+    height: calc(100vh - 595px);
+    margin: 0 auto;
+    padding: 160px 0 120px 0;
+}
+
+.account-wrap h1 {
+    margin-bottom: 60px;
+    font-size: 34px;
+    line-height: 1;
+    font-weight: 600;
+    text-align: center;
+}
