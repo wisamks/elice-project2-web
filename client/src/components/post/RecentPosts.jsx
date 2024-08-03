@@ -1,4 +1,5 @@
-import ItemCardHorizontal from "../../itemCard/ItemCardHorizontal";
+import ItemCardHorizontal from '../itemCard/ItemCardHorizontal';
+import { formatDateToString } from "../../utils";
 
 import './RecentPosts.css'
 
@@ -13,7 +14,7 @@ const dummyData = [
         userProfileSrc: "../images/profile/profile01.png",
         userName: "퍼스트펭귄",
         saleLocation: "성동구",
-        itemUpdate: "2024-07-24"
+        itemUpdate: new Date("2024-07-24")
     },
     {
         linkURL: "/board/view/2",
@@ -24,7 +25,7 @@ const dummyData = [
         userProfileSrc: "../images/profile/profile01.png",
         userName: "퍼스트펭귄",
         saleLocation: "성동구",
-        itemUpdate: "2024-07-24"
+        itemUpdate: new Date("2024-07-24")
     },
     {
         linkURL: "/board/view/3",
@@ -35,7 +36,7 @@ const dummyData = [
         userProfileSrc: "../images/profile/profile01.png",
         userName: "퍼스트펭귄",
         saleLocation: "성동구",
-        itemUpdate: "2024-07-24"
+        itemUpdate: new Date("2024-07-24")
     },
     {
         linkURL: "/board/view/4",
@@ -46,7 +47,7 @@ const dummyData = [
         userProfileSrc: "../images/profile/profile01.png",
         userName: "퍼스트펭귄",
         saleLocation: "성동구",
-        itemUpdate: "2024-07-24"
+        itemUpdate: new Date("2024-07-24")
     },
     {
         linkURL: "/board/view/5",
@@ -57,7 +58,7 @@ const dummyData = [
         userProfileSrc: "../images/profile/profile01.png",
         userName: "퍼스트펭귄",
         saleLocation: "성동구",
-        itemUpdate: "2024-07-24"
+        itemUpdate: new Date("2024-07-24")
     }
 ];
 
@@ -78,7 +79,7 @@ const RecentPosts = () => {
                                 userProfileSrc={item.userProfileSrc}
                                 userName={item.userName}
                                 saleLocation={item.saleLocation}
-                                itemUpdate={item.itemUpdate}
+                                itemUpdate={formatDateToString(item.itemUpdate)}
                             />
                         </li>
                     ))}

@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
-import UnauthenticatedHeader from "./components/common/UnauthenticatedHeader";
-import AuthenticateHeader from "./components/common/AuthenticatedHeader";
+import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 
 import Home from './pages/home/Home';
@@ -16,7 +15,7 @@ function App() {
   return (
     <RecoilRoot>
       <Router>
-        <UnauthenticatedHeader />
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sign-in" element={<SignIn />} />
