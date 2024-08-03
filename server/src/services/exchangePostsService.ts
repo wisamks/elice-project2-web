@@ -1,19 +1,22 @@
 import { NotFoundError, ForbiddenError, InternalServerError } from "@_/utils/customError";
 import PostModel from "@_/models/postModel";
 import PhotoModel from "@_/models/photoModel";
-import { PostCreationData, PostUpdateData } from "@_/customTypes/postType";
+import { Filters, PostCreationData, PostUpdateData } from "@_/customTypes/postType";
+import FavoriteModel from "@_/models/favoriteModel";
+import CommentModel from "@_/models/commentModel";
+import { Paginations } from "@_/customTypes/postType";
 
 
 // 중고거래 게시판 서비스
 class ExchangePostsService {
     // 페이지네이션을 진행하여 필요한 게시글들 불러오는 서비스
-    static async getAllPosts() {}
     static async getPostsCount(categoryId: number) {
         // categoryId를 넣으면 
         // post테이블에 user 테이블과 post_exchange_detail 테이블을 join하고
         // 전체 게시글 수를 세는 함수
+        return await PostModel.getPostsCount(categoryId);
     }
-    static async getPosts(categoryId: number, page: number, perPage: number) {
+    static async getPosts(paginations: Paginations, filters: Filters | undefined) {
         // categoryId, page, perPage를 넣으면 
         // post테이블에 user 테이블과 post_exchange_detail 테이블을 join하고
         // 페이지네이션을 진행하여 게시글 배열을 뱉어주는 함수
@@ -24,18 +27,72 @@ class ExchangePostsService {
         //         status, item, target, location, price
         //     } * perPage개
         // ]
+        const foundPosts = await PostModel.getPosts(paginations, filters);
+        return foundPosts.map(foundPost => (
+            {
+                postId: foundPost.id,
+                userId: foundPost.user_id,
+                nickname: foundPost.nickname,
+                userImage: foundPost.user_image,
+                title: foundPost.title,
+                content: foundPost.content,
+                createdAt: foundPost.created_at,
+                updateAt: foundPost.updated_at,
+                price: foundPost.price,
+                location: foundPost.location,
+                reserver: foundPost.reserver_id,
+                status: foundPost.status,
+                target: foundPost.target,
+                item: foundPost.item,
+                sort: foundPost.sort,                    
+            }
+        ));
     }
     // 각 게시글 당 댓글 개수를 조회하는 서비스
-    static async getCommentsCount(post:any) {
+    static async getCommentsCount(postId: number) {
         // postId를 집어넣으면 comment 테이블에서 댓글을 카운트해서 개수를 뱉어주는 모델 함수
+        return await CommentModel.findCountByPostId(postId);
+    }
+    // 게시글을 조회하는 서비스
+    static async getPost(postId: number) {
+        const foundPost = await PostModel.findById(postId);
+        if (!foundPost) {
+            throw new NotFoundError('해당 게시글이 존재하지 않습니다.');
+        }
+        return foundPost;
     }
     // 사진 테이블에서 is_main을 확인해서 대문 이미지를 찾는 서비스
-    static async getMainImage(post:any) {
+    static async getMainImage(postId: number) {
         // postId 집어넣으면 photo 테이블에서 is_main 확인해서 true인 사진 하나를 뱉어주는 모델 함수
+        const foundMainImage = await PhotoModel.getMainPhotoByPostId(postId);
+        if (!foundMainImage) {
+            return {
+                id: 0,
+                url: '',
+            };
+        }
+        return foundMainImage;
+    }
+    // 게시글의 사진을 찾아오는 서비스
+    static async getPhotos(postId: number, count?: number) {
+        const foundPhotos = count ? await PhotoModel.getPhotosByPostId(postId, count) : await PhotoModel.getPhotosByPostId(postId);
+        return foundPhotos;
+    }
+    // 게시글의 사진 개수를 찾는 서비스
+    static async getPhotosCount(postId: number) {
+        return await PhotoModel.getPhotosCount(postId);
+    }
+    // 게시글 좋아요 개수를 확인하는 서비스
+    static async getFavoriteCount(postId: number) {
+        return await FavoriteModel.findCountByPostId(postId);
     }
     // 사용자가 좋아요 누른 게시글인지 확인하는 서비스
-    static async checkMyFavorite() {
+    static async checkMyFavorite(postId: number, userId: number|undefined) {
         // userId와 postId를 넣으면 favorite 테이블에서 찾아서 해당 정보를 뱉어주는 함수
+        if (!userId) {
+            return false;
+        }
+        return await FavoriteModel.findOneByUserId(postId, userId);
     }
     // 중고거래 게시글 생성
     static async createPost(postContent: PostCreationData) {

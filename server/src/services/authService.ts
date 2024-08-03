@@ -4,7 +4,7 @@ import {Response} from 'express';
 import { setToken } from '@_utils';
 import UserModel from '@_models/userModel';
 import { ForbiddenError, InternalServerError } from '@_/utils/customError';
-import { SnsCode } from '@_/customTypes/userType';
+import { JoinUser } from '@_/customTypes/userType';
 import { jwtRefreshTokenSecret } from '@_config';
 import TokenModel from '@_models/tokenModel';
 import AxiosModel from '@_/models/axiosModel';
@@ -29,8 +29,8 @@ class AuthService {
         }
     }
     // 유저 생성
-    static async createUser (nickname: string, name: string, email: string, snsCode: SnsCode, image?: string) {
-        const createdUser = await UserModel.initiateUserFromOauth({nickname, name, email, image, snsCode});
+    static async createUser (joinUser: JoinUser) {
+        const createdUser = await UserModel.initiateUserFromOauth(joinUser);
         if (!createdUser) {
             throw new InternalServerError('유저를 생성하는 데 실패했습니다.');
         }

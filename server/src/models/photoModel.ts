@@ -23,15 +23,29 @@ class PhotoModel extends PostDb {
         return result;
     }
 
-    public static async getPhotosByPostId(postId: number) {
+    public static async getPhotosByPostId(postId: number, count?: number) {
         const sql = `SELECT * FROM photo WHERE post_id = ? AND deleted_at IS NULL`;
-        const result = await this.findMany(sql, [postId]);
+        const addSql = count ? ` LIMIT ?` : '';
+        const data = count ? [postId, count] : [postId];
+        const result = await this.findMany(sql + addSql, data);
         return result;
     }
 
     public static async getPhotoById(photoId: number) {
         const sql = `SELECT * FROM photo WHERE id = ? AND deleted_at IS NULL`;
         const result = await this.findOne(sql, [photoId]);
+        return result;
+    }
+
+    public static async getPhotosCount(postId: number) {
+        const sql = `SELECT COUNT(id) AS count FROM photo WHERE post_id = ? AND deleted_at IS NULL`;
+        const result = await this.findOne(sql, [postId]);
+        return result;
+    }
+
+    public static async getMainPhotoByPostId(postId: number) {
+        const sql = `SELECT * FROM photo WHERE post_id = ? AND is_main = TRUE AND deleted_at IS NULL`;
+        const result = await this.findOne(sql, [postId]);
         return result;
     }
 

@@ -1,5 +1,6 @@
 import PostDb from "@_models/postDb";
-import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails } from "@_/customTypes/postType";
+import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters } from "@_/customTypes/postType";
+import { calculatePriceRange } from "@_/utils";
 
 class PostModel extends PostDb {
 
@@ -25,7 +26,7 @@ class PostModel extends PostDb {
         await this.insert(detailSql, detailValues);
 
         return {
-            post_id, 
+            id: post_id, 
             user_id,
             category_id,
             title,
@@ -95,7 +96,7 @@ class PostModel extends PostDb {
             const postSql = `
                 UPDATE post 
                 SET ${postUpdateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP 
-                WHERE post_id = ? AND deleted_at IS NULL
+                WHERE id = ? AND deleted_at IS NULL
             `;
             await this.update(postSql, [...postUpdateValues, post_id]);
         }
@@ -134,18 +135,46 @@ class PostModel extends PostDb {
     // category)id 해당 게시글 목록 페이지네이션
     // post + postExchange_detail + user join => 상세정보 조회 + 작성자 조회
     
-    public static async getPosts(category_id: number, page: number, perPage: number): Promise<PostWithDetails[]> {
+    public static async getPosts(paginations:Paginations, filters: Filters|undefined): Promise<PostWithDetails[]> {
+        const {page, perPage, categoryId} = paginations;
+
+        let dataFilter;
+        let sqlMiddle = '';
+        if (filters) {
+            const {sort, target, item, price, location} = filters;
+
+            const sqlSort = sort ? ` ped.sort = ? AND`: '';
+            const sqlTarget = target ? ` ped.target = ? AND`: '';
+            const sqlItem = item ? ` ped.item = ? AND`: '';
+            const sqlLocation = location ? ` ped.location = ? AND`: '';
+            const priceRange = calculatePriceRange(price);
+            const sqlPrice = !priceRange ? '' : price === 0 ? ` ped.price = ? AND` : !priceRange.max ? ` ped.price > ? AND` : ` ped.price > ? AND ped.price <= ? AND`;
+            
+            const dataFilterUnde: Array<string|number|undefined> = [sort, target, item, location];
+            if (priceRange) {
+                dataFilterUnde.push(priceRange.min);
+                dataFilterUnde.push(priceRange.max);
+            }
+
+            sqlMiddle += sqlSort + sqlTarget + sqlItem + sqlLocation + sqlPrice;
+            dataFilter = dataFilterUnde.filter(data => data !== undefined);
+        }
+        
         const offset = (page - 1) * perPage;
+
         const sql = `
             SELECT p.*, ped.*, u.nickname, u.image as user_image
             FROM post p
-            JOIN post_exchange_detail ped ON p.post_id = ped.post_id
-            JOIN user u ON p.user_id = u.user_id
-            WHERE p.category_id = ? AND p.deleted_at IS NULL
+            JOIN post_exchange_detail ped ON p.id = ped.post_id
+            JOIN user u ON p.user_id = u.id
+            WHERE${sqlMiddle} p.category_id = ? AND p.deleted_at IS NULL
             ORDER BY p.created_at DESC
             LIMIT ? OFFSET ?
         `;
-        return await this.findMany(sql, [category_id, perPage, offset]);
+        
+        const dataPagination = [categoryId, String(perPage), String(offset)];
+        const data = dataFilter ? [...dataFilter, ...dataPagination]: dataPagination;
+        return await this.findMany(sql, data);
     }
 
     // 특정 게시글의 댓글 수를 조회하는 메서드 (댓글 작동부분이 아직 없음)   => 댓글 모델 필요

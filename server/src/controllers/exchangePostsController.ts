@@ -11,12 +11,11 @@ class ExchangePostsController {
         // 이후 필터 관련 변수들 추가되면 미들웨어 이용해서 추가하기
         
         // 1. 페이지네이션을 진행하여 필요한 게시글들 불러오는 서비스
-        if (req.pagination === undefined) {
+        if (req.paginations === undefined) {
             throw new BadRequestError('입력값이 올바르지 않습니다.');
         }
-        const {page, perPage, categoryId} = req.pagination;
-        const totalPostsCount = ExchangePostsService.getPostsCount(categoryId);
-        const foundPosts = ExchangePostsService.getPosts(categoryId, page, perPage);
+        const totalPostsCount = await ExchangePostsService.getPostsCount(req.paginations.categoryId = 1);
+        const foundPosts = await ExchangePostsService.getPosts(req.paginations, req.filters);
         // 2. 각 게시글 당 댓글 개수를 조회하는 서비스
         // const commentsCountedPosts = ExchangePostsService.getCommentsCount();
         // 3. 사진 테이블에서 is_main을 확인해서 대문 이미지를 찾는 서비스
@@ -35,6 +34,77 @@ class ExchangePostsController {
         // 2-7. userId와 postId 집어넣어서 좋아요 검색
         // 3. 가져온 게시글의 filter들을 이용해서 중고거래 게시판 목록 1페이지 8개를 출력
         // 댓글은 따로 클라이언트에게 api조회 시키기
+        const { postId } = req.params;
+        const _postId = +postId;
+        const user = req.user as ReqUser | undefined;
+        const _userId = user ? user.userId : undefined;
+        try {
+            const [
+                foundPost,
+                foundPhotos,
+                foundPhotosCount,
+                foundThumbnail,
+                foundCommentsCount,
+                foundFavoriteCount,
+                isMyFavorite,
+            ] = await Promise.all([
+                ExchangePostsService.getPost(_postId),
+                ExchangePostsService.getPhotos(_postId),
+                ExchangePostsService.getPhotosCount(_postId),
+                ExchangePostsService.getMainImage(_postId),
+                ExchangePostsService.getCommentsCount(_postId),
+                ExchangePostsService.getFavoriteCount(_postId),
+                ExchangePostsService.checkMyFavorite(_postId, _userId),
+            ]);
+            const filters = {
+                sort: foundPost.sort,
+                target: foundPost.target,
+                item: foundPost.item,
+                location: foundPost.location,
+                price: foundPost.price,
+            };
+            const foundFilteredPosts = await ExchangePostsService.getPosts({
+                page: 1,
+                perPage: 8,
+                categoryId: 1,
+            }, filters);
+            return res.status(200).json({
+                post: {
+                    postId: foundPost.id,
+                    userId: foundPost.user_id,
+                    nickname: foundPost.nickname,
+                    userImage: foundPost.user_image,
+                    title: foundPost.title,
+                    content: foundPost.content,
+                    createdAt: foundPost.created_at,
+                    updateAt: foundPost.updated_at,
+                    price: foundPost.price,
+                    location: foundPost.location,
+                    reserver: foundPost.reserver_id,
+                    status: foundPost.status,
+                    target: foundPost.target,
+                    item: foundPost.item,
+                    sort: foundPost.sort,                    
+                },
+                images: foundPhotos.map(image => ({
+                    imageId: image.id,
+                    url: image.url,
+                })),
+                counts: {
+                    imagesCount: foundPhotosCount,
+                    commentsCount: foundCommentsCount,
+                    favoriteCount: foundFavoriteCount,
+                },
+                thumbnail: {
+                    thumbnailId: foundThumbnail.id,
+                    thumbnailUrl: foundThumbnail.url,
+                },
+                isMyFavorite,
+                filteredPosts: foundFilteredPosts,
+            });
+        } catch(err) {
+            next(err);
+        }     
     }
     // 게시글 생성
     static async createPost(req: Request, res: Response, next: NextFunction) {
@@ -47,7 +117,7 @@ class ExchangePostsController {
         const postContent = {user_id: userId, sort, category_id, title, content, status, item, target, location, price: +price};
         try {
             const createdPost = await ExchangePostsService.createPost(postContent);
-            const postId = createdPost.post_id;
+            const postId = createdPost.id;
             await ExchangePostsService.createImages(postId, images);
             return res.status(201).json({postId});
         } catch(err) {

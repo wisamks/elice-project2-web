@@ -1,11 +1,31 @@
-import { Request, Response, NextFunction } from "express"
+import { PostSort } from '@_/customTypes/postType';
+import {Request, Response, NextFunction} from 'express';
 
 const pagesToNumber = (req: Request, res: Response, next: NextFunction) => {
-    const { page, perPage, categoryId } = req.query;
-    const _categoryId = Number(categoryId);
-    const _page = page ? Number(page) : 1;
-    const _perPage = perPage ? Number(perPage) : 40;
-    req.pagination = {page: _page, perPage: _perPage, categoryId: _categoryId}
+    const {
+        page = 1,
+        perPage = 40,
+        categoryId,
+        sort,
+        target,
+        item,
+        price,
+        location
+    } = req.params;
+    req.paginations = {
+        page: Number(page),
+        perPage: Number(perPage),
+        categoryId: Number(categoryId),
+    }
+    req.filters = {
+        sort: sort as PostSort,
+        target,
+        item,
+        price: Number(price),
+        location
+    }
+
+    return next();
 }
 
 export default pagesToNumber;

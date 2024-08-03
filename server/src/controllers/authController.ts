@@ -69,7 +69,7 @@ class AuthController {
             if (checked) {
                 throw new ConflictError('이미 사용 중인 닉네임입니다.');
             }
-            const {userId, accessToken, refreshToken} = await AuthService.createUser(nickname, name, email, snsCode, image);
+            const {userId, accessToken, refreshToken} = await AuthService.createUser({nickname, name, email, snsCode, image});
             res.cookie('accessToken', accessToken, {maxAge: 3600000, httpOnly: true}); // 1시간 https만 쓰면 secure
             res.cookie('refreshToken', refreshToken, {maxAge: 86400000, httpOnly: true}); // 24시간
             await AuthService.createRefresh(userId, refreshToken);
