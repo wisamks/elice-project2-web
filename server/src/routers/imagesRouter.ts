@@ -5,6 +5,6 @@ import ImagesController from '@_controllers/imagesController';
 
 const router = Router();
 
-router.post('/upload', upload.array('images', 10), ImagesController.putImages);
+router.post('/upload', upload, ImagesController.putImages);
 
 export default router;

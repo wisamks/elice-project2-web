@@ -15,6 +15,8 @@ const upload = multer({
         },
         acl: 'public-read',
     }),
-});
+}).fields([
+    { name: 'images', maxCount: 3 },
+]);
 
 export default upload;
