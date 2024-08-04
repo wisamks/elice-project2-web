@@ -2,8 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { setToken } from '@_utils';
 import AuthService from '@_services/authService';
 import UserModel from '@_models/userModel';
-import { BadRequestError, ConflictError, ForbiddenError, InternalServerError, UnauthorizedError } from '@_/utils/customError';
-import { clientDomain, jwtAccessTokenSecret } from '@_/config';
+import { ConflictError, ForbiddenError, UnauthorizedError } from '@_/utils/customError';
 import { SnsCode } from '@_/customTypes/userType';
 import { ReqUser } from '@_customTypes/express';
 
@@ -69,7 +68,7 @@ class AuthController {
             if (checked) {
                 throw new ConflictError('이미 사용 중인 닉네임입니다.');
             }
-            const {userId, accessToken, refreshToken} = await AuthService.createUser(nickname, name, email, snsCode, image);
+            const {userId, accessToken, refreshToken} = await AuthService.createUser({nickname, name, email, snsCode, image});
             res.cookie('accessToken', accessToken, {maxAge: 3600000, httpOnly: true}); // 1시간 https만 쓰면 secure
             res.cookie('refreshToken', refreshToken, {maxAge: 86400000, httpOnly: true}); // 24시간
             await AuthService.createRefresh(userId, refreshToken);
@@ -81,8 +80,10 @@ class AuthController {
     // 로그아웃
     static async logout (req: Request, res: Response, next: NextFunction) {
         try {
-            AuthService.deleteRefresh(req.cookies.refreshToken);
-            AuthService.deleteTokens(res);
+            await Promise.all([
+                AuthService.deleteRefresh(req.cookies.refreshToken),
+                AuthService.deleteTokens(res)
+            ]);
             return res.status(204).end();
         } catch(err) {
             return next(err);
@@ -96,9 +97,15 @@ class AuthController {
             }
             const user = req.user as ReqUser;
             const userId = user.userId;
-            AuthService.deleteRefresh(req.cookies.refreshToken);
-            AuthService.deleteUser(userId);
-            AuthService.deleteTokens(res);
+            await Promise.all([
+                AuthService.deleteRefresh(req.cookies.refreshToken),
+                AuthService.deleteUser(userId),
+                AuthService.deleteTokens(res),
+                AuthService.deleteFavorites(userId),
+                AuthService.deletePosts(userId),
+                AuthService.deleteComments(userId),
+                AuthService.deletePhotos(userId),
+            ]);
             return res.status(204).end();
         } catch(err) {
             return next(err);

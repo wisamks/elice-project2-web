@@ -4,10 +4,14 @@ import {Response} from 'express';
 import { setToken } from '@_utils';
 import UserModel from '@_models/userModel';
 import { ForbiddenError, InternalServerError } from '@_/utils/customError';
-import { SnsCode } from '@_/customTypes/userType';
+import { JoinUser } from '@_/customTypes/userType';
 import { jwtRefreshTokenSecret } from '@_config';
 import TokenModel from '@_models/tokenModel';
 import AxiosModel from '@_/models/axiosModel';
+import FavoriteModel from '@_/models/favoriteModel';
+import CommentModel from '@_/models/commentModel';
+import PostModel from '@_/models/postModel';
+import PhotoModel from '@_/models/photoModel';
 
 // authService를 모아두는 클래스
 class AuthService {
@@ -29,8 +33,8 @@ class AuthService {
         }
     }
     // 유저 생성
-    static async createUser (nickname: string, name: string, email: string, snsCode: SnsCode, image?: string) {
-        const createdUser = await UserModel.initiateUserFromOauth({nickname, name, email, image, snsCode});
+    static async createUser (joinUser: JoinUser) {
+        const createdUser = await UserModel.initiateUserFromOauth(joinUser);
         if (!createdUser) {
             throw new InternalServerError('유저를 생성하는 데 실패했습니다.');
         }
@@ -52,6 +56,23 @@ class AuthService {
         await UserModel.softDelete(userId);
         return;
     }
+    static async deleteFavorites (userId: number) {
+        await FavoriteModel.deleteByUserId(userId);
+        return;
+    }
+    static async deletePosts (userId: number) {
+        await PostModel.deleteByUserId(userId);
+        return;
+    }
+    static async deleteComments (userId: number) {
+        await CommentModel.deleteByUserId(userId);
+        return;
+    }
+    static async deletePhotos (userId: number) {
+        await PhotoModel.deleteByUserId(userId);
+        return;
+    }
+
     // refresh 유효성 검증
     static async validateRefresh (refreshToken: string) {
         try {
