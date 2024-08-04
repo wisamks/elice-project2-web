@@ -122,7 +122,9 @@
     width: 96px;
     font-size: 14px;
     color: #444;   
-    padding: 15px;
+    border: none;
+    background-color: white;
+    cursor: pointer;
 }
 
 .mypage-button {
@@ -182,4 +184,15 @@
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-bottom: 10px solid #ccc;
+}
+
+.logout-button {
+    border: none;
+    background-color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    font-weight: 700;
 }

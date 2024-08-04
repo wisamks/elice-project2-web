@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import LoginButton from '../account/LoginButton';
+import LogoutButton from '../account/LogoutButton';
+
 import './Header.css';
 
 const Header = () => {
@@ -122,13 +125,13 @@ const Header = () => {
                     <li className="dropdown-item"><Link to="/">나의 등급</Link></li>
                     <li className="dropdown-item"><Link to="/">나의 거래</Link></li>
                     <li className="dropdown-item"><Link to="/">나의 활동</Link></li>
-                    <li className="dropdown-item"><Link to="/">로그아웃</Link></li>
+                    <li className="dropdown-item"><LogoutButton /></li>
                   </ul>
                 )}
               </div>
             </>
           ) : (
-            <Link to="/sign-in" className="auth-button">로그인/회원가입</Link>
+            <LoginButton />
           )}
         </div>
       </div>

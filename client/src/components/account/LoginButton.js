@@ -10,6 +10,8 @@ const LoginButton = () => {
     };
 
     return(
-        <div className="" onClick={handleLogin}>로그인/회원가입</div>
+        <button className="auth-button" onClick={handleLogin}>로그인/회원가입</button>
     );
 };
+
+export default LoginButton;
