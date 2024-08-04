@@ -10,3 +10,19 @@ export interface PaginationComment {
     page: number;
     perPage: number;
 }
+
+export interface UpdateComment{
+    content?: string;
+    secret?: boolean;
+}
+
+export interface Comment {
+    commentId: number;
+    postId: number;
+    userId: number;
+    content: string;
+    secret: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | null;
+}
