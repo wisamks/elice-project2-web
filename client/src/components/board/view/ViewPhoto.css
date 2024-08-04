@@ -7,14 +7,7 @@
     width: 464px;
     height: 570px;
     border-radius: 8px;
-    overflow: hidden;
 }
-
-.view-post-photos li img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-} 
 
 .view-post-photos .default-photo{
     display: flex;

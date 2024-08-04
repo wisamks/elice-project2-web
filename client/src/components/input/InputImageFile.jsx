@@ -33,7 +33,7 @@ const InputImageFile = ({ imgSrc, setImgSrc, isDefault, setIsDefault }) => {
 
     return (
         <div className="input-image-file">
-            <p className={`img-view ${isDefault ? 'default' : ''}`}>
+            <p className={`img-view ${isDefault ? 'default imgFrame' : 'imgFrame'}`}>
                 <img
                     src={imgSrc}
                     alt=""

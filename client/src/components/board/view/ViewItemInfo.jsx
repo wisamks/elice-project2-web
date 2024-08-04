@@ -1,4 +1,4 @@
-import { formatNumberToCommaString, formatDateToString } from '../../../utils';
+import { formatDateToString } from '../../../utils';
 
 import './ViewItemInfo.css';
 
@@ -52,15 +52,15 @@ const ViewItemInfo = ({
                     </div>
                     <p className="item-name">{title}</p>
                 </div>
-                <div className="item-price"><span className="number">{formatNumberToCommaString(price)}</span>원</div>
+                <div className="item-price"><span className="number">{price.toLocalString}</span>원</div>
             </div>
             <div className="row2">
                 <div className="user-info">
-                    <p className="user-profile"><img src={userImage} alt={nickname} /></p>
+                    <p className="user-profile imgFrame"><img src={userImage} alt={nickname} /></p>
                     <p className="user-name">{nickname}</p>
                 </div>
                 <div className="item-location-date">
-                    <p className="sale-location">{location}</p>
+                    <p className="sale-location dot">{location}</p>
                     <p className="item-update">{formatDateToString(createdAt)}</p>
                 </div>
             </div>

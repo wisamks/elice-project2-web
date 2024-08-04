@@ -7,9 +7,11 @@ const GoogleLogin = () => {
     const location = useLocation();
     // const currentPath = location.pathname + location.search;
 
-    // const link = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&state=${encodeURIComponent(currentPath)}`;
+    const encodedScope = encodeURIComponent('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile');
 
-    const link = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&state={state}`;
+    // const link = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=${encodedScope}&state=${encodeURIComponent(currentPath)}`;
+
+    const link = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=${encodedScope}&state={state}`;
 
 
     return (
