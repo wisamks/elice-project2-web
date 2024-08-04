@@ -7,27 +7,28 @@ import { PostStatus, PostSort, PostUpdateData } from '@_/customTypes/postType';
 // 중고거래 게시판 컨트롤러
 class ExchangePostsController {
     // 목록 조회
-    static async findPosts(req: Request, res: Response, next: NextFunction) {
-        // 이후 필터 관련 변수들 추가되면 미들웨어 이용해서 추가하기
-        
-        // 1. 페이지네이션을 진행하여 필요한 게시글들 불러오는 서비스
+    static async findPosts(req: Request, res: Response, next: NextFunction) {        
         if (req.paginations === undefined) {
             throw new BadRequestError('입력값이 올바르지 않습니다.');
         }
-        const user = req.user as ReqUser;
-        const userId = user.userId;
-        const totalPostsCount = await ExchangePostsService.getPostsCount(req.paginations.categoryId = 1);
-        const foundPosts = await ExchangePostsService.getPosts({
+        const user = req.user as ReqUser | undefined;
+        const userId = user ? user.userId : undefined;
+        const data = {
             paginations: req.paginations, 
             filters: req.filters, 
             postId: undefined, 
             userId,
-        });
-        // 2. 각 게시글 당 댓글 개수를 조회하는 서비스
-        // const commentsCountedPosts = ExchangePostsService.getCommentsCount();
-        // 3. 사진 테이블에서 is_main을 확인해서 대문 이미지를 찾는 서비스
-        // const imageFoundPosts = ExchangePostsService.getMainImage()
-        // 4. 사용자가 좋아요 누른 게시글인지 확인하는 서비스
+        };
+        try {
+            const totalPostsCount = await ExchangePostsService.getPostsCount(data);
+            const foundPosts = await ExchangePostsService.getPosts(data);
+            return res.status(200).json({
+                totalPostsCount,
+                posts: foundPosts,
+            });
+        } catch(err) {
+            return next(err);
+        }
     }
     // 게시글 조회
     static async findOnePost(req: Request, res: Response, next: NextFunction) {
@@ -107,7 +108,7 @@ class ExchangePostsController {
                 filteredPosts: foundFilteredPosts,
             });
         } catch(err) {
-            next(err);
+            return next(err);
         }     
     }
     // 게시글 생성
@@ -151,9 +152,9 @@ class ExchangePostsController {
 
             await ExchangePostsService.updatePost(+postId, user.userId, updateData, images);
     
-            res.status(204).end();
+            return res.status(204).end();
         } catch (error) {
-            next(error);
+            return next(error);
         }
     }
 
@@ -185,9 +186,9 @@ class ExchangePostsController {
           // model -> service 이용해서 게시글 삭제(비즈니스로직은 서비스로..분리)
           await ExchangePostsService.deletePost(+postId, user.userId);
     
-          res.status(204).end();
+          return res.status(204).end();
         } catch (error) {
-          next(error);
+          return next(error);
         }
       }
 

@@ -11,18 +11,18 @@ const pagesToNumber = (req: Request, res: Response, next: NextFunction) => {
         item,
         price,
         location
-    } = req.params;
+    } = req.query;
     req.paginations = {
         page: Number(page),
         perPage: Number(perPage),
         categoryId: Number(categoryId),
     }
     req.filters = {
-        sort: sort as PostSort,
-        target,
-        item,
-        price: Number(price),
-        location
+        sort: sort as PostSort|undefined,
+        target: target as string|undefined,
+        item: item as string|undefined,
+        price: price === undefined ? undefined : Number(price),
+        location: location as string|undefined,
     }
 
     return next();

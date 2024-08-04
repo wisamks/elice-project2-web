@@ -10,8 +10,18 @@ import { Paginations } from "@_/customTypes/postType";
 // 중고거래 게시판 서비스
 class ExchangePostsService {
     // 현재 조회하려는 필터에 맞게 전체 게시글 수
-    static async getPostsCount(categoryId: number) {
-        return await PostModel.getPostsCount(categoryId);
+    static async getPostsCount({
+        paginations, 
+        filters, 
+        postId, 
+        userId,
+    }: {
+        paginations: Paginations;
+        filters: Filters|undefined;
+        postId: number|undefined;
+        userId: number|undefined;
+    }) {
+        return await PostModel.getPostsCount(paginations.categoryId);
     }
     static async getPosts({
         paginations,
@@ -27,6 +37,11 @@ class ExchangePostsService {
         const foundPosts = await PostModel.getPosts(paginations, filters, postId);
         const posts = await Promise.all(foundPosts.map(async (foundPost) => {
             const isMyFavorite = userId ? await FavoriteModel.findOneByUserId(foundPost.id, userId) : false;
+            const [foundMainImage, commentsCount] = await Promise.all([
+                PhotoModel.getMainPhotoByPostId(foundPost.id),
+                CommentModel.findCountByPostId(foundPost.id)
+            ])
+            const thumbnail = foundMainImage ? {id: foundMainImage.id, url: foundMainImage.url} : {id: undefined, url: undefined};
             return {
                 postId: foundPost.id,
                 userId: foundPost.user_id,
@@ -43,7 +58,9 @@ class ExchangePostsService {
                 target: foundPost.target,
                 item: foundPost.item,
                 sort: foundPost.sort,
-                isMyFavorite: !!isMyFavorite,                    
+                isMyFavorite: !!isMyFavorite,
+                commentsCount,
+                thumbnail            
             }
         }))
         return posts;
