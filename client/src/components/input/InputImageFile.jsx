@@ -1,4 +1,3 @@
-import { useState } from "react";
 import imageCompression from "browser-image-compression";
 import './InputImageFile.css'
 
@@ -16,7 +15,7 @@ const InputImageFile = ({ imgSrc, setImgSrc, isDefault, setIsDefault }) => {
                 const compressionFiles = await imageCompression(file, options);
                 const reader = new FileReader();
                 reader.onload = () => {
-                    setImgSrc(reader.result);
+                    setImgSrc(reader.result, compressionFiles);
                 }
                 reader.readAsDataURL(compressionFiles);
             } catch (error) {
@@ -34,7 +33,7 @@ const InputImageFile = ({ imgSrc, setImgSrc, isDefault, setIsDefault }) => {
 
     return (
         <div className="input-image-file">
-            <p className={`img-view ${isDefault ? 'default' : ''}`}>
+            <p className={`img-view ${isDefault ? 'default imgFrame' : 'imgFrame'}`}>
                 <img
                     src={imgSrc}
                     alt=""

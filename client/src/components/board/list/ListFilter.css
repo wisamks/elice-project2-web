@@ -1,0 +1,43 @@
+.list-post-filter{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    width: 250px;
+}
+
+.list-post-filter h3{
+    margin-bottom: 12px;
+
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.list-post-filter .sort .input-radio-wrap, .list-post-filter .target .input-radio-wrap{
+    display: flex;
+    gap: 20px;
+}
+
+.list-post-filter .items .input-radio-wrap, .list-post-filter .price-range .input-radio-wrap{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.list-post-filter .locations .input-radio-wrap{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 0;
+}
+
+.list-post-filter .locations .input-radio-wrap p{
+    width: 80px;
+}
+
+.btn-filter-submit{
+    width: 180px;
+    height: 48px;
+
+    font-size: 18px;
+    font-weight: 600;
+}

@@ -5,9 +5,13 @@ import passport from 'passport';
 
 import { clientDomain } from '@_config';
 import { serverPort } from '@_config';
+import homeRouter from '@_routers/homeRouter';
 import authRouter from '@_routers/authRouter';
 import usersRouter from '@_routers/usersRouter';
 import exchangePostsRouter from '@_routers/exchangePostsRouter';
+import favoriteRouter from '@_routers/favoriteRouter';
+import commentsRouter from '@_routers/commentsRouter';
+import { getUserByToken } from '@_middlewares';
 
 import passportConfig from '@_passport-config';
 passportConfig();
@@ -25,15 +29,15 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 app.use(passport.initialize()); // 패스포트 초기화
 
-// 임시 동작 확인용: 나중에 삭제!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!꼭!!!!!!!!!!!!!!!!!!!!!!!
-app.get('/', (req: Request, res: Response) => {
-    res.send('hello typescript');
-})
+app.use(getUserByToken);
 
 //라우터
+app.use('/api/home', homeRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/exchange-posts', exchangePostsRouter);
+app.use('/api/favorite', favoriteRouter);
+app.use('/api/comments', commentsRouter);
 
 // 에러 핸들링 미들웨어
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
