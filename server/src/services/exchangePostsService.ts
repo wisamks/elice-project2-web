@@ -50,7 +50,7 @@ class ExchangePostsService {
                 title: foundPost.title,
                 content: foundPost.content,
                 createdAt: foundPost.created_at,
-                updateAt: foundPost.updated_at,
+                updatedAt: foundPost.updated_at,
                 price: foundPost.price,
                 location: foundPost.location,
                 reserver: foundPost.reserver_id,

@@ -5,6 +5,7 @@ import passport from 'passport';
 
 import { clientDomain } from '@_config';
 import { serverPort } from '@_config';
+import homeRouter from '@_routers/homeRouter';
 import authRouter from '@_routers/authRouter';
 import usersRouter from '@_routers/usersRouter';
 import exchangePostsRouter from '@_routers/exchangePostsRouter';
@@ -30,12 +31,8 @@ app.use(passport.initialize()); // 패스포트 초기화
 
 app.use(getUserByToken);
 
-// 임시 동작 확인용: 나중에 삭제!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!꼭!!!!!!!!!!!!!!!!!!!!!!!
-app.get('/', (req: Request, res: Response) => {
-    res.send('hello typescript');
-})
-
 //라우터
+app.use('/api/home', homeRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/exchange-posts', exchangePostsRouter);
