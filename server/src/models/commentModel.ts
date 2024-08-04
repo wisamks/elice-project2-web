@@ -1,4 +1,4 @@
-import { CreationComment, PaginationComment } from "@_/customTypes/commentType";
+import { CreationComment, PaginationComment, UpdateComment, Comment } from "@_/customTypes/commentType";
 import PostDb from "@_models/postDb";
 
 class CommentModel extends PostDb {  
@@ -31,6 +31,8 @@ class CommentModel extends PostDb {
         return await this.findMany(sql, data);
     }
 
+    
+
     public static async findAllByUserId(userId: number) {}
 
     public static async findInPostByUserId(postId: number, userId: number) {}
@@ -48,7 +50,28 @@ class CommentModel extends PostDb {
 
     public static async findCountByUserId(userId: number) {}
 
-    public static async updateOneById(commentId: number) {}
+    public static async updateOneById(commentId: number, data: UpdateComment): Promise<Comment | null> {
+        const updates = [];
+        const values = [];
+        if (data.content !== undefined) {
+            updates.push('content = ?');
+            values.push(data.content);
+        }
+        if (data.secret !== undefined) {
+            updates.push('secret = ?');
+            values.push(data.secret);
+        }
+        updates.push('updated_at = CURRENT_TIMESTAMP');
+
+        const sql = `UPDATE comment SET ${updates.join(', ')} WHERE id = ? AND deleted_at IS NULL`;
+        values.push(commentId);
+
+        const result = await this.update(sql, values);
+        if (result > 0) {
+            return this.findOneById(commentId);
+        }
+        return null;
+    }
 
     public static async deleteByPostId(postId: number) {
         const sql = `UPDATE comment SET deleted_at = CURRENT_TIMESTAMP WHERE post_id = ? AND deleted_at IS NULL`;
