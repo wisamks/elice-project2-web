@@ -1,7 +1,7 @@
 import NaverLogin from '../../components/account/authBtns/NaverLogin';
 import GoogleLogin from '../../components/account/authBtns/GoogleLogin';
 
-import '../../styles/account-common.css';
+import './account-common.css';
 import './SignIn.css';
 
 const SignIn = () => {

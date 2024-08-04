@@ -15,3 +15,15 @@
     height: 100%;
     object-fit: cover;
 } 
+
+.view-post-photos .default-photo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f5f5f5;
+}
+
+.view-post-photos .default-photo img{
+    width: 96px;
+    height: 96px;
+}

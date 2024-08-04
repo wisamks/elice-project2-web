@@ -121,7 +121,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../../styles/account-common.css';
+import './account-common.css';
 import './SignUp.css';
 
 const SignUp = () => {
@@ -203,14 +203,21 @@ const SignUp = () => {
     };
 
     useEffect(() => {
-        const header = document.querySelector('#header');
-        const footer = document.querySelector('#footer');
-        if (header) header.style.pointerEvents = 'none';
-        if (footer) footer.style.pointerEvents = 'none';
+        const handleClickOutside = (event) => {
+            // 클릭한 요소가 헤더나 푸터인 경우
+            if (event.target.closest('#header') || event.target.closest('#footer')) {
+                event.preventDefault(); // 기본 동작 막기
+                event.stopPropagation(); // 이벤트 전파 중지
+                alert('닉네임 설정을 완료해주세요.');
+            }
+        };
 
+        // 클릭 이벤트 리스너 추가 (캡처링 단계)
+        document.addEventListener('click', handleClickOutside, true);
+        
         return () => {
-            if (header) header.style.pointerEvents = 'auto';
-            if (footer) footer.style.pointerEvents = 'auto';
+            // 컴포넌트 언마운트 시 이벤트 리스너 제거
+            document.removeEventListener('click', handleClickOutside, true);
         };
     }, []);
 

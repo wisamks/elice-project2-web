@@ -1,3 +1,17 @@
+/* 생성, 수정 페이지 */
+.create-post, .edit-post{
+    width: 1440px;
+    margin: 0px auto;
+}
+
+.create-post-wrap, .edit-post-wrap{
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 120px;
+}
+
+/* 상세 페이지 */
 .view-post{
     width: 1440px;
     margin: 60px auto 120px auto;
@@ -52,4 +66,32 @@
 .view-post-row4-column2{
     width: 423px;
     padding: 60px 0 0 40px;
+}
+
+/* 목록 페이지 */
+.list-post{
+    width: 1440px;
+    margin: 0 auto 120px auto;
+}
+
+.list-post-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.list-post .btn-go-create{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.list-post-wrap{
+    display: flex;
+    justify-content: space-between;
 }

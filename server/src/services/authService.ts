@@ -80,7 +80,7 @@ class AuthService {
             if (!foundToken) {
                 throw new ForbiddenError('잘못된 접근입니다.');
             }
-            return jwt.verify(foundToken.token, jwtRefreshTokenSecret);
+            return jwt.verify(foundToken.token, jwtRefreshTokenSecret, { algorithms: ['HS256'] });
         } catch(err) {
             throw err;
         }

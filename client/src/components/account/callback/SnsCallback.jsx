@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { apiService } from "../../../services/apiService";
 import { signInController } from "../../../controllers/signInController";
-import apiInterceptors from "../../../services/apiInterceptors";
 
 const SnsCallback = ({ platform }) => {
     const location = useLocation();

@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
-import { jwtAccessTokenSecret } from '@_config/index';
+import { jwtAccessTokenSecret, jwtRefreshTokenSecret } from '@_config/index';
 
 const setToken = (userId: number, isRefresh = false) => {
     const time = isRefresh ? '1d' : '1h';
-    const jwtToken = jwt.sign({userId}, jwtAccessTokenSecret, { expiresIn: time })
+    const secretKey = isRefresh ? jwtRefreshTokenSecret : jwtAccessTokenSecret;
+    const jwtToken = jwt.sign({userId}, secretKey, { expiresIn: time, algorithm: 'HS256' })
     return jwtToken;
 }
 
