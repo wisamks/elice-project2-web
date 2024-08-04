@@ -1,6 +1,6 @@
 import CommentModel from "@_/models/commentModel";
 import { CreationComment, PaginationComment } from "@_/customTypes/commentType";
-import { InternalServerError, NotFoundError } from "@_/utils/customError";
+import { ForbiddenError, InternalServerError, NotFoundError } from "@_/utils/customError";
 import PostModel from "@_/models/postModel";
 
 class CommentsService {
@@ -25,7 +25,17 @@ class CommentsService {
         return createdCommentId;
     }
     static async updateComment() {}
-    static async deleteComment() {}
+    static async deleteComment(commentId: number, userId: number) {
+        const foundComment = await CommentModel.findOneById(commentId);
+        if (!foundComment) {
+            throw new NotFoundError('댓글이 존재하지 않습니다.');
+        }
+        if (foundComment.user_id !== userId) {
+            throw new ForbiddenError('잘못된 접근입니다.');
+        }
+        await CommentModel.deleteById(commentId);
+        return;
+    }
 }
 
 export default CommentsService;

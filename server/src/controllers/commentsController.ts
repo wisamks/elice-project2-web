@@ -1,5 +1,6 @@
 import { ReqUser } from '@_/customTypes/express';
 import CommentsService from '@_/services/commentsService';
+import { BadRequestError } from '@_/utils/customError';
 import { Request, Response, NextFunction } from 'express';
 
 class CommentsController {
@@ -49,6 +50,15 @@ class CommentsController {
     // 댓글 삭제
     static async deleteComment(req: Request, res: Response, next: NextFunction) {
         // 있는지 확인하고 404, 유저 아이디 다르면 403, 그 다음 삭제
+        const { commentId } = req.params;
+        const user = req.user as ReqUser;
+        const userId = user.userId;
+        try {
+            await CommentsService.deleteComment(Number(commentId), userId);
+            return res.status(204).end();
+        } catch(err) {
+            return next(err);
+        }
     }
 }
 

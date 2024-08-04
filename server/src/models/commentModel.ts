@@ -35,7 +35,10 @@ class CommentModel extends PostDb {
 
     public static async findInPostByUserId(postId: number, userId: number) {}
 
-    public static async findOneById(commentId: number) {}
+    public static async findOneById(commentId: number) {
+        const sql = `SELECT * FROM comment WHERE id = ? AND deleted_at IS NULL`;
+        return await this.findOne(sql, [commentId]);
+    }
 
     public static async findCountByPostId(postId: number) {
         const sql = `SELECT COUNT(id) AS count FROM comment WHERE post_id = ? AND deleted_at IS NULL`;
@@ -57,7 +60,10 @@ class CommentModel extends PostDb {
         return await this.update(sql, [userId]);
     }
 
-    public static async deleteById(commentId: number) {}
+    public static async deleteById(commentId: number) {
+        const sql = `UPDATE comment SET deleted_at = CURRENT_TIMESTAMP WHERE id = ? AND deleted_at IS NULL`;
+        return await this.update(sql, [commentId]);
+    }
 }
 
 export default CommentModel;
