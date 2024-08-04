@@ -9,30 +9,24 @@ import { Paginations } from "@_/customTypes/postType";
 
 // 중고거래 게시판 서비스
 class ExchangePostsService {
-    // 페이지네이션을 진행하여 필요한 게시글들 불러오는 서비스
+    // 현재 조회하려는 필터에 맞게 전체 게시글 수
     static async getPostsCount(categoryId: number) {
-        // categoryId를 넣으면 
-        // post테이블에 user 테이블과 post_exchange_detail 테이블을 join하고
-        // 전체 게시글 수를 세는 함수
         return await PostModel.getPostsCount(categoryId);
     }
-    static async getPosts(paginations: Paginations, filters: Filters | undefined, userId: number|undefined) {
-        // categoryId, page, perPage를 넣으면 
-        // post테이블에 user 테이블과 post_exchange_detail 테이블을 join하고
-        // 페이지네이션을 진행하여 게시글 배열을 뱉어주는 함수
-        // [
-        //     {
-        //         postId, categoryId, title, createdAt, updatedAt, 
-        //         userId, nickname, userImage, 
-        //         status, item, target, location, price
-        //     } * perPage개
-        // ]
-        const foundPosts = await PostModel.getPosts(paginations, filters);
+    static async getPosts({
+        paginations,
+        filters,
+        postId,
+        userId,
+    }: {
+        paginations: Paginations;
+        filters: Filters|undefined;
+        postId: number|undefined;
+        userId: number|undefined;
+    }) {
+        const foundPosts = await PostModel.getPosts(paginations, filters, postId);
         const posts = await Promise.all(foundPosts.map(async (foundPost) => {
-            if (!userId) {
-                return false;
-            }
-            const isMyFavorite = await FavoriteModel.findOneByUserId(foundPost.id, userId);
+            const isMyFavorite = userId ? await FavoriteModel.findOneByUserId(foundPost.id, userId) : false;
             return {
                 postId: foundPost.id,
                 userId: foundPost.user_id,
@@ -52,7 +46,6 @@ class ExchangePostsService {
                 isMyFavorite: !!isMyFavorite,                    
             }
         }))
-        console.log(posts);
         return posts;
     }
     // 각 게시글 당 댓글 개수를 조회하는 서비스

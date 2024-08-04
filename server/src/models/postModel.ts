@@ -141,10 +141,10 @@ class PostModel extends PostDb {
     // category)id 해당 게시글 목록 페이지네이션
     // post + postExchange_detail + user join => 상세정보 조회 + 작성자 조회
     
-    public static async getPosts(paginations:Paginations, filters: Filters|undefined): Promise<PostWithDetails[]> {
+    public static async getPosts(paginations:Paginations, filters: Filters|undefined, postId: number|undefined): Promise<PostWithDetails[]> {
         const {page, perPage, categoryId} = paginations;
 
-        let dataFilter;
+        let dataFilter: Array<string|number|undefined> = [];
         let sqlMiddle = '';
         if (filters) {
             const {sort, target, item, price, location} = filters;
@@ -164,6 +164,10 @@ class PostModel extends PostDb {
 
             sqlMiddle += sqlSort + sqlTarget + sqlItem + sqlLocation + sqlPrice;
             dataFilter = dataFilterUnde.filter(data => data !== undefined);
+        }
+        if (postId) {
+            sqlMiddle += ` p.id != ? AND`;
+            dataFilter.push(postId);
         }
         
         const offset = (page - 1) * perPage;

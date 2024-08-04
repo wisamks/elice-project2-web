@@ -17,7 +17,12 @@ class ExchangePostsController {
         const user = req.user as ReqUser;
         const userId = user.userId;
         const totalPostsCount = await ExchangePostsService.getPostsCount(req.paginations.categoryId = 1);
-        const foundPosts = await ExchangePostsService.getPosts(req.paginations, req.filters, userId);
+        const foundPosts = await ExchangePostsService.getPosts({
+            paginations: req.paginations, 
+            filters: req.filters, 
+            postId: undefined, 
+            userId,
+        });
         // 2. 각 게시글 당 댓글 개수를 조회하는 서비스
         // const commentsCountedPosts = ExchangePostsService.getCommentsCount();
         // 3. 사진 테이블에서 is_main을 확인해서 대문 이미지를 찾는 서비스
@@ -26,15 +31,6 @@ class ExchangePostsController {
     }
     // 게시글 조회
     static async findOnePost(req: Request, res: Response, next: NextFunction) {
-        // 1. postId path로 받아오기 
-        // 2-1. postId로 게시글 가져오기 -> 없으면 404
-        // 2-2. postId로 사진 가져오기 3개
-        // 2-3. postId로 사진 총 개수 가져오기
-        // 2-4. postId로 사진에서 is_main이 true인 거 찾기
-        // 2-5. postId로 댓글 개수 조회
-        // 2-6. postId로 좋아요 개수 조회
-        // 2-7. userId와 postId 집어넣어서 좋아요 검색
-        // 3. 가져온 게시글의 filter들을 이용해서 중고거래 게시판 목록 1페이지 8개를 출력
         // 댓글은 따로 클라이언트에게 api조회 시키기
         const { postId } = req.params;
         const _postId = +postId;
@@ -58,6 +54,11 @@ class ExchangePostsController {
                 ExchangePostsService.getFavoriteCount(_postId),
                 ExchangePostsService.checkMyFavorite(_postId, _userId),
             ]);
+            const paginations = {
+                page: 1,
+                perPage: 8,
+                categoryId: 1,
+            };
             const filters = {
                 sort: foundPost.sort,
                 target: foundPost.target,
@@ -66,10 +67,11 @@ class ExchangePostsController {
                 price: foundPost.price,
             };
             const foundFilteredPosts = await ExchangePostsService.getPosts({
-                page: 1,
-                perPage: 8,
-                categoryId: 1,
-            }, filters, _userId);
+                paginations,
+                filters,
+                postId: _postId,
+                userId: _userId,
+            });
             return res.status(200).json({
                 post: {
                     postId: foundPost.id,
