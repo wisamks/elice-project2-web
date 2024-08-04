@@ -12,7 +12,7 @@ const ViewPhoto = ({photos}) => {
         <div className="view-post-photos">
             <ul>
                 {filledPhotos.map((photo, idx) => (
-                    <li key={idx} className={photo === defaultPhoto ? 'default-photo' : ''}>
+                    <li key={idx} className={photo === defaultPhoto ? 'default-photo imgFrame' : 'imgFrame'}>
                         <img src={photo} alt='' />
                     </li>
                 ))};
