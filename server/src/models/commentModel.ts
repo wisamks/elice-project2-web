@@ -1,7 +1,12 @@
+import { CreationComment } from "@_/customTypes/commentType";
 import PostDb from "@_models/postDb";
 
 class CommentModel extends PostDb {  
-    public static async create() {}
+    public static async create({postId, content, secret, userId}: CreationComment) {
+        const sql = `INSERT INTO comment(post_id, content, secret, user_id) VALUES(?, ?, ?, ?)`;
+        const data = [postId, content, secret, userId];
+        return await this.insert(sql, data);
+    }
 
     public static async findAllByPostId(postId: number) {}
 

@@ -1,3 +1,5 @@
+import { ReqUser } from '@_/customTypes/express';
+import CommentsService from '@_/services/commentsService';
 import { Request, Response, NextFunction } from 'express';
 
 class CommentsController {
@@ -9,6 +11,23 @@ class CommentsController {
     // 댓글 생성
     static async createComment(req: Request, res: Response, next: NextFunction) {
         // 그냥 생성
+        const {postId, content, secret} = req.body;
+        const user = req.user as ReqUser;
+        const userId = user.userId;
+        const data = {
+            postId: Number(postId),
+            content,
+            secret: secret === 'true' ? true : false,
+            userId,
+        };
+        try {
+            const createdCommentId = await CommentsService.createComment(data);
+            return res.status(201).json({
+                commentId: createdCommentId
+            });
+        } catch(err) {
+            return next(err);
+        }
     }
     // 댓글 수정
     static async updateComment(req: Request, res: Response, next: NextFunction) {
