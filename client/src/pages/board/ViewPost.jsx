@@ -46,7 +46,7 @@ const ViewPost = () => {
                 </div>
             </div>
             <div className="view-post-row2">
-                <ViewPhoto photos={post.photos} />
+                {/* <ViewPhoto photos={post.photos} /> */}
             </div>
             <div className="view-post-row3">
                 <ViewItemInfo
