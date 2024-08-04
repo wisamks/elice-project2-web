@@ -5,12 +5,25 @@ import { Request, Response, NextFunction } from 'express';
 class CommentsController {
     // 게시글에서 댓글 조회
     static async getCommentsByPostId(req: Request, res: Response, next: NextFunction) {
-        // 페이지네이션 적용, 유저 테이블 조인
-        // 전체 댓글 개수 이미 있긴 한데... 혹시 모르니...
+        const {postId, page, perPage} = req.query;
+        const data = {
+            postId: Number(postId),
+            page: page ? Number(page) : 1,
+            perPage: perPage ? Number(perPage) : 10,
+        };
+        try {
+            const {foundComments, commentsCount} = await CommentsService.getCommentsByPostId(data);
+            console.log(foundComments);
+            return res.status(200).json({
+                commentsCount, 
+                comments: foundComments,
+            });
+        } catch(err) {
+            return next(err);
+        }
     }
     // 댓글 생성
     static async createComment(req: Request, res: Response, next: NextFunction) {
-        // 그냥 생성
         const {postId, content, secret} = req.body;
         const user = req.user as ReqUser;
         const userId = user.userId;

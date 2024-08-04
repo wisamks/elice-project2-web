@@ -1,4 +1,4 @@
-import { CreationComment } from "@_/customTypes/commentType";
+import { CreationComment, PaginationComment } from "@_/customTypes/commentType";
 import PostDb from "@_models/postDb";
 
 class CommentModel extends PostDb {  
@@ -8,7 +8,28 @@ class CommentModel extends PostDb {
         return await this.insert(sql, data);
     }
 
-    public static async findAllByPostId(postId: number) {}
+    public static async findAllByPostId({postId, page, perPage}: PaginationComment) {
+        const sql = `
+            SELECT 
+                c.id AS commentId,
+                c.user_id AS userId,
+                c.content,
+                c.created_at AS createdAt,
+                c.updated_at AS updatedAt,
+                c.secret,
+                u.nickname,
+                u.image
+            FROM comment c 
+            JOIN user u
+                ON u.id = c.user_id
+            WHERE c.post_id = ? AND c.deleted_at IS NULL
+            ORDER BY c.created_at DESC
+            LIMIT ? OFFSET ? 
+        `;
+        const offset = (page - 1) * perPage;
+        const data = [postId, String(perPage), String(offset)];
+        return await this.findMany(sql, data);
+    }
 
     public static async findAllByUserId(userId: number) {}
 

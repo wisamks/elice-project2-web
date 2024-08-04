@@ -4,3 +4,9 @@ export interface CreationComment {
     secret: boolean;
     userId: number;
 };
+
+export interface PaginationComment {
+    postId: number;
+    page: number;
+    perPage: number;
+}
