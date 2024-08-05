@@ -3,6 +3,7 @@ import { RecoilRoot } from 'recoil';
 
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
+import UserProfileLoader from "./components/account/UserProfileLoader";
 
 import Home from './pages/home/Home';
 import SignIn from './pages/account/SignIn';
@@ -14,6 +15,7 @@ import BoardPage from './pages/board/BoardPage';
 function App() {
   return (
     <RecoilRoot>
+      <UserProfileLoader />
       <Router>
         <Header />
         <Routes>
