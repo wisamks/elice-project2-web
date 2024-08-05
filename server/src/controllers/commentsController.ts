@@ -57,7 +57,8 @@ class CommentsController {
 
         try {
             const updatedComment = await CommentsService.updateComment(Number(commentId), userId, updateData);
-            return res.status(200).json(updatedComment);
+            // return res.status(200).json(updatedComment);
+            return res.status(204).end();
         } catch (err) {
             return next(err);
         }
