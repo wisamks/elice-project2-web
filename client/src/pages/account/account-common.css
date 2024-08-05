@@ -1,0 +1,15 @@
+.account-wrap{
+    width: 480px;
+    height: calc(100vh - 595px);
+    margin: 0 auto;
+    padding: 160px 0 120px 0;
+}
+
+.account-wrap h1{
+    margin-bottom: 60px;
+
+    font-size: 34px;
+    line-height: 1;
+    font-weight: 600;
+    text-align: center;
+}

@@ -1,0 +1,97 @@
+/* 생성, 수정 페이지 */
+.create-post, .edit-post{
+    width: 1440px;
+    margin: 0px auto;
+}
+
+.create-post-wrap, .edit-post-wrap{
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 120px;
+}
+
+/* 상세 페이지 */
+.view-post{
+    width: 1440px;
+    margin: 60px auto 120px auto;
+}
+
+.view-post-row1{
+    display: flex;
+
+    margin-bottom: 12px;
+}
+
+.go-back-page{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    line-height: 28px;
+    cursor: pointer;
+}
+
+.go-back-page .ico{
+    height: 20px;
+    padding: 4px 0;
+}
+
+.view-post-row2, .view-post-row3{
+    margin-bottom: 60px;
+}
+
+.view-post-row4{
+    display: flex;
+    border-top: 1px solid #eee;
+}
+
+.view-post-row4-column1{
+    width: 976px;
+    border-right: 1px solid #eee;
+    padding-top: 60px;
+}
+
+.view-post-row4-column1-1{
+    padding-right: 40px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 60px;
+}
+
+.view-post-row4-column1-2{
+    padding-right: 40px;
+}
+
+.view-post-row4-column2{
+    width: 423px;
+    padding: 60px 0 0 40px;
+}
+
+/* 목록 페이지 */
+.list-post{
+    width: 1440px;
+    margin: 0 auto 120px auto;
+}
+
+.list-post-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.list-post .btn-go-create{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.list-post-wrap{
+    display: flex;
+    justify-content: space-between;
+}
