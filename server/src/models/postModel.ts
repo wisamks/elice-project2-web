@@ -52,7 +52,7 @@ class PostModel extends PostDb {
             JOIN user u ON p.user_id = u.id
             WHERE p.id = ? AND p.deleted_at IS NULL
         `;
-        const result =  await this.findOne(sql, [post_id]);
+        const result = await this.findOne(sql, [post_id]);
         return result;
     }
 

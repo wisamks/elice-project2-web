@@ -10,7 +10,6 @@ export const getExchangePost = async (apiClient, postId) => {
 
 export const postExchangePost = async (apiClient, data) => {
     const fetchURI = baseURI + '/api/exchange-posts/'
-
     const response = await apiClient.post(fetchURI, data, {
         withCredentials: true,
     });

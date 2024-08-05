@@ -15,15 +15,13 @@ import './BoardStyle.css'
 const ViewPost = () => {
     const navigate = useNavigate();
     const { postId } = useParams();
-    const [post, setPost] = useState({});
+    const [postData, setPostData] = useState(null);
 
     useEffect(() => {
         const fetchPost = async () => {
             if (postId) {
                 const res = await apiService((apiClient) => getExchangePost(apiClient, postId));
-                if (res && res.data) {
-                    setPost(res.data);
-                }
+                setPostData(res);
             }
         };
         fetchPost();
@@ -33,38 +31,40 @@ const ViewPost = () => {
         navigate(-1);
     };
 
-    if (!post) {
+    if (postData === null) {
         return <div>게시글 정보를 로딩중입니다.</div>
     }
+
+    console.log('postData', postData);
 
     return (
         <div className="view-post">
             <div className="view-post-row1">
                 <div className="go-back-page" onClick={handleGoBack}>
-                    <span className="ico"><img src="../images/ico-back.png" /></span>
+                    <span className="ico"><img src="/images/ico-back.png" /></span>
                     <span className="txt">돌아가기</span>
                 </div>
             </div>
             <div className="view-post-row2">
-                <ViewPhoto photos={post.photos} />
+                <ViewPhoto photos={postData.images} />
             </div>
             <div className="view-post-row3">
                 <ViewItemInfo
-                    sort={post.sort}
-                    status={post.status}
-                    item={post.item}
-                    title={post.title}
-                    price={post.price}
-                    userImage={post.userImage}
-                    nickname={post.nickname}
-                    location={post.location}
-                    createdAt={post.createdAt}
+                    sort={postData.post.sort}
+                    status={postData.post.status}
+                    item={postData.post.item}
+                    title={postData.post.title}
+                    price={postData.post.price}
+                    userImage={postData.post.userImage}
+                    nickname={postData.post.nickname}
+                    location={postData.post.location}
+                    createdAt={postData.post.createdAt}
                 />
             </div>
             <div className="view-post-row4">
                 <div className="view-post-row4-column1">
                     <div className="view-post-row4-column1-1">
-                        <ViewItemDescription content={post.content} />
+                        <ViewItemDescription content={postData.post.content} />
                     </div>
                     <div className="view-post-row4-column1-2">
                         <ViewComment />

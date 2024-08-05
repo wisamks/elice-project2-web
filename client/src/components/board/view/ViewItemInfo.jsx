@@ -1,4 +1,4 @@
-import { formatDateToString } from '../../../utils';
+import { formatDateToString, formatNumberToCommaString } from '../../../utils';
 
 import './ViewItemInfo.css';
 
@@ -52,7 +52,7 @@ const ViewItemInfo = ({
                     </div>
                     <p className="item-name">{title}</p>
                 </div>
-                <div className="item-price"><span className="number">{price.toLocalString}</span>원</div>
+                <div className="item-price"><span className="number">{formatNumberToCommaString(price)}</span>원</div>
             </div>
             <div className="row2">
                 <div className="user-info">

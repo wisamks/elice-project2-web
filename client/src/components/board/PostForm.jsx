@@ -83,8 +83,8 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
         }
     };
 
-    const handleSetImgSrc = (idx) => (imgSrc, file) => {
-        const updatedImages = setImgSrc(images, idx, imgSrc, file);
+    const handleSetImgSrc = (idx) => async (imgSrc, file) => {
+        const updatedImages = await setImgSrc(images, idx, imgSrc, file);
         setImages(updatedImages);
     };
 
@@ -108,28 +108,25 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
         return true;
     };
 
-    const handleSubmitForm = async () => {
+    const handleSubmitForm = () => {
         const isValidImg = images.some(image => !image.isDefault);
         if (!validateSubmit(!title, '제목을 입력해주세요.', titleRef)) return;
-        if (!validateSubmit(!price, '가격을 입력해주세요.', priceRef)) return;
+        if (!validateSubmit(price === null || price === undefined || price === '', '가격을 입력해주세요.', priceRef)) return;
         if (!validateSubmit(!isValidImg, '이미지를 한 장 이상 업로드해주세요.', imgSectionRef, true)) return;
         if (!validateSubmit(!content, '내용을 입력해주세요.', contentRef)) return;
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
-        formData.append('target', targets[selectedTargetType]);
-        formData.append('item', items[selectedItemType]);
-        formData.append('price', Number(price));
-        formData.append('location', locations[selectedLocationType]);
-        formData.append('sort', sortTypes[selectedSortType]);
+        const data = {
+            title,
+            content,
+            target: targets[selectedTargetType],
+            item: items[selectedItemType],
+            price: Number(price),
+            location: locations[selectedLocationType],
+            sort: sortTypes[selectedSortType],
+            images: images.filter(image => !image.isDefault).map(image => image.imgSrc)
+        };
 
-        const validImages = images.filter(image => !image.isDefault);
-        validImages.forEach(image => {
-            formData.append('images', image.file);
-        });
-
-        onSubmit(formData);
+        onSubmit(data);
     };
 
     const handleResetForm = () => {

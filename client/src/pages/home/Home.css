@@ -1,0 +1,48 @@
+.Home{
+    display: flex;
+    flex-direction: column;
+    gap: 120px;
+}
+
+.Home-main01{
+    position: relative;
+    overflow: hidden;
+}
+
+.Home-main01 .image{
+    width: 1440px;
+    margin: 0 auto;
+}
+
+.Home-main01 .image p{
+    margin-left: -240px;
+}
+
+.Home-main01 .text{
+    position: absolute;
+    top: 280px;
+    right: 50%;
+    margin-right: -600px;
+
+    text-align: right;
+    color: #fff;
+    text-shadow: 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.Home-main01 .text .txt1{
+    margin-bottom: 16px;
+
+    font-size: 60px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.Home-main01 .text .txt2{
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.Home-main01 .text .txt2 strong{
+    color: #F9E000;
+}

@@ -44,6 +44,7 @@ const InputImageFile = ({ imgSrc, setImgSrc, isDefault, setIsDefault }) => {
                     type="file"
                     accept="image/*"
                     onChange={handleChangeImg}
+                    name="images"
                 />
             </p>
             <p
