@@ -73,6 +73,27 @@ class PostModel extends PostDb {
         return result;
     }
 
+    public static async updateNormalPost(postId: number, data: {title?: string, content?: string}) {
+        let sqlMiddle = '';
+        const preparedData = [];
+        if (!data) {
+            return;
+        } else if (data.title && data.content) {
+            sqlMiddle = `title = ?, content = ?`;
+            preparedData.push(data.title);
+            preparedData.push(data.content);
+        } else if (data.title) {
+            sqlMiddle = `title = ?`;
+            preparedData.push(data.title);
+        } else if (data.content) {
+            sqlMiddle = `content = ?`;
+            preparedData.push(data.content);
+        }
+        const sql = `UPDATE post SET ${sqlMiddle} WHERE id = ? AND deleted_at IS NULL`;
+        const sqlData = [...preparedData, postId];
+        await this.update(sql, sqlData);
+    }
+
     public static async updatePost(post_id: number, updateData: PostUpdateData): Promise<PostWithDetails | null> {
         const postUpdateFields: string[] = [];
         const postUpdateValues: any[] = [];
@@ -88,8 +109,8 @@ class PostModel extends PostDb {
             postUpdateValues.push(updateData.content);
         }
         if (updateData.status !== undefined) {
-            postUpdateFields.push('status = ?');
-            postUpdateValues.push(updateData.status);
+            detailUpdateFields.push('status = ?');
+            detailUpdateValues.push(updateData.status);
         }
         if (updateData.item !== undefined) {
             detailUpdateFields.push('item = ?');

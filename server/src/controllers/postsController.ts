@@ -24,7 +24,18 @@ class PostsController {
         }
     }
     static async updatePost(req: Request, res: Response, next: NextFunction) {
-        
+        const { categoryId, title, images, content } = req.body;
+        const { postId } = req.params;
+        const user = req.user as ReqUser;
+        const userId = user.userId;
+
+        const data: PostCreation = { title, content, category_id: Number(categoryId), user_id: userId };
+        try {
+            const updatedPost = await PostsService.updatePost(data, images, Number(postId));
+            return res.status(204).end();
+        } catch(err) {
+            return next(err);
+        }
     }
     static async deletePost(req: Request, res: Response, next: NextFunction) {
         const { postId } = req.params;
