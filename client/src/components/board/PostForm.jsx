@@ -83,8 +83,8 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
         }
     };
 
-    const handleSetImgSrc = (idx) => (imgSrc, file) => {
-        const updatedImages = setImgSrc(images, idx, imgSrc, file);
+    const handleSetImgSrc = (idx) => async (imgSrc, file) => {
+        const updatedImages = await setImgSrc(images, idx, imgSrc, file);
         setImages(updatedImages);
     };
 
@@ -112,7 +112,7 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
         const isValidImg = images.some(image => !image.isDefault);
         if (!validateSubmit(!title, '제목을 입력해주세요.', titleRef)) return;
         if (!validateSubmit(price === null || price === undefined || price === '', '가격을 입력해주세요.', priceRef)) return;
-        //if (!validateSubmit(!isValidImg, '이미지를 한 장 이상 업로드해주세요.', imgSectionRef, true)) return;
+        if (!validateSubmit(!isValidImg, '이미지를 한 장 이상 업로드해주세요.', imgSectionRef, true)) return;
         if (!validateSubmit(!content, '내용을 입력해주세요.', contentRef)) return;
 
         const data = {
@@ -123,8 +123,7 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
             price: Number(price),
             location: locations[selectedLocationType],
             sort: sortTypes[selectedSortType],
-            // images: images.filter(image => !image.isDefault).map(image => image.imgSrc)
-            "images": ["asdlgaksdpfoew.jpg", "agpsiodhfasdokfmolang.png", "thisismypics.jpg"]
+            images: images.filter(image => !image.isDefault).map(image => image.imgSrc)
         };
 
         onSubmit(data);

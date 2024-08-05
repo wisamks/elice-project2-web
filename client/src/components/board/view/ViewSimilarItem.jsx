@@ -5,42 +5,42 @@ import './ViewSimilarItem.css';
 const dummyData = [
     {
         linkURL: "/board/view/1",
-        itemPhotoSrc: "../images/item/men/setup/men_setup_2.jpg",
+        itemPhotoSrc: "/images/item/men/setup/men_setup_2.jpg",
         itemName: "남자 반팔, 반바지 셋업",
     },
     {
         linkURL: "/board/view/2",
-        itemPhotoSrc: "../images/item/men/setup/men_setup_1.jpg",
+        itemPhotoSrc: "/images/item/men/setup/men_setup_1.jpg",
         itemName: "남자 반팔, 반바지 셋업222",
     },
     {
         linkURL: "/board/view/3",
-        itemPhotoSrc: "../images/item/men/setup/men_setup_4.jpg",
+        itemPhotoSrc: "/images/item/men/setup/men_setup_4.jpg",
         itemName: "남자 반팔, 반바지 셋업333",
     },
     {
         linkURL: "/board/view/4",
-        itemPhotoSrc: "../images/item/men/setup/men_setup_3.jpg",
+        itemPhotoSrc: "/images/item/men/setup/men_setup_3.jpg",
         itemName: "남자 반팔, 반바지 셋업444",
     },
     {
         linkURL: "/board/view/5",
-        itemPhotoSrc: "../images/item/men/setup/men_setup_5.jpg",
+        itemPhotoSrc: "/images/item/men/setup/men_setup_5.jpg",
         itemName: "남자 반팔, 반바지 셋업555",
     },
     {
         linkURL: "/board/view/6",
-        itemPhotoSrc: "../images/item/women/setup/women_setup_1.jpg",
+        itemPhotoSrc: "/images/item/women/setup/women_setup_1.jpg",
         itemName: "남자 반팔, 반바지 셋업666",
     },
     {
         linkURL: "/board/view/7",
-        itemPhotoSrc: "../images/item/women/setup/women_setup_2.jpg",
+        itemPhotoSrc: "/images/item/women/setup/women_setup_2.jpg",
         itemName: "남자 반팔, 반바지 셋업777",
     },
     {
         linkURL: "/board/view/8",
-        itemPhotoSrc: "../images/item/women/setup/women_setup_3.jpg",
+        itemPhotoSrc: "/images/item/women/setup/women_setup_3.jpg",
         itemName: "남자 반팔, 반바지 셋업888",
     }
 ];

@@ -1,7 +1,9 @@
 import './ViewPhoto.css';
 
 const ViewPhoto = ({photos}) => {
-    const defaultPhoto = '../images/ico-hanger.png';
+    const defaultPhoto = {
+        url : '/images/ico-hanger.png'
+    };
     const filledPhotos = [...photos];
 
     while (filledPhotos.length < 3){
@@ -13,9 +15,9 @@ const ViewPhoto = ({photos}) => {
             <ul>
                 {filledPhotos.map((photo, idx) => (
                     <li key={idx} className={photo === defaultPhoto ? 'default-photo imgFrame' : 'imgFrame'}>
-                        <img src={photo} alt='' />
+                        <img src={photo.url} alt='' />
                     </li>
-                ))};
+                ))}
             </ul>
         </div>
     );

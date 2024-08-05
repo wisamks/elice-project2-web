@@ -62,7 +62,7 @@
     color: #333;
 }
 
-.view-post-item-info .row2 .item-location-date p::before{
-    margin: 9px 12px 0 0;
+.view-post-item-info .row2 .item-location-date .sale-location::after{
+    margin: 9px 0 0 12px;
     background-color: #555;
 }

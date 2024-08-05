@@ -5,12 +5,12 @@ import { imageUploadController } from "../controllers/imageUploadController";
 export const setImgSrc = async (images, index, imgSrc, file) => {
     const uploadImage = async (file) => {
         const formData = new FormData();
-        formData.append('image', file);
+        formData.append('images', file);
 
         const response = await  apiService(imageUploadController, formData);
         console.log('response', response);
 
-        return response.images;
+        return response.urls;
     };
 
     const imageUrls = await uploadImage(file);
