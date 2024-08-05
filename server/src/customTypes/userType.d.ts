@@ -1,4 +1,7 @@
-export type SnsCode = 'google' | 'naver' ;              // snscode 서비스단에서?
+export enum SnsCode {
+    google = 'google',
+    naver = 'naver'
+}          // snscode 서비스단에서?
 
 export interface User {
     id: number;            // readonly?

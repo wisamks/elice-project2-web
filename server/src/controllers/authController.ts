@@ -92,9 +92,6 @@ class AuthController {
     // 회원 탈퇴
     static async delete (req: Request, res: Response, next: NextFunction) {
         try {
-            if (typeof(req.user) === 'undefined') {
-                throw new UnauthorizedError('로그인이 필요합니다.');
-            }
             const user = req.user as ReqUser;
             const userId = user.userId;
             await Promise.all([
