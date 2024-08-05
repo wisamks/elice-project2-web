@@ -63,10 +63,10 @@ const ListPost = () => {
                 <ListContent
                     items={items}
                     total={totalItems}
-                    // isOnlyAble={isOnlyAble}
-                    // page={page}
-                    // perPage={perPage}
-                    // handlePageChange={handlePageChange}
+                    isOnlyAble={isOnlyAble}
+                    page={page}
+                    perPage={perPage}
+                    handlePageChange={handlePageChange}
                 />
             </div>
         </div>

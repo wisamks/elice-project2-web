@@ -8,11 +8,11 @@ const ItemCardVertical257 = ({item}) => {
         if (sort === '나눔') {
             if (status === '진행') return 'item-status item-status-free-ing';
             if (status === '예약') return 'item-status item-status-free-rsv';
-            if (status === '마감') return 'item-status item-status-free-end';
+            if (status === '완료') return 'item-status item-status-free-end';
         } else if (sort === '판매') {
             if (status === '진행') return 'item-status item-status-sale-ing';
             if (status === '예약') return 'item-status item-status-sale-rsv';
-            if (status === '마감') return 'item-status item-status-sale-end';
+            if (status === '완료') return 'item-status item-status-sale-end';
         }
         return 'item-status';
     };
@@ -21,11 +21,11 @@ const ItemCardVertical257 = ({item}) => {
         if (sort === '나눔') {
             if (status === '진행') return '나눔 진행';
             if (status === '예약') return '나눔 예약';
-            if (status === '마감') return '나눔 마감';
+            if (status === '완료') return '나눔 완료';
         } else if (sort === '판매') {
             if (status === '진행') return '판매 진행';
             if (status === '예약') return '판매 예약';
-            if (status === '마감') return '판매 마감';
+            if (status === '완료') return '판매 완료';
         }
         return '';
     };
