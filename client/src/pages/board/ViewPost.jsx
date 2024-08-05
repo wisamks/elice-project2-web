@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 import ViewPhoto from '../../components/board/view/ViewPhoto';
+import ImageModal from '../../components/modal/ImageModal';
 import ViewItemInfo from '../../components/board/view/ViewItemInfo';
 import ViewItemDescription from '../../components/board/view/ViewItemDescription';
 import ViewComment from '../../components/board/view/ViewComment';
@@ -17,10 +18,14 @@ const ViewPost = () => {
     const { postId } = useParams();
     const [postData, setPostData] = useState(null);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
+
     useEffect(() => {
         const fetchPost = async () => {
             if (postId) {
                 const res = await apiService((apiClient) => getExchangePost(apiClient, postId));
+                console.log('ViewPost', res);
                 setPostData(res);
             }
         };
@@ -35,7 +40,18 @@ const ViewPost = () => {
         return <div>게시글 정보를 로딩중입니다.</div>
     }
 
-    console.log('postData', postData);
+    const handleOpenModal = (photo) => {
+        setSelectedPhoto(photo);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handlePhotoClick = (photo) => {
+        handleOpenModal(photo);
+    };
 
     return (
         <div className="view-post">
@@ -46,7 +62,17 @@ const ViewPost = () => {
                 </div>
             </div>
             <div className="view-post-row2">
-                <ViewPhoto photos={postData.images} />
+                <ViewPhoto 
+                    photos={postData.images} 
+                    onPhotoClick={handlePhotoClick}
+                />
+                {isModalOpen && 
+                    <ImageModal 
+                        photos={postData.images} 
+                        selectedPhoto={selectedPhoto}
+                        closeModal={handleCloseModal}
+                    />
+                }
             </div>
             <div className="view-post-row3">
                 <ViewItemInfo
