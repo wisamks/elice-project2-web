@@ -50,6 +50,16 @@ class PostModel extends PostDb {
         } as Post;
     }
 
+    public static async findNormalById(postId: number) {
+        const sql = `
+            SELECT p.*, u.nickname, u.image as user_image
+            FROM post p
+            JOIN user u ON p.user_id = u.id
+            WHERE p.id = ? AND p.deleted_at IS NULL
+        `;
+        return await this.findOne(sql, [postId]);
+    }
+
     public static async findById(post_id: number): Promise<PostWithDetails | null> {
         // post_id로 게시글 정보 조회(post(p) + post_exchange_detail(ped) + user(u) join)
         const sql = `

@@ -27,7 +27,15 @@ class PostsController {
         
     }
     static async deletePost(req: Request, res: Response, next: NextFunction) {
-        
+        const { postId } = req.params;
+        const user = req.user as ReqUser;
+        const userId = user.userId;
+        try {
+            await PostsService.deletePost(Number(postId), userId);
+            return res.status(204).end();
+        } catch(err) {
+            return next(err);
+        }
     }
 }
 
