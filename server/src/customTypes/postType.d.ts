@@ -12,14 +12,16 @@ export interface Post {
     category_id: number;   // categoryid - FK (category table)
     title: string;         
     content: string;       
-    status: PostStatus;    
     created_at: Date;      
     updated_at: Date;      
     deleted_at: Date | null; 
 }
 
+export type PostCreation = Omit<Post, 'id'|'created_at'|'updated_at'|'deleted_at'>;
+
 // postExchangeDetail
 export interface PostExchangeDetail {
+    status: PostStatus;    
     item: string;     
     target: string;   
     location: string; 

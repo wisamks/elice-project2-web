@@ -1,8 +1,15 @@
 import PostDb from "@_models/postDb";
-import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters } from "@_/customTypes/postType";
+import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters, PostCreation } from "@_/customTypes/postType";
 import { calculatePriceRange } from "@_/utils";
 
 class PostModel extends PostDb {
+    public static async createNormalPost(data: PostCreation) {
+        const sql = `
+            INSERT INTO post(user_id, category_id, title, content)
+            VALUES (?, ?, ?, ?)
+        `;
+        return await this.insert(sql, [data.user_id, data.category_id, data.title, data.content]);
+    }
 
     public static async createPost(postData: PostCreationData): Promise<Post> {
         const { user_id, category_id, title, content, status, item, target, location, price, sort } = postData;
