@@ -13,7 +13,7 @@ const UserProfileLoader = () => {
 
                 setUserState({
                     name: data.name || '',
-                    userId: data.userId || '',
+                    id: data.id || '',
                     nickname: data.nickname || '',
                     profileImage: data.profileImage || '',
                 });
@@ -22,7 +22,7 @@ const UserProfileLoader = () => {
             } catch (error) {
                 setUserState({
                     name: '',
-                    userId: '',
+                    id: '',
                     nickname: '',
                     profileImage: '',
                 });

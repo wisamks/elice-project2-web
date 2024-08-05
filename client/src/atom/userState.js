@@ -4,7 +4,7 @@ export const userState = atom({
     key: 'userState',
     default: {
         name: '',
-        userId: '',
+        id: '',
         nickname: '',
         profileImage: '',
     },
