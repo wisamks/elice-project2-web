@@ -1,10 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config(); // 환경 변수 로드
+
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 
-import { clientDomain } from '@_config';
-import { serverPort } from '@_config';
+import { clientDomain, serverPort } from '@_config';
 import homeRouter from '@_routers/homeRouter';
 import authRouter from '@_routers/authRouter';
 import usersRouter from '@_routers/usersRouter';
@@ -12,6 +14,7 @@ import exchangePostsRouter from '@_routers/exchangePostsRouter';
 import favoriteRouter from '@_routers/favoriteRouter';
 import commentsRouter from '@_routers/commentsRouter';
 import imagesRouter from '@_routers/imagesRouter';
+import clothingBinsRouter from '@_routers/clothingBinsRouter'; // 의류 수거함 라우터 추가
 import { getUserByToken } from '@_middlewares';
 
 import passportConfig from '@_passport-config';
@@ -40,6 +43,7 @@ app.use('/api/exchange-posts', exchangePostsRouter);
 app.use('/api/favorite', favoriteRouter);
 app.use('/api/comments', commentsRouter);
 app.use('/api/images', imagesRouter);
+app.use('/api/clothing-bins', clothingBinsRouter); // 의류 수거함 라우터 추가
 
 // 에러 핸들링 미들웨어
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -50,7 +54,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     const message = err.message ? err.message : '에러가 발생했습니다.';
     return res.status(statusCode).json({ error: message });
 });
-
 
 app.listen(serverPort, () => {
     console.log(`server started on Port ${serverPort}`);
