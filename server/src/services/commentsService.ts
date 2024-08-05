@@ -30,8 +30,7 @@ class CommentsService {
         if (!comment) {
             throw new NotFoundError('댓글을 찾을 수 없습니다.');
         }
-        
-        if (comment.userId !== userId) {
+        if (comment.user_id !== userId) {
             throw new ForbiddenError('댓글을 수정할 권한이 없습니다.');
         }
         
