@@ -40,7 +40,7 @@ const ItemCardVertical257 = ({item}) => {
 
     return (
         <div className="ItemCardVertical257">
-            <Link to={'#'}>
+            <Link to={`/board/view/${item.postId}`}>
                 <p className={imgFrameClass}>
                     <img src={thumbnailUrl} alt="" />
                 </p>

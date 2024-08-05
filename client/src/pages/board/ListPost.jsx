@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 
 import ListFilter from "../../components/board/list/ListFilter";
 import ListOnlyAble from "../../components/board/list/ListOnlyAble";
@@ -49,8 +49,10 @@ const ListPost = () => {
             <div className="list-post-top">
                 <h1 className="page-title">중고거래</h1>
                 <div className="btn-go-create">
-                    <span><img src="images/ico-edit.png" alt="등록하기" /></span>
-                    <span>등록하기</span>
+                    <Link to="/board/create">
+                        <span><img src="images/ico-edit.png" alt="등록하기" /></span>
+                        <span>등록하기</span>
+                    </Link>
                 </div>
             </div>            
             <div className="list-post-wrap">

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import FilterSection from './FilterSection';
 import InputImageFile from '../input/InputImageFile';
@@ -9,6 +10,8 @@ import { setImgSrc, resetImgSrc } from '../../utils/imageUtils';
 import './PostForm.css';
 
 const PostForm = ({ initialPost, onSubmit, formType }) => {
+    const navigate = useNavigate();
+
     const sortTypes = ['판매', '나눔'];
     const targets = ['남성', '여성', '아동'];
     const items = ['상의', '하의', '원피스', '셋업', '아우터'];
@@ -47,20 +50,20 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
 
     useEffect(() => {
         if (initialPost) {
-            setSelectedSortType(sortTypes.indexOf(initialPost.sort));
-            setSelectedTargetType(targets.indexOf(initialPost.target));
-            setSelectedItemType(items.indexOf(initialPost.item));
-            setSelectedLocationType(locations.indexOf(initialPost.location));
+            setSelectedSortType(sortTypes.indexOf(initialPost.post.sort));
+            setSelectedTargetType(targets.indexOf(initialPost.post.target));
+            setSelectedItemType(items.indexOf(initialPost.post.item));
+            setSelectedLocationType(locations.indexOf(initialPost.post.location));
 
-            setTitle(initialPost.title);
-            setPrice(initialPost.price);
-            setContent(initialPost.content);
+            setTitle(initialPost.post.title);
+            setPrice(initialPost.post.price);
+            setContent(initialPost.post.content);
 
             setImages(
-                initialPost.photos.map(photo => ({
-                    imgSrc: photo,
+                initialPost.images.map(image => ({
+                    imgSrc: image.url,
                     isDefault: false
-                })).concat(defaultPhoto.slice(initialPost.photos.length))
+                })).concat(defaultPhoto.slice(initialPost.images.length))
             );
         }
     }, [initialPost]);
@@ -130,6 +133,11 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
     };
 
     const handleResetForm = () => {
+        if (formType === 'edit') {
+            navigate(`/board/view/${initialPost.post.postId}`);
+            return;
+        }
+
         if (!title && !price && !content && images.every(image => image.isDefault)) {
             return;
         }

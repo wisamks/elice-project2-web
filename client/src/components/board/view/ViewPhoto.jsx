@@ -18,7 +18,7 @@ const defaultPhoto = {
                     <li 
                         key={idx} 
                         className={photo === defaultPhoto ? 'default-photo imgFrame' : 'imgFrame'}
-                        onClick={() => onPhotoClick(photo)}
+                        onClick={photo !== defaultPhoto ? () => onPhotoClick(photo) : undefined}
                     >
                         <img src={photo.url} alt='' />
                     </li>
