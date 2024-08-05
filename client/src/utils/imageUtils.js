@@ -1,4 +1,5 @@
-
+import { apiService } from "../services/apiService";
+import { imageUploadController } from "../controllers/imageUploadController";
 
 // 이미지 업로드
 export const setImgSrc = async (images, index, imgSrc, file) => {
@@ -6,22 +7,10 @@ export const setImgSrc = async (images, index, imgSrc, file) => {
         const formData = new FormData();
         formData.append('image', file);
 
-        try{
-            const response = await axios.post('http://localhost:8080/api/images/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+        const response = await  apiService(imageUploadController, formData);
+        console.log('response', response);
 
-            if (!response.ok) {
-                throw new Error('Image upload failed');
-            }
-
-            return response.data.urls;
-        } catch (error) {
-            console.error('Error uploading image:', error);
-            return null;
-        }
+        return response.images;
     };
 
     const imageUrls = await uploadImage(file);
