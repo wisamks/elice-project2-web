@@ -101,8 +101,8 @@ class ExchangePostsController {
                     favoriteCount: foundFavoriteCount,
                 },
                 thumbnail: {
-                    thumbnailId: foundThumbnail.id,
-                    thumbnailUrl: foundThumbnail.url,
+                    thumbnailId: foundPhotos[0].id,
+                    thumbnailUrl: foundPhotos[0].url,
                 },
                 isMyFavorite: !!isMyFavorite,
                 filteredPosts: foundFilteredPosts,

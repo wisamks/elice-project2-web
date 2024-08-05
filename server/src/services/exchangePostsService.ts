@@ -37,11 +37,12 @@ class ExchangePostsService {
         const foundPosts = await PostModel.getPosts(paginations, filters, postId);
         const posts = await Promise.all(foundPosts.map(async (foundPost) => {
             const isMyFavorite = userId ? await FavoriteModel.findOneByUserId(foundPost.id, userId) : false;
-            const [foundMainImage, commentsCount] = await Promise.all([
+            const [foundMainImage, commentsCount, foundImages] = await Promise.all([
                 PhotoModel.getMainPhotoByPostId(foundPost.id),
-                CommentModel.findCountByPostId(foundPost.id)
+                CommentModel.findCountByPostId(foundPost.id),
+                PhotoModel.getPhotosByPostId(foundPost.id)
             ])
-            const thumbnail = foundMainImage ? {id: foundMainImage.id, url: foundMainImage.url} : {id: undefined, url: undefined};
+            const thumbnail = foundImages ? {id: foundImages[0]?.id, url: foundImages[0]?.url} : {id: undefined, url: undefined};
             return {
                 postId: foundPost.id,
                 userId: foundPost.user_id,
