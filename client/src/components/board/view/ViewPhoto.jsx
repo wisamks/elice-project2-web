@@ -1,9 +1,10 @@
 import './ViewPhoto.css';
 
-const ViewPhoto = ({photos}) => {
-    const defaultPhoto = {
+const ViewPhoto = ({photos, onPhotoClick}) => {
+const defaultPhoto = {
         url : '/images/ico-hanger.png'
     };
+    
     const filledPhotos = [...photos];
 
     while (filledPhotos.length < 3){
@@ -14,7 +15,11 @@ const ViewPhoto = ({photos}) => {
         <div className="view-post-photos">
             <ul>
                 {filledPhotos.map((photo, idx) => (
-                    <li key={idx} className={photo === defaultPhoto ? 'default-photo imgFrame' : 'imgFrame'}>
+                    <li 
+                        key={idx} 
+                        className={photo === defaultPhoto ? 'default-photo imgFrame' : 'imgFrame'}
+                        onClick={() => onPhotoClick(photo)}
+                    >
                         <img src={photo.url} alt='' />
                     </li>
                 ))}

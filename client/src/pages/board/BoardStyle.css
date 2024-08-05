@@ -92,6 +92,14 @@
 }
 
 .list-post-wrap{
+    position: relative;
+
     display: flex;
     justify-content: space-between;
+}
+
+.list-filter{
+    position: absolute;
+    top: 0;
+    right: 0;
 }

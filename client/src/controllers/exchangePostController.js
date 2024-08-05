@@ -32,3 +32,12 @@ export const deleteExchangePost = async (apiClient, postId) => {
     });
     return response;
 };
+
+export const getExchangeList = async (apiClient, page, perPage) => {
+    const fetchURI = baseURI + `/api/exchange-posts?categoryId=1&page=${page}&perPage=${perPage}`;
+    const response = await apiClient.get(fetchURI, {
+        // params,
+        withCredentials: true,
+    });
+    return response;
+};
