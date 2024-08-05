@@ -8,6 +8,10 @@
     margin-bottom: 24px;
 }
 
+.list-post-content-top .total-num{
+    margin-left: 8px;
+}
+
 .list-post .onlyAble{
     color: #555;
 }
