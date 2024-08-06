@@ -1,0 +1,155 @@
+.CertificationModal .modal-wrap{
+    width: 1040px;
+    padding: 0;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.CertificationModal .modal-wrap .modal-main-img{
+    width: 580px;
+    height: 680px;
+    border-radius: 8px 0 0 8px;
+}
+
+.CertificationModal .modal-wrap .modal-right{
+    position: relative;
+    width: 460px;
+}
+
+.CertificationModal .modal-wrap .modal-right::before{
+    content: "";
+    position: absolute;
+    top: 157px;
+    right: 0px;
+    width: 20px;
+    height: 417px;
+    background-color: #fff;
+    z-index: 500;
+}
+
+.CertificationModal .modal-right-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 12px 24px;
+    border-bottom: 1px solid #ccc;
+}
+
+.CertificationModal .modal-user-info{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.CertificationModal .modal-user-info .user-profile{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.CertificationModal .modal-user-info .user-name{
+    font-weight: 600;
+}
+
+.CertificationModal .user-edit-btn{
+    display: flex;
+    gap: 16px;
+    font-weight: 500;
+}
+
+.CertificationModal .user-edit-btn p{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.CertificationModal .user-edit-btn .user-edit-btn-fix{
+    color: var(--primary-color);
+}
+
+.CertificationModal .user-content-wrap{
+    padding: 24px;
+}
+
+.CertificationModal .user-content-wrap .user-content-text{
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.CertificationModal .user-content-wrap .user-content-date{
+    color: #777;
+}
+
+.CertificationModal .comment-list{
+    position: relative;
+    height: 369px;
+    overflow-y: scroll;
+    padding: 24px;
+}
+
+.CertificationModal .comment-list ul{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.CertificationModal .comment-list li{
+    display: flex;
+    gap: 16px;
+}
+
+.CertificationModal .comment-list-user-profile{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.CertificationModal .comment-user-text{
+    padding-top: 6px;
+    margin-bottom: 8px;
+}
+
+.CertificationModal .comment-user-text .comment-user{
+    margin-right: 16px;
+    font-weight: 600;
+}
+
+.CertificationModal .comment-date{
+    color: #777;
+}
+
+.CertificationModal .reaction{
+    display: flex;
+    gap: 16px;
+
+    padding: 16px 24px;
+    border-top: 1px solid #ccc;
+}
+
+.CertificationModal .reaction p{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #888;
+}
+
+.CertificationModal .content{
+    margin: 0 8px;
+    font-size: 15px;
+}
+
+.CertificationModal .comment-input-form{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px 12px 24px;
+}
+
+.CertificationModal .comment-input-form .comment-input{
+    display: block;
+    width: 350px;
+    height: 40px;
+}
+
+.CertificationModal .comment-input-form .comment-btn{
+    height: 40px;
+}

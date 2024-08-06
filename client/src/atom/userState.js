@@ -6,7 +6,7 @@ export const userState = atom({
         name: '',
         id: '',
         nickname: '',
-        profileImage: '',
+        image: '',
     },
 });
 
