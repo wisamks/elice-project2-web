@@ -14,10 +14,10 @@ class CommentsController {
             perPage: perPage ? Number(perPage) : 10,
         };
         try {
-            const {foundComments, commentsCount} = await CommentsService.getCommentsByPostId(data);
+            const {comments, commentsCount} = await CommentsService.getCommentsByPostId(data);
             return res.status(200).json({
                 commentsCount, 
-                comments: foundComments,
+                comments,
             });
         } catch(err) {
             return next(err);

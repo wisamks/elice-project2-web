@@ -11,7 +11,17 @@ class CommentsService {
         }
         const foundComments = await CommentModel.findAllByPostId(data);
         const commentsCount = await CommentModel.findCountByPostId(data.postId);
-        return {foundComments, commentsCount};
+        const comments = foundComments.map(comment => ({
+            commentId: comment.commentId,
+            userId: comment.userId,
+            content: comment.content,
+            createdAt: comment.createdAt,
+            updatedAt: comment.updatedAt,
+            secret: !!comment.secret,
+            nickname: comment.nickname,
+            image: comment.image,
+        }));
+        return {comments, commentsCount};
     }
     static async createComment(data: CreationComment) {
         const foundPost = await PostModel.findById(data.postId);
