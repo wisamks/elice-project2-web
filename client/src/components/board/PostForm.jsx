@@ -20,17 +20,17 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
 
     const defaultPhoto = [
         {
-            imgSrc: '../images/ico-camera.png',
+            imgSrc: '/images/ico-camera.png',
             isDefault: true,
             file: null,
         },
         {
-            imgSrc: '../images/ico-camera.png',
+            imgSrc: '/images/ico-camera.png',
             isDefault: true,
             file: null,
         },
         {
-            imgSrc: '../images/ico-camera.png',
+            imgSrc: '/images/ico-camera.png',
             isDefault: true,
             file: null,
         }

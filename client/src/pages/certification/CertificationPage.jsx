@@ -21,7 +21,7 @@ const CertificationPage = () => {
             <div className="certification-list-top">
                 <h1 className="page-title">의류수거함 인증</h1>
                 <div className="btn-go-create">
-                    <Link to="">
+                    <Link to="/certification/create">
                         <span><img src="images/ico-edit.png" alt="등록하기" /></span>
                         <span>등록하기</span>
                     </Link>
