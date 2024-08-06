@@ -5,10 +5,9 @@ const NaverLogin = () => {
     const REDIRECT_URI = process.env.REACT_APP__NAVER_REDIRECT_URI;
 
     const location = useLocation();
-    // const currentPath = location.pathname + location.search;
+    const currentPath = location.pathname + location.search;
 
-    // const link = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&state=${encodeURIComponent(currentPath)}`;
-    const link = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&state={state}`;
+    const link = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&state=${encodeURIComponent(currentPath)}`;
 
     return (
         <p>

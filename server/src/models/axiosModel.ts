@@ -2,6 +2,7 @@ import axios from 'axios';
 import qs from 'querystring';
 
 import { googleClientId, googleClientPw, googleRedirectUri, naverClientId, naverClientPw } from "@_/config";
+import { SnsCode } from '@_/customTypes/userType';
 
 class AxiosModel {
     static async getProfileGoogle(code: string) {
@@ -32,7 +33,7 @@ class AxiosModel {
             name: profile.name as string,
             email: profile.email as string,
             image: profile.picture as string|undefined,
-            snsCode: 'google',
+            snsCode: SnsCode.google,
         };
     }
 
@@ -60,7 +61,7 @@ class AxiosModel {
             name: profile.name,
             email: profile.email,
             image: profile.profile_image,
-            snsCode: 'naver',
+            snsCode: SnsCode.naver,
         };
     }
 }

@@ -64,10 +64,10 @@ const Header = () => {
         <nav className="nav">
           <ul className="nav-list">
             <li className="nav-item">
-              <Link to="/">중고거래</Link>
+              <Link to="/board">중고거래</Link>
             </li>
             <li className="nav-item">
-              <Link to="/">의류수거함 위치</Link>
+              <Link to="/map">의류수거함 위치</Link>
             </li>
             <li className="nav-item">
               <Link to="/">의류수거함 인증</Link>

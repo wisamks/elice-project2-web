@@ -13,6 +13,19 @@ class UsersController {
             return next(err);
         }
     }
+
+    static async updateProfile(req: Request, res: Response, next: NextFunction) {
+        const user = req.user as ReqUser;
+        const userId = user.userId;
+        const { nickname, image } = req.body;
+        const data = { nickname, image };
+        try {
+            await UsersService.updateProfile(userId, data);
+            return res.status(204).end();
+        } catch(err) {
+            return next(err);
+        }
+    }
 }
 
 export default UsersController;

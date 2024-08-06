@@ -1,13 +1,16 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { userState } from '../../atom/userState';
 
 import ViewPhoto from '../../components/board/view/ViewPhoto';
+import ImageModal from '../../components/modal/ImageModal';
 import ViewItemInfo from '../../components/board/view/ViewItemInfo';
 import ViewItemDescription from '../../components/board/view/ViewItemDescription';
 import ViewComment from '../../components/board/view/ViewComment';
 import ViewSimilarItem from '../../components/board/view/ViewSimilarItem';
 
-import { getExchangePost } from '../../controllers/exchangePostController';
+import { getExchangePost, deleteExchangePost, getExchangeList } from '../../controllers/exchangePostController';
 import { apiService } from '../../services/apiService';
 
 import './BoardStyle.css'
@@ -16,6 +19,11 @@ const ViewPost = () => {
     const navigate = useNavigate();
     const { postId } = useParams();
     const [postData, setPostData] = useState(null);
+    const [recentPosts, setRecentPosts] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+    const setUserState = useRecoilValue(userState);
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -24,29 +32,76 @@ const ViewPost = () => {
                 setPostData(res);
             }
         };
+
+        const fetchRecentPosts = async () => {
+            const res = await apiService((apiClient) => getExchangeList(apiClient, 1, 8));
+            setRecentPosts(res.posts);
+        };
+
         fetchPost();
+        fetchRecentPosts();
     }, [postId]);
 
-    const handleGoBack = () => {
-        navigate(-1);
+    const handleDeletePost = async () => {
+        if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
+            await apiService((apiClient) => deleteExchangePost(apiClient, postId));
+            navigate('/board');
+        }
+    };
+
+    const handleEditPost = () => {
+        navigate(`/board/edit/${postId}`);
     };
 
     if (postData === null) {
         return <div>게시글 정보를 로딩중입니다.</div>
-    }
+    };
 
-    console.log('postData', postData);
+    const handleOpenModal = (photo) => {
+        setSelectedPhoto(photo);
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handlePhotoClick = (photo) => {
+        handleOpenModal(photo);
+    };
 
     return (
         <div className="view-post">
             <div className="view-post-row1">
-                <div className="go-back-page" onClick={handleGoBack}>
-                    <span className="ico"><img src="/images/ico-back.png" /></span>
-                    <span className="txt">돌아가기</span>
+                <div className="go-back-page">
+                    <Link to="/board">
+                        <span className="ico"><img src="/images/ico-back.png" /></span>
+                        <span className="txt">돌아가기</span>
+                    </Link>
                 </div>
+                {postData.post.userId === setUserState.id && <div className="user-edit-btn">
+                    <p className="user-edit-btn-del" onClick={handleDeletePost}>
+                        <span className="icon"><img src='/images/ico-delete.png' alt='삭제하기' /></span>
+                        <span className="text">삭제</span>
+                    </p>
+                    <p className="user-edit-btn-fix" onClick={handleEditPost}>
+                        <span className="icon"><img src='/images/ico-fix.png' alt='수정하기' /></span>
+                        <span className="text">수정</span>
+                    </p>
+                </div>}
             </div>
             <div className="view-post-row2">
-                <ViewPhoto photos={postData.images} />
+                <ViewPhoto 
+                    photos={postData.images} 
+                    onPhotoClick={handlePhotoClick}
+                />
+                {isModalOpen && 
+                    <ImageModal 
+                        photos={postData.images} 
+                        selectedPhoto={selectedPhoto}
+                        closeModal={handleCloseModal}
+                    />
+                }
             </div>
             <div className="view-post-row3">
                 <ViewItemInfo
@@ -71,7 +126,10 @@ const ViewPost = () => {
                     </div>
                 </div>
                 <div className="view-post-row4-column2">
-                    <ViewSimilarItem />
+                    <ViewSimilarItem 
+                        filteredPosts={postData.filteredPosts} 
+                        recentPosts={recentPosts} 
+                    />
                 </div>
             </div>
         </div>
