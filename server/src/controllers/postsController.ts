@@ -8,7 +8,58 @@ class PostsController {
 
     }
     static async getPost(req: Request, res: Response, next: NextFunction) {
-        
+        const { postId } = req.params;
+        const user = req.user as ReqUser|undefined;
+        const userId = user?.userId;
+        const _postId = Number(postId);
+        try {
+            const [
+                foundPost,
+                foundPhotos,
+                foundPhotosCount,
+                foundThumbnail,
+                foundCommentsCount,
+                foundFavoriteCount,
+                isMyFavorite,
+            ] = await Promise.all([
+                PostsService.getPost(_postId),
+                PostsService.getPhotos(_postId),
+                PostsService.getPhotosCount(_postId),
+                PostsService.getMainImage(_postId),
+                PostsService.getCommentsCount(_postId),
+                PostsService.getFavoriteCount(_postId),
+                PostsService.checkMyFavorite(_postId, userId),
+            ]);
+            return res.status(200).json({
+                post: {
+                    postId: foundPost.id,
+                    categoryId: foundPost.category_id,
+                    userId: foundPost.user_id,
+                    nickname: foundPost.nickname,
+                    userImage: foundPost.user_image,
+                    title: foundPost.title,
+                    content: foundPost.content,
+                    createdAt: foundPost.created_at,
+                    updateAt: foundPost.updated_at,
+                },
+                images: foundPhotos.map(image => ({
+                    imageId: image.id,
+                    url: image.url,
+                })),
+                counts: {
+                    imagesCount: foundPhotosCount,
+                    commentsCount: foundCommentsCount,
+                    favoriteCount: foundFavoriteCount,
+                },
+                thumbnail: {
+                    thumbnailId: foundPhotos[0]?.id,
+                    thumbnailUrl: foundPhotos[0]?.url,
+                },
+                isMyFavorite: !!isMyFavorite,
+            });
+        } catch(err) {
+            return next(err);
+        }
     }
     static async createPost(req: Request, res: Response, next: NextFunction) {
         const { categoryId, title, images, content } = req.body;

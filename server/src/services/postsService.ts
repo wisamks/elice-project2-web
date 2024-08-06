@@ -7,6 +7,45 @@ import { ForbiddenError, InternalServerError, NotFoundError } from "@_/utils/cus
 
 class PostsService {
     static async getPosts() {}
+
+    static async getPost(postId: number) {
+        const foundPost = await PostModel.findNormalById(postId);
+        if (!foundPost) {
+            throw new NotFoundError('게시글을 찾을 수 없습니다.');
+        }
+        return foundPost;
+    }
+    static async getPhotos(postId: number) {
+        const foundPhotos = await PhotoModel.getPhotosByPostId(postId);
+        return foundPhotos;
+    }
+    static async getPhotosCount(postId: number) {
+        return await PhotoModel.getPhotosCount(postId);
+    }
+    static async getMainImage(postId: number) {
+        const foundMainImage = await PhotoModel.getMainPhotoByPostId(postId);
+        if (!foundMainImage) {
+            return {
+                id: 0,
+                url: '',
+            };
+        }
+        return foundMainImage;
+    }
+    static async getCommentsCount(postId: number) {
+        return await CommentModel.findCountByPostId(postId);
+    }
+    static async getFavoriteCount(postId: number) {
+        return await FavoriteModel.findCountByPostId(postId);
+    }
+    static async checkMyFavorite(postId: number, userId: number|undefined) {
+        if (!userId) {
+            return false;
+        }
+        const foundFavorite = await FavoriteModel.findOneByUserId(postId, userId);
+        return foundFavorite;
+    }
+
     static async createPost(data: PostCreation, images: Array<string>) {
         const createdPostId = await PostModel.createNormalPost(data);
         if (!createdPostId) {

@@ -36,7 +36,7 @@ class ExchangePostsController {
         const { postId } = req.params;
         const _postId = +postId;
         const user = req.user as ReqUser | undefined;
-        const _userId = user ? user.userId : undefined;
+        const _userId = user?.userId;
         try {
             const [
                 foundPost,
@@ -76,6 +76,7 @@ class ExchangePostsController {
             return res.status(200).json({
                 post: {
                     postId: foundPost.id,
+                    categoryId: foundPost.category_id,
                     userId: foundPost.user_id,
                     nickname: foundPost.nickname,
                     userImage: foundPost.user_image,
