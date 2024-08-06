@@ -1,6 +1,6 @@
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userState } from '../../atom/userState';
 
 import ViewPhoto from '../../components/board/view/ViewPhoto';
@@ -10,7 +10,7 @@ import ViewItemDescription from '../../components/board/view/ViewItemDescription
 import ViewComment from '../../components/board/comment/ViewComment';
 import ViewSimilarItem from '../../components/board/view/ViewSimilarItem';
 
-import { getExchangePost, deleteExchangePost, getExchangeList } from '../../controllers/exchangePostController';
+import { getExchangePost, deleteExchangePost, getExchangeList, updatePostStatus } from '../../controllers/exchangePostController';
 import { apiService } from '../../services/apiService';
 
 import './BoardStyle.css'
@@ -18,29 +18,58 @@ import './BoardStyle.css'
 const ViewPost = () => {
     const navigate = useNavigate();
     const { postId } = useParams();
+    const user = useRecoilValue(userState);
+
+    const statusOptions = [
+        { id: 'ing', label: '진행' },
+        { id: 'rev', label: '예약' },
+        { id: 'end', label: '완료' },
+    ];
+
     const [postData, setPostData] = useState(null);
+    const [selectedStatus, setSelectedStatus] = useState('ing');
     const [recentPosts, setRecentPosts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
-
-    const setUserState = useRecoilValue(userState);
 
     useEffect(() => {
         const fetchPost = async () => {
             if (postId) {
                 const res = await apiService((apiClient) => getExchangePost(apiClient, postId));
                 setPostData(res);
-            }
+                if (res && res.post) {
+                    setSelectedStatus(res.post.status);
+                };
+            };
         };
 
+        fetchPost();
+    }, [postId]);
+
+    useEffect(() => {
         const fetchRecentPosts = async () => {
             const res = await apiService((apiClient) => getExchangeList(apiClient, 1, 8));
             setRecentPosts(res.posts);
         };
 
-        fetchPost();
         fetchRecentPosts();
-    }, [postId]);
+    }, []);
+
+    const handleStatusClick = async (status) => {
+        const postIdToNum = Number(postId)
+        const result = await apiService((apiClient) => updatePostStatus(apiClient, postIdToNum, status));
+        console.log('상태변경클릭', result)
+        if (result) {
+            setSelectedStatus(status);
+            setPostData((prevData) => ({
+                ...prevData,
+                post: {
+                    ...prevData.post,
+                    status: status,
+                },
+            }));
+        }
+    };
 
     const handleDeletePost = async () => {
         if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
@@ -70,6 +99,8 @@ const ViewPost = () => {
         handleOpenModal(photo);
     };
 
+    console.log('포스트데이터', postData);
+
     return (
         <div className="view-post">
             <div className="view-post-row1">
@@ -79,25 +110,49 @@ const ViewPost = () => {
                         <span className="txt">돌아가기</span>
                     </Link>
                 </div>
-                {postData.post.userId === setUserState.id && <div className="user-edit-btn">
-                    <p className="user-edit-btn-del" onClick={handleDeletePost}>
-                        <span className="icon"><img src='/images/ico-delete.png' alt='삭제하기' /></span>
-                        <span className="text">삭제</span>
-                    </p>
-                    <p className="user-edit-btn-fix" onClick={handleEditPost}>
-                        <span className="icon"><img src='/images/ico-fix.png' alt='수정하기' /></span>
-                        <span className="text">수정</span>
-                    </p>
-                </div>}
+                {postData.post.userId === user.id &&
+                    <div className="user-space">
+                        <p className="post-status-title">판매상태 변경하기</p>
+                        <div className="post-status">
+                            {statusOptions.map((option) => (
+                                <p
+                                    key={option.id}
+                                    className={`post-status-input ${selectedStatus === option.id ? 'post-status-input-active' : ''}`}
+                                    onClick={() => handleStatusClick(option.label)}
+                                >
+                                    <span>
+                                        <input
+                                            type="radio"
+                                            id={`post-status-${option.id}`}
+                                            checked={selectedStatus === option.id}
+                                            readOnly
+                                        />
+                                    </span>
+                                    <label htmlFor={`post-status-${option.id}`}>{option.label}</label>
+                                </p>
+                            ))}
+                        </div>
+                        <div className="user-edit-btn">
+                            <p className="user-edit-btn-del" onClick={handleDeletePost}>
+                                <span className="icon"><img src='/images/ico-delete.png' alt='삭제하기' /></span>
+                                <span className="text">삭제</span>
+                            </p>
+                            <p className="user-edit-btn-fix" onClick={handleEditPost}>
+                                <span className="icon"><img src='/images/ico-fix.png' alt='수정하기' /></span>
+                                <span className="text">수정</span>
+                            </p>
+                        </div>
+                    </div>
+                }
             </div>
             <div className="view-post-row2">
-                <ViewPhoto 
-                    photos={postData.images} 
+                <ViewPhoto
+                    photos={postData.images}
                     onPhotoClick={handlePhotoClick}
                 />
-                {isModalOpen && 
-                    <ImageModal 
-                        photos={postData.images} 
+                {isModalOpen &&
+                    <ImageModal
+                        photos={postData.images}
                         selectedPhoto={selectedPhoto}
                         closeModal={handleCloseModal}
                     />
@@ -126,9 +181,9 @@ const ViewPost = () => {
                     </div>
                 </div>
                 <div className="view-post-row4-column2">
-                    <ViewSimilarItem 
-                        filteredPosts={postData.filteredPosts} 
-                        recentPosts={recentPosts} 
+                    <ViewSimilarItem
+                        filteredPosts={postData.filteredPosts}
+                        recentPosts={recentPosts}
                     />
                 </div>
             </div>
