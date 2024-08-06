@@ -3,124 +3,133 @@ import axios from 'axios';
 
 const MapComponent = () => {
     const [map, setMap] = useState(null);
+    const [activeDistrict, setActiveDistrict] = useState(null); // 활성화된 구역 상태
 
-    // 서울특별시 각 구의 중심 좌표 목록
     const districts = {
         "중랑구": { lat: 37.5956435098, lng: 127.0959717546 },
         "강남구": { lat: 37.4959854, lng: 127.0664091 },
         "서대문구": { lat: 37.5798718, lng: 126.9367428 },
         "성북구": { lat: 37.5894003, lng: 127.0166463 }
-        // 필요한 구의 좌표 추가
     };
 
     useEffect(() => {
-        const mapInstance = new window.naver.maps.Map('map', {
-            center: new window.naver.maps.LatLng(37.5665, 126.9780), // 초기 중심 좌표 (서울 시청)
-            zoom: 10  // 초기 줌 레벨
-        });
-        setMap(mapInstance);  // 지도 인스턴스를 상태로 설정
-
-        const fetchClothingBins = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/api/clothing-bins');
-                const bins = response.data;
-
-                bins.forEach(bin => {
-                    if (bin.latitude && bin.longitude) {
-                        const marker = new window.naver.maps.Marker({
-                            position: new window.naver.maps.LatLng(bin.latitude, bin.longitude),
-                            map: mapInstance,
-                            title: bin.roadAddress
-                        });
-
-                        const infoWindow = new window.naver.maps.InfoWindow({
-                            content: `<div style="padding:10px;">
-                                        <b>구역: ${bin.district}</b><br>
-                                        <b>주소: ${bin.roadAddress}</b>
-                                      </div>`
-                        });
-
-                        window.naver.maps.Event.addListener(marker, 'click', function() {
-                            if (infoWindow.getMap()) {
-                                infoWindow.close();
-                            } else {
-                                infoWindow.open(mapInstance, marker);
-                            }
-                        });
-                    }
-                });
-            } catch (error) {
-                console.error('Error fetching clothing bin data:', error);
-            }
-        };
-
-        // 사용자의 현재 위치 가져오기
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(position => {
-                const userLat = position.coords.latitude;
-                const userLng = position.coords.longitude;
-
-                // 사용자의 현재 위치를 중심으로 지도 이동
-                const userLocation = new window.naver.maps.LatLng(userLat, userLng);
-                mapInstance.setCenter(userLocation);
-
-                // 현재 위치에 마커 추가
-                new window.naver.maps.Marker({
-                    position: userLocation,
-                    map: mapInstance,
-                    icon: {
-                        content: `
-                            <div style="
-                                background-color: white;
-                                border-radius: 50%;
-                                width: 60px;
-                                height: 60px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                border: 2px solid #FF0000;
-                                font-size: 12px;
-                                color: #FF0000;">
-                                현재 위치
-                            </div>
-                        `,
-                        anchor: new window.naver.maps.Point(30, 30), // 중심점 설정
-                    }
-                });
-            }, error => {
-                console.error('Error getting current position:', error);
+        const script = document.createElement('script');
+        script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.REACT_APP_NAVER_CLIENT_ID2}`;
+        script.onload = () => {
+            const mapInstance = new window.naver.maps.Map('map', {
+                center: new window.naver.maps.LatLng(37.5665, 126.9780),
+                zoom: 10
             });
-        } else {
-            console.log('Geolocation is not supported by this browser.');
-        }
+            setMap(mapInstance);
 
-        fetchClothingBins();
+            const fetchClothingBins = async () => {
+                try {
+                    const response = await axios.get('http://localhost:8080/api/clothing-bins');
+                    const bins = response.data;
+
+                    bins.forEach(bin => {
+                        if (bin.latitude && bin.longitude) {
+                            const marker = new window.naver.maps.Marker({
+                                position: new window.naver.maps.LatLng(bin.latitude, bin.longitude),
+                                map: mapInstance,
+                                title: bin.roadAddress,
+                                icon: {
+                                    url: '/images/ico-location.png', 
+                                    size: new window.naver.maps.Size(24, 37),
+                                    origin: new window.naver.maps.Point(0, 0),
+                                    anchor: new window.naver.maps.Point(12, 37)
+                                }
+                            });
+
+                            const infoWindow = new window.naver.maps.InfoWindow({
+                                content: `<div style="padding:10px;">
+                                            <b>구역: ${bin.district}</b><br>
+                                            <b>주소: ${bin.roadAddress}</b>
+                                          </div>`
+                            });
+
+                            window.naver.maps.Event.addListener(marker, 'click', function() {
+                                if (infoWindow.getMap()) {
+                                    infoWindow.close();
+                                } else {
+                                    infoWindow.open(mapInstance, marker);
+                                }
+                            });
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error fetching clothing bin data:', error);
+                }
+            };
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    const userLocation = new window.naver.maps.LatLng(userLat, userLng);
+                    mapInstance.setCenter(userLocation);
+
+                    new window.naver.maps.Marker({
+                        position: userLocation,
+                        map: mapInstance,
+                        icon: {
+                            content: `
+                                <div style="
+                                    background-color: white;
+                                    border-radius: 50%;
+                                    width: 60px;
+                                    height: 60px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    border: 2px solid #FF0000;
+                                    font-size: 12px;
+                                    color: #FF0000;">
+                                    현재 위치
+                                </div>
+                            `,
+                            anchor: new window.naver.maps.Point(30, 30),
+                        }
+                    });
+                }, error => {
+                    console.error('Error getting current position:', error);
+                });
+            } else {
+                console.log('Geolocation is not supported by this browser.');
+            }
+
+            fetchClothingBins();
+        };
+        document.head.appendChild(script);
     }, []);
 
-    // 지도 중심을 이동시키는 함수
-    const moveToDistrict = (lat, lng) => {
+    const moveToDistrict = (lat, lng, district) => {
         if (map) {
             const newCenter = new window.naver.maps.LatLng(lat, lng);
             map.setCenter(newCenter);
-            map.setZoom(14); // 구로 이동할 때 확대 수준을 조정할 수 있음
+            map.setZoom(14);
+            setActiveDistrict(district);
         }
     };
 
     return (
-        <div>
-            <div>
+        <div className="map-content">
+            <div className="map-top">
                 <h2>구 선택</h2>
                 <ul>
                     {Object.keys(districts).map(district => (
                         <li key={district}>
-                            <button onClick={() => moveToDistrict(districts[district].lat, districts[district].lng)}>
+                            <button
+                                className={activeDistrict === district ? 'active' : ''}
+                                onClick={() => moveToDistrict(districts[district].lat, districts[district].lng, district)}
+                            >
                                 {district}
                             </button>
                         </li>
                     ))}
                 </ul>
             </div>
-            <div id="map" style={{ width: '100%', height: '500px' }} />
+            <div id="map" />
         </div>
     );
 };

@@ -1,10 +1,12 @@
 import React from 'react';
-import MapComponent from '../../components/map/MapComponent';  // Adjust path as needed
+import MapComponent from '../../components/map/MapComponent';
+
+import './MapPage.css';
 
 const MapPage = () => {
     return (
-        <div>
-            <h1>의류수거함 지도</h1>
+        <div className="MapPage">
+            <h1 className='page-title'>의류수거함 지도</h1>
             <MapComponent />
         </div>
     );
