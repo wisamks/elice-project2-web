@@ -49,7 +49,7 @@ const ItemCardVertical257 = ({item}) => {
                 <p className="item-cate">{item.item}</p>
                 </div>
                 <p className="item-name">{item.title}</p>
-                <p className="item-price"><span>{item.price}</span>원</p>
+                <p className="item-price"><span>{Number(item.price).toLocaleString()}</span>원</p>
                 <div className="user-info">
                     <p className="user-profile imgFrame"><img src={item.userImage} alt="" /></p>
                     <p className="user-name">{item.nickname}</p>

@@ -4,6 +4,8 @@ export enum PostStatus {
     '완료' = '완료'
 }
 
+export type Status = '예약' | '진행' | '완료';
+
 export type PostSort = '판매' | '나눔';
 
 export interface Post {
@@ -66,4 +68,5 @@ export interface Filters {
     item?: string;
     price?: number;
     location?: string;
+    status?: Status;
 }

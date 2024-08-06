@@ -33,10 +33,16 @@ export const deleteExchangePost = async (apiClient, postId) => {
     return response;
 };
 
-export const getExchangeList = async (apiClient, page, perPage) => {
-    const fetchURI = baseURI + `/api/exchange-posts?categoryId=1&page=${page}&perPage=${perPage}`;
+export const getExchangeList = async (apiClient, page, perPage, filters) => {
+    const params = new URLSearchParams({
+        page,
+        perPage,
+        categoryId: 1,
+        ...filters
+    }).toString();
+
+    const fetchURI = baseURI + `/api/exchange-posts?${params}`;
     const response = await apiClient.get(fetchURI, {
-        // params,
         withCredentials: true,
     });
     return response;

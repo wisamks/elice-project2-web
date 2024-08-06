@@ -1,5 +1,5 @@
 import PostDb from "@_models/postDb";
-import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters, PostCreation } from "@_/customTypes/postType";
+import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters, PostCreation, Status } from "@_/customTypes/postType";
 import { calculatePriceRange } from "@_/utils";
 
 class PostModel extends PostDb {
@@ -151,6 +151,11 @@ class PostModel extends PostDb {
         return this.findById(post_id);
     }
 
+    public static async updatePostStatus(postId: number, status: Status) {
+        const sql = `UPDATE post_exchange_detail SET status = ? WHERE post_id = ?`;
+        return await this.update(sql, [status, postId]);
+    } 
+
     public static async softDeletePost(post_id: number): Promise<boolean> {
         const sql = 'UPDATE post SET deleted_at = CURRENT_TIMESTAMP WHERE id = ? AND deleted_at IS NULL';
         const result = await this.update(sql, [post_id]);
@@ -165,13 +170,42 @@ class PostModel extends PostDb {
 // -------------------------------------------------------------------------------------
 // 아래부터는 작동유무 확인 및 다른 모델 정의 필요
     // category_id에 해당하는 게시글 조회
-    public static async getPostsCount(category_id: number): Promise<number> {
+    public static async getPostsCount(category_id: number, filters?: Filters|undefined): Promise<number> {
+        let sqlJoin = '';
+        if (filters) {
+            sqlJoin = 'JOIN post_exchange_detail ped ON p.id = ped.post_id';
+        }
+
+        let dataFilter: Array<string|number|undefined> = [];
+        let sqlMiddle = '';
+        if (filters) {
+            const {sort, target, item, price, location, status} = filters;
+
+            const sqlStatus = status ? ` ped.status = ? AND`: '';
+            const sqlSort = sort ? ` ped.sort = ? AND`: '';
+            const sqlTarget = target ? ` ped.target = ? AND`: '';
+            const sqlItem = item ? ` ped.item = ? AND`: '';
+            const sqlLocation = location ? ` ped.location = ? AND`: '';
+            const priceRange = calculatePriceRange(price);
+            const sqlPrice = !priceRange ? '' : price === 0 ? ` ped.price = ? AND` : !priceRange.max ? ` ped.price >= ? AND` : ` ped.price >= ? AND ped.price < ? AND`;
+            
+            const dataFilterUnde: Array<string|number|undefined> = [status, sort, target, item, location];
+            if (priceRange) {
+                dataFilterUnde.push(priceRange.min);
+                dataFilterUnde.push(priceRange.max);
+            }
+
+            sqlMiddle += sqlStatus + sqlSort + sqlTarget + sqlItem + sqlLocation + sqlPrice;
+            dataFilter = dataFilterUnde.filter(data => data !== undefined);
+        }
+
         const sql = `
-            SELECT COUNT(*) as count
+            SELECT COUNT(p.id) as count
             FROM post p
-            WHERE p.category_id = ? AND p.deleted_at IS NULL
+            ${sqlJoin}
+            WHERE ${sqlMiddle} p.category_id = ? AND p.deleted_at IS NULL
         `;
-        const result = await this.findOne(sql, [category_id]);
+        const result = await this.findOne(sql, [...dataFilter, category_id]);
         return result.count;
     }
 
@@ -185,8 +219,9 @@ class PostModel extends PostDb {
         let dataFilter: Array<string|number|undefined> = [];
         let sqlMiddle = '';
         if (filters) {
-            const {sort, target, item, price, location} = filters;
+            const {sort, target, item, price, location, status} = filters;
 
+            const sqlStatus = status ? ` ped.status = ? AND`: '';
             const sqlSort = sort ? ` ped.sort = ? AND`: '';
             const sqlTarget = target ? ` ped.target = ? AND`: '';
             const sqlItem = item ? ` ped.item = ? AND`: '';
@@ -194,13 +229,13 @@ class PostModel extends PostDb {
             const priceRange = calculatePriceRange(price);
             const sqlPrice = !priceRange ? '' : price === 0 ? ` ped.price = ? AND` : !priceRange.max ? ` ped.price >= ? AND` : ` ped.price >= ? AND ped.price < ? AND`;
             
-            const dataFilterUnde: Array<string|number|undefined> = [sort, target, item, location];
+            const dataFilterUnde: Array<string|number|undefined> = [status, sort, target, item, location];
             if (priceRange) {
                 dataFilterUnde.push(priceRange.min);
                 dataFilterUnde.push(priceRange.max);
             }
 
-            sqlMiddle += sqlSort + sqlTarget + sqlItem + sqlLocation + sqlPrice;
+            sqlMiddle += sqlStatus + sqlSort + sqlTarget + sqlItem + sqlLocation + sqlPrice;
             dataFilter = dataFilterUnde.filter(data => data !== undefined);
         }
         if (postId) {
