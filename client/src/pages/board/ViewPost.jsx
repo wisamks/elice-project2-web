@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { userState } from '../../atom/userState';
@@ -10,7 +10,7 @@ import ViewItemDescription from '../../components/board/view/ViewItemDescription
 import ViewComment from '../../components/board/view/ViewComment';
 import ViewSimilarItem from '../../components/board/view/ViewSimilarItem';
 
-import { getExchangePost, deleteExchangePost } from '../../controllers/exchangePostController';
+import { getExchangePost, deleteExchangePost, getExchangeList } from '../../controllers/exchangePostController';
 import { apiService } from '../../services/apiService';
 
 import './BoardStyle.css'
@@ -19,7 +19,7 @@ const ViewPost = () => {
     const navigate = useNavigate();
     const { postId } = useParams();
     const [postData, setPostData] = useState(null);
-
+    const [recentPosts, setRecentPosts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
 
@@ -32,12 +32,15 @@ const ViewPost = () => {
                 setPostData(res);
             }
         };
-        fetchPost();
-    }, [postId]);
 
-    const handleGoBack = () => {
-        navigate(-1);
-    };
+        const fetchRecentPosts = async () => {
+            const res = await apiService((apiClient) => getExchangeList(apiClient, 1, 8));
+            setRecentPosts(res.posts);
+        };
+
+        fetchPost();
+        fetchRecentPosts();
+    }, [postId]);
 
     const handleDeletePost = async () => {
         if (window.confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
@@ -70,9 +73,11 @@ const ViewPost = () => {
     return (
         <div className="view-post">
             <div className="view-post-row1">
-                <div className="go-back-page" onClick={handleGoBack}>
-                    <span className="ico"><img src="/images/ico-back.png" /></span>
-                    <span className="txt">돌아가기</span>
+                <div className="go-back-page">
+                    <Link to="/board">
+                        <span className="ico"><img src="/images/ico-back.png" /></span>
+                        <span className="txt">돌아가기</span>
+                    </Link>
                 </div>
                 {postData.post.userId === setUserState.id && <div className="user-edit-btn">
                     <p className="user-edit-btn-del" onClick={handleDeletePost}>
@@ -121,7 +126,10 @@ const ViewPost = () => {
                     </div>
                 </div>
                 <div className="view-post-row4-column2">
-                    <ViewSimilarItem />
+                    <ViewSimilarItem 
+                        filteredPosts={postData.filteredPosts} 
+                        recentPosts={recentPosts} 
+                    />
                 </div>
             </div>
         </div>

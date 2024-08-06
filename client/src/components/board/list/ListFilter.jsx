@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FilterSection from '../FilterSection';
-import InputRadioGroup from '../../input/InputRadioGroup';
 
 import './ListFilter.css';
 
-const ListFilter = () => {
+const ListFilter = ({ filters, onFilterChange, onSearch }) => {
     const sortTypes = ['전체', '판매', '나눔'];
     const targets = ['전체', '남성', '여성', '아동'];
     const items = ['전체', '상의', '하의', '원피스', '셋업', '아우터'];
@@ -34,6 +33,16 @@ const ListFilter = () => {
     const [selectedPriceRange, setSelectedPriceRange] = useState(0);
     const [selectedLocationType, setSelectedLocationType] = useState(0);
 
+    useEffect(() => {
+        onFilterChange({
+            sortType: selectedSortType,
+            targetType: selectedTargetType,
+            itemType: selectedItemType,
+            priceRange: selectedPriceRange,
+            locationType: selectedLocationType,
+        });
+    }, [selectedSortType, selectedTargetType, selectedItemType, selectedPriceRange, selectedLocationType]);
+
     return (
         <div className='list-post-filter'>
             <FilterSection
@@ -53,7 +62,7 @@ const ListFilter = () => {
                 priceRangeLabels={priceRangeLabels}
                 locations={locations}
             />
-            <div className='btn-filter-submit'><span className='btn-primary-full'>검색하기</span></div>
+            <div className='btn-filter-submit' onClick={onSearch}><span className='btn-primary-full'>검색하기</span></div>
         </div>
     );
 };

@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 import FilterSection from './FilterSection';
 import InputImageFile from '../input/InputImageFile';
+import InputRadioGroup from '../input/InputRadioGroup';
 
 import { formatNumberToCommaString, formatCommaStringToNumber, focusInput, scrollToSection } from '../../utils';
-import { setImgSrc, resetImgSrc } from '../../utils/imageUtils';
+import { setImgSrc, resetImgSrc, uploadImages } from '../../utils/imageUtils';
 
 import './PostForm.css';
 
@@ -15,19 +16,23 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
     const sortTypes = ['판매', '나눔'];
     const targets = ['남성', '여성', '아동'];
     const items = ['상의', '하의', '원피스', '셋업', '아우터'];
-    const locations = ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중량구'];
+    const locations = ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'];
+
     const defaultPhoto = [
         {
             imgSrc: '../images/ico-camera.png',
             isDefault: true,
+            file: null,
         },
         {
             imgSrc: '../images/ico-camera.png',
             isDefault: true,
+            file: null,
         },
         {
             imgSrc: '../images/ico-camera.png',
             isDefault: true,
+            file: null,
         }
     ];
 
@@ -62,7 +67,8 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
             setImages(
                 initialPost.images.map(image => ({
                     imgSrc: image.url,
-                    isDefault: false
+                    isDefault: false,
+                    file: null
                 })).concat(defaultPhoto.slice(initialPost.images.length))
             );
         }
@@ -86,8 +92,13 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
         }
     };
 
-    const handleSetImgSrc = (idx) => async (imgSrc, file) => {
-        const updatedImages = await setImgSrc(images, idx, imgSrc, file);
+    const handleSetImgSrc = (idx) => (imgSrc, file) => {
+        const updatedImages = images.map((img, index) => {
+            if (index === idx) {
+                return { imgSrc, file, isDefault: false };
+            }
+            return img;
+        });
         setImages(updatedImages);
     };
 
@@ -111,12 +122,15 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
         return true;
     };
 
-    const handleSubmitForm = () => {
+    const handleSubmitForm = async () => {
         const isValidImg = images.some(image => !image.isDefault);
         if (!validateSubmit(!title, '제목을 입력해주세요.', titleRef)) return;
         if (!validateSubmit(price === null || price === undefined || price === '', '가격을 입력해주세요.', priceRef)) return;
         if (!validateSubmit(!isValidImg, '이미지를 한 장 이상 업로드해주세요.', imgSectionRef, true)) return;
         if (!validateSubmit(!content, '내용을 입력해주세요.', contentRef)) return;
+
+        // Upload images first
+        const uploadedImageUrls = await uploadImages(images.filter(image => !image.isDefault && image.file));
 
         const data = {
             title,
@@ -126,7 +140,7 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
             price: Number(price),
             location: locations[selectedLocationType],
             sort: sortTypes[selectedSortType],
-            images: images.filter(image => !image.isDefault).map(image => image.imgSrc)
+            images: uploadedImageUrls
         };
 
         onSubmit(data);
