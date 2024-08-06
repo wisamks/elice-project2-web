@@ -15,18 +15,18 @@ import BoardPage from './pages/board/BoardPage';
 function App() {
   return (
     <RecoilRoot>
-      <UserProfileLoader />
       <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/oauth2callback/google" element={<GoogleCallback />} />
-          <Route path="/oauth2callback/naver" element={<NaverCallback />} />
-          <Route path="/board/*" element={<BoardPage />} />
-        </Routes>
-        <Footer />
+        <UserProfileLoader />
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/oauth2callback/google" element={<GoogleCallback />} />
+            <Route path="/oauth2callback/naver" element={<NaverCallback />} />
+            <Route path="/board/*" element={<BoardPage />} />
+          </Routes>
+          <Footer />
       </Router>
     </RecoilRoot>
   );
