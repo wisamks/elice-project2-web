@@ -1,5 +1,5 @@
 import PostDb from "@_models/postDb";
-import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters } from "@_/customTypes/postType";
+import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters, Status } from "@_/customTypes/postType";
 import { calculatePriceRange } from "@_/utils";
 
 class PostModel extends PostDb {
@@ -112,6 +112,11 @@ class PostModel extends PostDb {
 
         return this.findById(post_id);
     }
+
+    public static async updatePostStatus(postId: number, status: Status) {
+        const sql = `UPDATE post_exchange_detail SET status = ? WHERE post_id = ?`;
+        return await this.update(sql, [status, postId]);
+    } 
 
     public static async softDeletePost(post_id: number): Promise<boolean> {
         const sql = 'UPDATE post SET deleted_at = CURRENT_TIMESTAMP WHERE id = ? AND deleted_at IS NULL';

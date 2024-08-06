@@ -1,7 +1,7 @@
 import { NotFoundError, ForbiddenError, InternalServerError } from "@_/utils/customError";
 import PostModel from "@_/models/postModel";
 import PhotoModel from "@_/models/photoModel";
-import { Filters, PostCreationData, PostUpdateData } from "@_/customTypes/postType";
+import { Filters, PostCreationData, PostUpdateData, Status } from "@_/customTypes/postType";
 import FavoriteModel from "@_/models/favoriteModel";
 import CommentModel from "@_/models/commentModel";
 import { Paginations } from "@_/customTypes/postType";
@@ -201,7 +201,22 @@ class ExchangePostsService {
             CommentModel.deleteByPostId(postId),
         ]);
         return;
-      }
+    }
+
+    static async updatePostStatus(status: Status, postId: number, userId: number) {
+        const foundPost = await PostModel.findById(postId);
+        if (!foundPost) {
+            throw new NotFoundError('게시글이 존재하지 않습니다.');
+        }
+        if (foundPost.user_id !== userId) {
+            throw new ForbiddenError('잘못된 접근입니다.');
+        }
+        if (foundPost.status === status) {
+            return;
+        }
+        await PostModel.updatePostStatus(postId, status);
+        return;
+    }
 }
 
 export default ExchangePostsService;
