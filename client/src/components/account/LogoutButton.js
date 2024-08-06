@@ -6,11 +6,11 @@ import { signOutController } from '../../controllers/signOutController';
 const LogoutButton = () => {
   const navigate = useNavigate();
 
-  const handleLogout =  async() => {
+  const handleLogout = async() => {
     try {
-      const response =  await apiService(signOutController);
+      const isLoggedOut = await apiService(signOutController);
 
-      if (response) {
+      if (isLoggedOut) {
         navigate('/sign-in');
       }
     } catch (error) {

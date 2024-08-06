@@ -7,7 +7,7 @@ import ViewPhoto from '../../components/board/view/ViewPhoto';
 import ImageModal from '../../components/modal/ImageModal';
 import ViewItemInfo from '../../components/board/view/ViewItemInfo';
 import ViewItemDescription from '../../components/board/view/ViewItemDescription';
-import ViewComment from '../../components/board/view/ViewComment';
+import ViewComment from '../../components/board/comment/ViewComment';
 import ViewSimilarItem from '../../components/board/view/ViewSimilarItem';
 
 import { getExchangePost, deleteExchangePost, getExchangeList } from '../../controllers/exchangePostController';
