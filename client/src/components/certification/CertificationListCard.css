@@ -1,0 +1,40 @@
+.CertificationListCard{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.CertificationListCard .user-info{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: 8px;
+}
+
+.CertificationListCard .user-info .user-profile{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.CertificationListCard .user-info .user-name{
+    color: #888;
+}
+
+.CertificationListCard .reaction{
+    display: flex;
+    gap: 16px;
+    margin-left: 8px;
+}
+
+.CertificationListCard .reaction p{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #888;
+}
+
+.CertificationListCard .content{
+    margin: 0 8px;
+    font-size: 15px;
+}
