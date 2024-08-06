@@ -21,7 +21,7 @@ class ExchangePostsService {
         postId: number|undefined;
         userId: number|undefined;
     }) {
-        return await PostModel.getPostsCount(paginations.categoryId);
+        return await PostModel.getPostsCount(paginations.categoryId, filters);
     }
     static async getPosts({
         paginations,
