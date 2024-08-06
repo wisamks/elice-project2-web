@@ -2,19 +2,16 @@ import {Request, Response, NextFunction} from 'express';
 import ExchangePostsService from '@_services/exchangePostsService';
 import { BadRequestError, UnauthorizedError, ForbiddenError } from '@_/utils/customError';
 import { ReqUser } from '@_/customTypes/express';
-import { PostStatus, PostSort, PostUpdateData } from '@_/customTypes/postType';
+import { PostStatus, PostSort, PostUpdateData, Paginations } from '@_/customTypes/postType';
 
 // 중고거래 게시판 컨트롤러
 class ExchangePostsController {
     // 목록 조회
     static async findPosts(req: Request, res: Response, next: NextFunction) {        
-        if (req.paginations === undefined) {
-            throw new BadRequestError('입력값이 올바르지 않습니다.');
-        }
         const user = req.user as ReqUser | undefined;
         const userId = user ? user.userId : undefined;
         const data = {
-            paginations: req.paginations, 
+            paginations: req.paginations as Paginations, 
             filters: req.filters, 
             postId: undefined, 
             userId,

@@ -1,4 +1,4 @@
-import { PostCreation } from "@_/customTypes/postType";
+import { Paginations, PostCreation } from "@_/customTypes/postType";
 import CommentModel from "@_/models/commentModel";
 import FavoriteModel from "@_/models/favoriteModel";
 import PhotoModel from "@_/models/photoModel";
@@ -6,7 +6,35 @@ import PostModel from "@_/models/postModel";
 import { ForbiddenError, InternalServerError, NotFoundError } from "@_/utils/customError";
 
 class PostsService {
-    static async getPosts() {}
+    static async getPostsCount(data: Paginations) {
+        return await PostModel.getPostsCount(data.categoryId);
+    }
+    static async getPosts(data: Paginations, userId: number) {
+        const foundPosts = await PostModel.getNormalPosts(data);
+        const posts = await Promise.all(foundPosts.map(async (foundPost) => {
+            const isMyFavorite = userId ? await FavoriteModel.findOneByUserId(foundPost.id, userId) : false;
+            const [foundMainImage, commentsCount, foundImages] = await Promise.all([
+                PhotoModel.getMainPhotoByPostId(foundPost.id),
+                CommentModel.findCountByPostId(foundPost.id),
+                PhotoModel.getPhotosByPostId(foundPost.id)
+            ])
+            const thumbnail = foundImages ? {id: foundImages[0]?.id, url: foundImages[0]?.url} : {id: undefined, url: undefined};
+            return {
+                postId: foundPost.id,
+                userId: foundPost.user_id,
+                nickname: foundPost.nickname,
+                userImage: foundPost.user_image,
+                title: foundPost.title,
+                content: foundPost.content,
+                createdAt: foundPost.created_at,
+                updatedAt: foundPost.updated_at,
+                isMyFavorite: !!isMyFavorite,
+                commentsCount,
+                thumbnail            
+            }
+        }))
+        return posts;
+    }
 
     static async getPost(postId: number) {
         const foundPost = await PostModel.findNormalById(postId);

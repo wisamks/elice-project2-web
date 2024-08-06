@@ -1,11 +1,30 @@
 import { ReqUser } from '@_/customTypes/express';
-import { PostCreation } from '@_/customTypes/postType';
+import { Paginations, PostCreation } from '@_/customTypes/postType';
 import PostsService from '@_/services/postsService';
 import { Request, Response, NextFunction } from 'express';
 
 class PostsController {
     static async getAllPosts(req: Request, res: Response, next: NextFunction) {
-
+        const { categoryId, page, perPage } = req.query;
+        const user = req.user as ReqUser;
+        const userId = user?.userId;
+        const data: Paginations = {
+            categoryId: Number(categoryId),
+            page: Number(page),
+            perPage: Number(perPage),
+        };
+        try {
+            const [totalPostsCount, foundPosts] = await Promise.all([
+                PostsService.getPostsCount(data),
+                PostsService.getPosts(data, userId),
+            ]);
+            return res.status(200).json({
+                totalPostsCount,
+                posts: foundPosts,
+            });
+        } catch(err) {
+            return next(err);
+        }
     }
     static async getPost(req: Request, res: Response, next: NextFunction) {
         const { postId } = req.params;
