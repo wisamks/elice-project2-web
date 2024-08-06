@@ -31,7 +31,7 @@ class CommentsController {
         const data = {
             postId: Number(postId),
             content,
-            secret: secret === 'true' ? true : false,
+            secret,
             userId,
         };
         try {
