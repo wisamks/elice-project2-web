@@ -1,4 +1,4 @@
-import { PostSort } from '@_/customTypes/postType';
+import { PostSort, Status } from '@_/customTypes/postType';
 import {Request, Response, NextFunction} from 'express';
 
 const pagesToNumber = (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +10,8 @@ const pagesToNumber = (req: Request, res: Response, next: NextFunction) => {
         target,
         item,
         price,
-        location
+        location,
+        status,
     } = req.query;
     req.paginations = {
         page: Number(page),
@@ -23,6 +24,7 @@ const pagesToNumber = (req: Request, res: Response, next: NextFunction) => {
         item: item as string|undefined,
         price: price === undefined ? undefined : Number(price),
         location: location as string|undefined,
+        status: status as Status|undefined,
     }
 
     return next();

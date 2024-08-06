@@ -5,13 +5,11 @@ const GoogleLogin = () => {
     const REDIRECT_URI = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
 
     const location = useLocation();
-    // const currentPath = location.pathname + location.search;
+    const currentPath = location.pathname + location.search;
 
     const encodedScope = encodeURIComponent('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile');
 
-    // const link = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=${encodedScope}&state=${encodeURIComponent(currentPath)}`;
-
-    const link = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=${encodedScope}&state={state}`;
+    const link = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=${encodedScope}&state=${encodeURIComponent(currentPath)}`;
 
 
     return (

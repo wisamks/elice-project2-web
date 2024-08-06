@@ -19,15 +19,17 @@
 
 .view-post-row1{
     display: flex;
+    justify-content: space-between;
 
     margin-bottom: 12px;
 }
 
-.go-back-page{
+.go-back-page a{ 
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
 
+    color: #555;
     line-height: 28px;
     cursor: pointer;
 }
@@ -35,6 +37,24 @@
 .go-back-page .ico{
     height: 20px;
     padding: 4px 0;
+}
+
+.view-post-row1 .user-edit-btn{
+    display: flex;
+    gap: 16px;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.view-post-row1 .user-edit-btn p{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.view-post-row1 .user-edit-btn .user-edit-btn-fix .text{
+    color: var(--primary-color);
 }
 
 .view-post-row2, .view-post-row3{
@@ -81,7 +101,7 @@
     margin-bottom: 60px;
 }
 
-.list-post .btn-go-create{
+.list-post .btn-go-create a{
     display: flex;
     align-items: center;
     gap: 12px;
@@ -92,6 +112,16 @@
 }
 
 .list-post-wrap{
+    position: relative;
+
     display: flex;
     justify-content: space-between;
+
+    min-height: 1200px;
+}
+
+.list-filter{
+    position: absolute;
+    top: 0;
+    right: 0;
 }

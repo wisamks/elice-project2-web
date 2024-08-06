@@ -101,8 +101,8 @@ class ExchangePostsController {
                     favoriteCount: foundFavoriteCount,
                 },
                 thumbnail: {
-                    thumbnailId: foundPhotos[0].id,
-                    thumbnailUrl: foundPhotos[0].url,
+                    thumbnailId: foundPhotos[0]?.id,
+                    thumbnailUrl: foundPhotos[0]?.url,
                 },
                 isMyFavorite: !!isMyFavorite,
                 filteredPosts: foundFilteredPosts,
@@ -158,27 +158,7 @@ class ExchangePostsController {
         }
     }
 
-    // static async updatePost(req: Request, res: Response, next: NextFunction) {
-    //     // const obj = {
-    //     //     sort: '판매',
-    //     //     target: 'male',
-    //     //     item: 'top',
-    //     //     location: '강남구',
-    //     //     title: '제목', 
-    //     //     price: 7000,
-    //     //     images: [],
-    //     //     content: 'as;dghasdfkajsdga',
-    //     // }
-    //     // 1. const userId = req.user.userId;
-    //     // 2. postId 패스파라미터로 받아오기
-    //     // 3. postId로 게시글 찾아서 userId 일치하는지 확인 -> 아니면 403 에러, 못 찾았으면 404 에러
-    //     // 4-1. postId로 title, content수정 post 테이블
-    //     // 4-2. postId로 sort, target, item, location, price 수정 post_exchange_detail 테이블
-    //     // 4-3. postId로 images수정
-    //     // 5. 성공 시 204 No Content 응답
-    // }
-
-    // ReqUser = req.user
+    // 게시글 삭제
     static async deletePost(req: Request, res: Response, next: NextFunction) {
         try {
           const user = req.user as ReqUser;
@@ -192,14 +172,18 @@ class ExchangePostsController {
         }
       }
 
-    // // 게시글 삭제
-    // static async deletePost(req: Request, res: Response, next: NextFunction) {
-    //     // 1. const userId = req.user.userId;
-    //     // 2. postId 패스 파라미터로 받아오기
-    //     // 3. postId로 조회 없으면 404, 있는데 userId가 다르면 403
-    //     // 4. softdelete 하기
-    //     // 5. 204 No Content 응답
-    // }
+    // 게시글 상태 수정
+    static async updatePostStatus(req: Request, res: Response, next: NextFunction) {
+        const { postId, status } = req.body;
+        const user = req.user as ReqUser;
+        const userId = user.userId;
+        try {
+            await ExchangePostsService.updatePostStatus(status, Number(postId), userId);
+            return res.status(204).end();
+        } catch(err) {
+            return next(err);
+        }
+    }
 }
 
 export default ExchangePostsController;
