@@ -1,7 +1,7 @@
 import { NotFoundError, ForbiddenError, InternalServerError } from "@_/utils/customError";
 import PostModel from "@_/models/postModel";
 import PhotoModel from "@_/models/photoModel";
-import { Filters, PostCreationData, PostUpdateData } from "@_/customTypes/postType";
+import { Filters, PostCreationData, PostUpdateData, Status } from "@_/customTypes/postType";
 import FavoriteModel from "@_/models/favoriteModel";
 import CommentModel from "@_/models/commentModel";
 import { Paginations } from "@_/customTypes/postType";
@@ -21,7 +21,7 @@ class ExchangePostsService {
         postId: number|undefined;
         userId: number|undefined;
     }) {
-        return await PostModel.getPostsCount(paginations.categoryId);
+        return await PostModel.getPostsCount(paginations.categoryId, filters);
     }
     static async getPosts({
         paginations,
@@ -37,11 +37,12 @@ class ExchangePostsService {
         const foundPosts = await PostModel.getPosts(paginations, filters, postId);
         const posts = await Promise.all(foundPosts.map(async (foundPost) => {
             const isMyFavorite = userId ? await FavoriteModel.findOneByUserId(foundPost.id, userId) : false;
-            const [foundMainImage, commentsCount] = await Promise.all([
+            const [foundMainImage, commentsCount, foundImages] = await Promise.all([
                 PhotoModel.getMainPhotoByPostId(foundPost.id),
-                CommentModel.findCountByPostId(foundPost.id)
+                CommentModel.findCountByPostId(foundPost.id),
+                PhotoModel.getPhotosByPostId(foundPost.id)
             ])
-            const thumbnail = foundMainImage ? {id: foundMainImage.id, url: foundMainImage.url} : {id: undefined, url: undefined};
+            const thumbnail = foundImages ? {id: foundImages[0]?.id, url: foundImages[0]?.url} : {id: undefined, url: undefined};
             return {
                 postId: foundPost.id,
                 userId: foundPost.user_id,
@@ -200,7 +201,22 @@ class ExchangePostsService {
             CommentModel.deleteByPostId(postId),
         ]);
         return;
-      }
+    }
+
+    static async updatePostStatus(status: Status, postId: number, userId: number) {
+        const foundPost = await PostModel.findById(postId);
+        if (!foundPost) {
+            throw new NotFoundError('게시글이 존재하지 않습니다.');
+        }
+        if (foundPost.user_id !== userId) {
+            throw new ForbiddenError('잘못된 접근입니다.');
+        }
+        if (foundPost.status === status) {
+            return;
+        }
+        await PostModel.updatePostStatus(postId, status);
+        return;
+    }
 }
 
 export default ExchangePostsService;

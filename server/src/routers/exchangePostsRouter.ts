@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 
 import ExchangePostsController from '@_controllers/exchangePostsController';
-import authenticateJWT from '@_middlewares/authenticateJWT';
+import { authenticateAccessToken } from '@_middlewares';
 import { pagesToNumber } from '@_/middlewares';
 
 const router = Router();
@@ -13,10 +13,12 @@ router.get('/', pagesToNumber, ExchangePostsController.findPosts);
 // 게시글 조회
 router.get('/:postId', ExchangePostsController.findOnePost);
 // 게시글 생성
-router.post('/', authenticateJWT, ExchangePostsController.createPost);
+router.post('/', authenticateAccessToken, ExchangePostsController.createPost);
+// 게시글 상태 변경
+router.put('/status', authenticateAccessToken, ExchangePostsController.updatePostStatus);
 // 게시글 수정
-router.put('/:postId', authenticateJWT, ExchangePostsController.updatePost);
+router.put('/:postId', authenticateAccessToken, ExchangePostsController.updatePost);
 // 게시글 삭제
-router.delete('/:postId', authenticateJWT, ExchangePostsController.deletePost);
+router.delete('/:postId', authenticateAccessToken, ExchangePostsController.deletePost);
 
 export default router;

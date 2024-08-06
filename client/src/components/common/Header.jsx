@@ -2,39 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LoginButton from '../account/LoginButton';
 import LogoutButton from '../account/LogoutButton';
+import { useRecoilState } from 'recoil';
+import { loginState } from '../../atom/userState';
 
 import './Header.css';
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(loginState);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const checkLoginStatus = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/api/auth/access', {
-        method: 'GET',
-        credentials: 'include',
-      });
+  // const location = useLocation();
 
-      if (response.ok) {
-        setIsLoggedIn(true);
-      } else if (response.status === 401) {
-        setIsLoggedIn(false);
-        // console.warn('401 Unauthorized: Access token is invalid or expired. User is not logged in.')
-      } else {
-        setIsLoggedIn(false);
-      }
+  // useEffect(() => {
+  //   if (location.state?.refresh) {
+  //     setIsLoggedIn(true);
+  //   }
+  // }, [location]);
+
+  // const checkLoginStatus = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:8080/api/auth/access', {
+  //       method: 'GET',
+  //       credentials: 'include',
+  //     });
+
+  //     if (response.ok) {
+  //       setIsLoggedIn(true);
+  //     } else if (response.status === 401) {
+  //       setIsLoggedIn(false);
+  //       // console.warn('401 Unauthorized: Access token is invalid or expired. User is not logged in.')
+  //     } else {
+  //       setIsLoggedIn(false);
+  //     }
   
-    } catch (error) {
-      console.error('Error checking login status:', error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error('Error checking login status:', error);
+  //   }
+  // };
 
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
+  // useEffect(() => {
+  //   checkLoginStatus();
+  // }, []);
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -64,7 +74,7 @@ const Header = () => {
         <nav className="nav">
           <ul className="nav-list">
             <li className="nav-item">
-              <Link to="/">중고거래</Link>
+              <Link to="/board">중고거래</Link>
             </li>
             <li className="nav-item">
               <Link to="/">의류수거함 위치</Link>

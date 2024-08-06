@@ -3,6 +3,7 @@ import { RecoilRoot } from 'recoil';
 
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
+import UserProfileLoader from "./components/account/UserProfileLoader";
 
 import Home from './pages/home/Home';
 import SignIn from './pages/account/SignIn';
@@ -15,16 +16,17 @@ function App() {
   return (
     <RecoilRoot>
       <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/oauth2callback/google" element={<GoogleCallback />} />
-          <Route path="/oauth2callback/naver" element={<NaverCallback />} />
-          <Route path="/board/*" element={<BoardPage />} />
-        </Routes>
-        <Footer />
+        <UserProfileLoader />
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/oauth2callback/google" element={<GoogleCallback />} />
+            <Route path="/oauth2callback/naver" element={<NaverCallback />} />
+            <Route path="/board/*" element={<BoardPage />} />
+          </Routes>
+          <Footer />
       </Router>
     </RecoilRoot>
   );

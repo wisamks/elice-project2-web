@@ -44,13 +44,14 @@ const InputImageFile = ({ imgSrc, setImgSrc, isDefault, setIsDefault }) => {
                     type="file"
                     accept="image/*"
                     onChange={handleChangeImg}
+                    name="images"
                 />
             </p>
             <p
                 className={`img-file-close ${isDefault ? 'hide' : 'show'}`}
                 onClick={handleDeleteImg}
             >
-                <img src="../images/ico-close-bk.png" alt="등록된 이미지 삭제하기" />
+                <img src="/images/ico-close-bk.png" alt="등록된 이미지 삭제하기" />
             </p>
         </div>
     );
