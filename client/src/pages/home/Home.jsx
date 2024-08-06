@@ -1,9 +1,11 @@
 import BarChart from '../../components/chart/BarChart';
 
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { signOutController } from '../../controllers/signOutController'; 
 import { apiService } from '../../services/apiService';
 
-import './Home.css'
+import './Home.css';
 
 const Home = () => {
   const handleLogout = async () => {
