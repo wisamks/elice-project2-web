@@ -15,7 +15,7 @@ const UserProfileLoader = () => {
                     name: data.name || '',
                     id: data.id || '',
                     nickname: data.nickname || '',
-                    profileImage: data.profileImage || '',
+                    image: data.image || '',
                 });
                 console.log(data);
 
@@ -24,7 +24,7 @@ const UserProfileLoader = () => {
                     name: '',
                     id: '',
                     nickname: '',
-                    profileImage: '',
+                    image: '',
                 });
             }
         };
