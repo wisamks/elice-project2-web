@@ -4,11 +4,15 @@ import { calculatePriceRange } from "@_/utils";
 
 class PostModel extends PostDb {
     public static async createNormalPost(data: PostCreation) {
+        const sqlTitle = data.title ? ', title' : '';
+        const sqlTitle2 = data.title ? ', ?' : '';
+        
         const sql = `
-            INSERT INTO post(user_id, category_id, title, content)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO post(user_id, category_id${sqlTitle}, content)
+            VALUES (?, ?${sqlTitle2}, ?)
         `;
-        return await this.insert(sql, [data.user_id, data.category_id, data.title, data.content]);
+        const sqlData = data.title ? [data.user_id, data.category_id, data.title, data.content] : [data.user_id, data.category_id, data.content];
+        return await this.insert(sql, sqlData);
     }
 
     public static async createPost(postData: PostCreationData): Promise<Post> {
