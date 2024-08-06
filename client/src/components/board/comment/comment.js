@@ -1,15 +1,21 @@
 // 조회
 export const fetchComments = async (postId, page = 1, perPage = 10) => {
-    try {
-      const response = await fetch(`http://localhost:8080/api/comments/?postId=${postId}&page=${page}&perPage=${perPage}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch comments');
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching comments:', error);
-      throw error;
+  try {
+    const response = await fetch(`http://localhost:8080/api/comments/?postId=${postId}&page=${page}&perPage=${perPage}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch comments');
     }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching comments:', error);
+    throw error;
+  }
 };
   
   // 생성

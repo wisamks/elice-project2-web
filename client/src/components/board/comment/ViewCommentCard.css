@@ -5,7 +5,8 @@
 }
 
 .view-comment-card .comment-txt{
-    width: 710px;
+    flex-grow: 1;
+    margin-right: 24px;
     font-size: 16px;
     line-height: 1.7;
 }
@@ -14,6 +15,7 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    height: 28px;
 }
 
 .view-comment-card .comment-info .user-info{
@@ -35,4 +37,33 @@
 
 .view-comment-card .comment-info .comment-date{
     color: #777;
+}
+
+.view-comment-card .comment-actions{
+    height: 28px;
+    margin-left: 16px;
+}
+
+.view-comment-card .comment-actions::before{
+    content: "";
+    display: inline-block;
+    vertical-align: top;
+    width: 2px;
+    height: 2px;
+    margin-top: 12px;
+    margin-right: 6px;
+    background-color: #555;
+}
+
+.view-comment-card .comment-actions button{
+    height: 100%;
+    margin-left: 8px;
+    border: 0;
+    color: #777;
+    background-color: transparent;
+    cursor: pointer;;
+}
+
+.view-comment-card .comment-actions button:hover{
+    text-decoration: underline;
 }

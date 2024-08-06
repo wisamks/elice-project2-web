@@ -51,11 +51,12 @@ export const getExchangeList = async (apiClient, page, perPage, filters) => {
 
 export const updatePostStatus = async (apiClient, postId, status) =>{
     const fetchURI = baseURI + '/api/exchange-posts/status';
-    const response = await apiClient.post(fetchURI, {
+    const response = await apiClient.put(fetchURI, {
         postId,
-        status,
+        status,        
+    }, {
         withCredentials: true,
     })
-    console.log('상태컨트롤러', response)
-    return response;
+    console.log('업데이트 컨트롤러', response.config.data);
+    return response.config.data;
 };
