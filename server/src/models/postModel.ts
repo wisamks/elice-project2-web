@@ -1,8 +1,15 @@
 import PostDb from "@_models/postDb";
-import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters, Status } from "@_/customTypes/postType";
+import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters, PostCreation, Status } from "@_/customTypes/postType";
 import { calculatePriceRange } from "@_/utils";
 
 class PostModel extends PostDb {
+    public static async createNormalPost(data: PostCreation) {
+        const sql = `
+            INSERT INTO post(user_id, category_id, title, content)
+            VALUES (?, ?, ?, ?)
+        `;
+        return await this.insert(sql, [data.user_id, data.category_id, data.title, data.content]);
+    }
 
     public static async createPost(postData: PostCreationData): Promise<Post> {
         const { user_id, category_id, title, content, status, item, target, location, price, sort } = postData;
@@ -43,6 +50,16 @@ class PostModel extends PostDb {
         } as Post;
     }
 
+    public static async findNormalById(postId: number) {
+        const sql = `
+            SELECT p.*, u.nickname, u.image as user_image
+            FROM post p
+            JOIN user u ON p.user_id = u.id
+            WHERE p.id = ? AND p.deleted_at IS NULL
+        `;
+        return await this.findOne(sql, [postId]);
+    }
+
     public static async findById(post_id: number): Promise<PostWithDetails | null> {
         // post_id로 게시글 정보 조회(post(p) + post_exchange_detail(ped) + user(u) join)
         const sql = `
@@ -54,6 +71,27 @@ class PostModel extends PostDb {
         `;
         const result = await this.findOne(sql, [post_id]);
         return result;
+    }
+
+    public static async updateNormalPost(postId: number, data: {title?: string, content?: string}) {
+        let sqlMiddle = '';
+        const preparedData = [];
+        if (!data) {
+            return;
+        } else if (data.title && data.content) {
+            sqlMiddle = `title = ?, content = ?`;
+            preparedData.push(data.title);
+            preparedData.push(data.content);
+        } else if (data.title) {
+            sqlMiddle = `title = ?`;
+            preparedData.push(data.title);
+        } else if (data.content) {
+            sqlMiddle = `content = ?`;
+            preparedData.push(data.content);
+        }
+        const sql = `UPDATE post SET ${sqlMiddle} WHERE id = ? AND deleted_at IS NULL`;
+        const sqlData = [...preparedData, postId];
+        await this.update(sql, sqlData);
     }
 
     public static async updatePost(post_id: number, updateData: PostUpdateData): Promise<PostWithDetails | null> {
@@ -71,8 +109,8 @@ class PostModel extends PostDb {
             postUpdateValues.push(updateData.content);
         }
         if (updateData.status !== undefined) {
-            postUpdateFields.push('status = ?');
-            postUpdateValues.push(updateData.status);
+            detailUpdateFields.push('status = ?');
+            detailUpdateValues.push(updateData.status);
         }
         if (updateData.item !== undefined) {
             detailUpdateFields.push('item = ?');
