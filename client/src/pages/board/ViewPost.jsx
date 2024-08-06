@@ -1,5 +1,5 @@
-import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../atom/userState';
 
@@ -27,7 +27,7 @@ const ViewPost = () => {
     ];
 
     const [postData, setPostData] = useState(null);
-    const [selectedStatus, setSelectedStatus] = useState('ing');
+    const [selectedStatus, setSelectedStatus] = useState('');
     const [recentPosts, setRecentPosts] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -57,18 +57,14 @@ const ViewPost = () => {
 
     const handleStatusClick = async (status) => {
         const postIdToNum = Number(postId)
-        const result = await apiService((apiClient) => updatePostStatus(apiClient, postIdToNum, status));
-        console.log('상태변경클릭', result)
-        if (result) {
-            setSelectedStatus(status);
-            setPostData((prevData) => ({
-                ...prevData,
-                post: {
-                    ...prevData.post,
-                    status: status,
-                },
-            }));
-        }
+        setSelectedStatus(status);
+        setPostData((prevData) => ({
+            ...prevData,
+            post: {
+                ...prevData.post,
+                status: status,
+            },
+        }));
     };
 
     const handleDeletePost = async () => {
@@ -99,8 +95,6 @@ const ViewPost = () => {
         handleOpenModal(photo);
     };
 
-    console.log('포스트데이터', postData);
-
     return (
         <div className="view-post">
             <div className="view-post-row1">
@@ -117,7 +111,7 @@ const ViewPost = () => {
                             {statusOptions.map((option) => (
                                 <p
                                     key={option.id}
-                                    className={`post-status-input ${selectedStatus === option.id ? 'post-status-input-active' : ''}`}
+                                    className={`post-status-input ${selectedStatus === option.label ? 'post-status-input-active' : ''}`}
                                     onClick={() => handleStatusClick(option.label)}
                                 >
                                     <span>
