@@ -1,3 +1,4 @@
+import apiClient from "../services/apiClient";
 import { baseURI } from "./baseURI";
 
 export const getExchangePost = async (apiClient, postId) => {
@@ -45,5 +46,16 @@ export const getExchangeList = async (apiClient, page, perPage, filters) => {
     const response = await apiClient.get(fetchURI, {
         withCredentials: true,
     });
+    return response;
+};
+
+export const updatePostStatus = async (apiClient, postId, status) =>{
+    const fetchURI = baseURI + '/api/exchange-posts/status';
+    const response = await apiClient.post(fetchURI, {
+        postId,
+        status,
+        withCredentials: true,
+    })
+    console.log('상태컨트롤러', response)
     return response;
 };
