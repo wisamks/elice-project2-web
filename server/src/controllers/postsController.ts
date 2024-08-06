@@ -10,8 +10,8 @@ class PostsController {
         const userId = user?.userId;
         const data: Paginations = {
             categoryId: Number(categoryId),
-            page: Number(page),
-            perPage: Number(perPage),
+            page: page ? Number(page) : 1,
+            perPage: perPage ? Number(perPage) : 40,
         };
         try {
             const [totalPostsCount, foundPosts] = await Promise.all([
