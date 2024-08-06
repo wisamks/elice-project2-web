@@ -15,6 +15,13 @@ class UsersService {
             image: foundUser.image,
         }
     }
+    static async updateProfile(userId: number, data: {
+        nickname: string;
+        image: string;
+    }) {
+        await UserModel.updateUser(userId, data);
+        return;
+    }
 }
 
 export default UsersService;

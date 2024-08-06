@@ -15,6 +15,7 @@ import favoriteRouter from '@_routers/favoriteRouter';
 import commentsRouter from '@_routers/commentsRouter';
 import imagesRouter from '@_routers/imagesRouter';
 import clothingBinsRouter from '@_routers/clothingBinsRouter'; // 의류 수거함 라우터 추가
+import postsRouter from '@_routers/postsRouter';
 import { getUserByToken } from '@_middlewares';
 
 import passportConfig from '@_passport-config';
@@ -44,6 +45,7 @@ app.use('/api/favorite', favoriteRouter);
 app.use('/api/comments', commentsRouter);
 app.use('/api/images', imagesRouter);
 app.use('/api/clothing-bins', clothingBinsRouter); // 의류 수거함 라우터 추가
+app.use('/api/posts', postsRouter);
 
 // 에러 핸들링 미들웨어
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

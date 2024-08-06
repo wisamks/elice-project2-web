@@ -13,7 +13,7 @@ const calculatePriceRange = (price: number|undefined) => {
     } else if (price > 1000) {
         return {min: 1000, max: 5000};
     } else if (price > 0) {
-        return {min: 0, max: 1000};
+        return {min: 1, max: 1000};
     } else {
         return {min: undefined, max: 0};
     }

@@ -154,7 +154,7 @@ class PostModel extends PostDb {
             const sqlItem = item ? ` ped.item = ? AND`: '';
             const sqlLocation = location ? ` ped.location = ? AND`: '';
             const priceRange = calculatePriceRange(price);
-            const sqlPrice = !priceRange ? '' : price === 0 ? ` ped.price = ? AND` : !priceRange.max ? ` ped.price > ? AND` : ` ped.price > ? AND ped.price <= ? AND`;
+            const sqlPrice = !priceRange ? '' : price === 0 ? ` ped.price = ? AND` : !priceRange.max ? ` ped.price >= ? AND` : ` ped.price >= ? AND ped.price < ? AND`;
             
             const dataFilterUnde: Array<string|number|undefined> = [sort, target, item, location];
             if (priceRange) {
@@ -181,7 +181,6 @@ class PostModel extends PostDb {
             ORDER BY p.created_at DESC
             LIMIT ? OFFSET ?
         `;
-        
         const dataPagination = [categoryId, String(perPage), String(offset)];
         const data = dataFilter ? [...dataFilter, ...dataPagination]: dataPagination;
         return await this.findMany(sql, data);

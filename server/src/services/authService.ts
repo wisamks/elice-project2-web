@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
-import {Response} from 'express';
+import { Response } from 'express';
 
 import { setToken } from '@_utils';
 import UserModel from '@_models/userModel';
 import { ForbiddenError, InternalServerError } from '@_/utils/customError';
-import { JoinUser } from '@_/customTypes/userType';
+import { JoinUser, SnsCode } from '@_/customTypes/userType';
 import { jwtRefreshTokenSecret } from '@_config';
 import TokenModel from '@_models/tokenModel';
 import AxiosModel from '@_/models/axiosModel';
@@ -19,9 +19,9 @@ class AuthService {
     static async getUserFromSns (code: string, sns_code: string) {
         try {
             let user: any;
-            if (sns_code === 'google') {
+            if (sns_code === SnsCode.google) {
                 user = AxiosModel.getProfileGoogle(code);
-            } else if (sns_code === 'naver') {
+            } else if (sns_code === SnsCode.naver) {
                 user = AxiosModel.getProfileNaver(code);
             }
             return user;

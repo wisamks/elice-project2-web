@@ -8,6 +8,10 @@
     margin-bottom: 24px;
 }
 
+.list-post-content-top .total-num{
+    margin-left: 8px;
+}
+
 .list-post .onlyAble{
     color: #555;
 }
@@ -20,4 +24,32 @@
 
 .list-post-wrap li{
     width: 257px;
+}
+
+.list-post-content .pagination{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 60px;
+}
+
+.list-post-content .pagination button{
+    width: 32px;
+    height: 32px;
+    border: 0;
+    font-size: 15px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.list-post-content .pagination .prev, .list-post-content .pagination .next{
+    padding-top: 2px;
+}
+
+.list-post-content .pagination button:disabled{
+    opacity: 0.6;
+}
+
+.list-post-content .pagination button.active{
+    font-weight: 700;
 }
