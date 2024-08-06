@@ -177,6 +177,7 @@ class ExchangePostsService {
                 }
             }
         }
+        return;
     }
 
     // 게시글 삭제
