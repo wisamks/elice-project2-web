@@ -67,10 +67,10 @@ const Header = () => {
               <Link to="/board">중고거래</Link>
             </li>
             <li className="nav-item">
-              <Link to="/">의류수거함 위치</Link>
+              <Link to="/map">의류수거함 위치</Link>
             </li>
             <li className="nav-item">
-              <Link to="/">의류수거함 인증</Link>
+              <Link to="/certification">의류수거함 인증</Link>
             </li>
             <li className="nav-item">
               <Link to="/">리폼 정보</Link>
