@@ -16,25 +16,27 @@ import CertificationPage from './pages/certification/CertificationPage';
 import CertificationForm from './pages/certification/CertificationForm';
 
 function App() {
-    return (
-        <RecoilRoot>
-            <Router>
-                <Header />
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/sign-in" element={<SignIn />} />
-                    <Route path="/sign-up" element={<SignUp />} />
-                    <Route path="/oauth2callback/google" element={<GoogleCallback />} />
-                    <Route path="/oauth2callback/naver" element={<NaverCallback />} />
-                    <Route path="/board/*" element={<BoardPage />} />
-                    <Route path="/map" element={<MapPage />} />  // 지도 페이지 라우트 추가
-                    <Route path="/certification" element={<CertificationPage />} />
-                    <Route path="/certification/create" element={<CertificationForm />} />
-                </Routes>
-                <Footer />
-            </Router>
-        </RecoilRoot>
-    );
+  return (
+    <RecoilRoot>
+      <Router>
+        <UserProfileLoader>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/oauth2callback/google" element={<GoogleCallback />} />
+            <Route path="/oauth2callback/naver" element={<NaverCallback />} />
+            <Route path="/board/*" element={<BoardPage />} />
+            <Route path="/map" element={<MapPage />} />  // 지도 페이지 라우트 추가
+            <Route path="/certification" element={<CertificationPage />} />
+            <Route path="/certification/create" element={<CertificationForm />} />
+          </Routes>
+          <Footer />
+        </UserProfileLoader>
+      </Router>
+    </RecoilRoot>
+  );
 }
 
 export default App;
