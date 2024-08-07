@@ -11,15 +11,7 @@ const SnsCallback = ({ platform }) => {
     const navigate = useNavigate();
     const setIsLoggedIn = useSetRecoilState(loginState);
 
-    const redirectHome = () => {
-        navigate('/');
-    }
-
-    const redirectSignUp = () => {
-        navigate('/sign-up');
-    }
-
-    const handleSignInPost = async (code) => {
+    const handleSignInPost = async (code, redirect) => {
         const data = { 
             code, 
             sns_code: platform
@@ -28,18 +20,23 @@ const SnsCallback = ({ platform }) => {
         const res = await apiService((apiClient) => signInController(apiClient, data));
         if (res.hasUser) {
             setIsLoggedIn(true);
-            redirectHome();
+            if (redirect) {
+                navigate(redirect);
+            } else {
+                navigate('/');
+            }
         } else {
-            redirectSignUp();
+            navigate('/sign-up');
         }
     };
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const code = params.get('code');
+        const redirect = params.get('state') ? decodeURIComponent(params.get('state')) : null;
         
         if(code){
-            handleSignInPost(code);
+            handleSignInPost(code, redirect);
         } else {
             console.log('로그인 재시도');
         }

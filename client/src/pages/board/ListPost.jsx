@@ -46,8 +46,9 @@ const ListPost = () => {
 
     const handleChangeOnlyAble = (e) => {
         setIsOnlyAble(e.target.checked);
-        setSearchParams({ page, isOnlyAble: e.target.checked });
-        const newFilters = { ...filters, isOnlyAble: e.target.checked ? '진행' : '' };
+        const statusValue = isOnlyAble ? '진행' : '';
+        setSearchParams({ page, perPage, status: statusValue });
+        const newFilters = { ...filters, status: statusValue };
         fetchData(newFilters);
     };
 

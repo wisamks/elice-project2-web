@@ -40,6 +40,7 @@ const UserProfileLoader = ({ children }) => {
           nickname: data.nickname || '',
           profileImage: data.profileImage || '',
         });
+        setIsLoggedIn(true);
       } catch (error) {
         setUserState({
           name: '',
@@ -47,6 +48,7 @@ const UserProfileLoader = ({ children }) => {
           nickname: '',
           profileImage: '',
         });
+        setIsLoggedIn(false);
       }
     };
 
