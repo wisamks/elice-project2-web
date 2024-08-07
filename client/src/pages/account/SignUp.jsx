@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './account-common.css';
 import './SignUp.css';
+import { baseURI } from '../../controllers/baseURI';
 
 const SignUp = () => {
     const [nickname, setNickname] = useState('');
@@ -23,7 +24,7 @@ const SignUp = () => {
             return false;
         }
         try {
-            const res = await fetch('http://localhost:8080/api/auth/nickname', {
+            const res = await fetch(`${baseURI}/api/auth/nickname`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -59,7 +60,7 @@ const SignUp = () => {
         e.preventDefault();
         if (isNicknameValid) {
             try {
-                const res = await fetch('http://localhost:8080/api/auth/join', {
+                const res = await fetch(`${baseURI}/api/auth/join`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

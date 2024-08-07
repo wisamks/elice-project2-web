@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CertificationListCard from '../../components/certification/CertificationListCard';
 import CertificationModal from '../../components/certification/CertificationModal';
 import './CertificationPage.css';
+import { baseURI } from '../../controllers/baseURI';
 
 const CertificationPage = () => {
   const [posts, setPosts] = useState([]); // 게시글 목록 상태
@@ -17,7 +18,7 @@ const CertificationPage = () => {
   const fetchPosts = async (page) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/posts?perPage=${postsPerPage}&page=${page}&categoryId=${categoryId}`,
+        `${baseURI}/api/posts?perPage=${postsPerPage}&page=${page}&categoryId=${categoryId}`,
         {
           method: 'GET',
           headers: {
@@ -55,7 +56,7 @@ const CertificationPage = () => {
 
   const fetchPostDetail = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+      const response = await fetch(`${baseURI}/api/posts/${postId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

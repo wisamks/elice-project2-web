@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BarChart from '../../components/chart/BarChart';
 
 import './Home.css';
+import { baseURI } from '../../controllers/baseURI';
 
 const Home = () => {
   // 상태 정의
@@ -17,7 +18,7 @@ const Home = () => {
         const exchangeLimit = 4; // 교환 게시판에 표시할 게시물 수
         const binLimit = 12;     // 인증 게시판에 표시할 게시물 수
 
-        const response = await fetch(`http://localhost:8080/api/home?exchangeLimit=${exchangeLimit}&binLimit=${binLimit}`);
+        const response = await fetch(`${baseURI}/api/home?exchangeLimit=${exchangeLimit}&binLimit=${binLimit}`);
         
         if (!response.ok) {
           throw new Error('데이터를 가져오는 중 문제가 발생했습니다.');
