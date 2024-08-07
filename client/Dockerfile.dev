@@ -1,19 +1,13 @@
-# 클라이언트 개발
 FROM node:20.14.0
 
 WORKDIR /app
 
-# package.json 및 package-lock.json 복사
-COPY package*.json ./
+COPY client/package*.json ./
 
-# npm 의존성 설치
 RUN npm install
 
-# 전체 프로젝트 소스 코드 복사
-COPY . .
+COPY client .
 
-# 개발 환경 포트 노출
 EXPOSE 3000
 
-# 개발 환경용 엔트리 포인트
-CMD ["env-cmd", "-f", "../dev.env", "npm", "start"]
+CMD ["npm", "start"]
