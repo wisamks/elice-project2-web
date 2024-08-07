@@ -2,6 +2,7 @@ import PostDb from "@_models/postDb";
 import { Post, PostCreationData, PostUpdateData, PostStatus, PostSearchCriteria, PostWithDetails, Paginations, Filters, PostCreation, Status } from "@_/customTypes/postType";
 import { calculatePriceRange } from "@_/utils";
 import PostCreateDTO from "@_/middlewares/DTOs/postCreateDTO";
+import ExchangeCreateDTO from "@_/middlewares/DTOs/exchangeCreateDTO";
 
 class PostModel extends PostDb {
     public static async createNormalPost(data: PostCreateDTO) {
@@ -12,8 +13,8 @@ class PostModel extends PostDb {
         return await this.insert(sql, [data.userId, data.categoryId, data.title, data.content]);
     }
 
-    public static async createPost(postData: PostCreationData): Promise<Post> {
-        const { user_id, category_id, title, content, status, item, target, location, price, sort } = postData;
+    public static async createPost(data: ExchangeCreateDTO): Promise<Post> {
+        const { userId, categoryId, title, content, status, item, target, location, price, sort } = data;
 
         // post create 쿼리
         const postSql = `
@@ -21,7 +22,7 @@ class PostModel extends PostDb {
             VALUES (?, ?, ?, ?)
         `;
 
-        const postValues = [user_id, category_id, title, content];
+        const postValues = [userId, categoryId, title, content];
         const post_id = await this.insert(postSql, postValues);
 
         // postExchangeDetail create 쿼리
@@ -35,8 +36,8 @@ class PostModel extends PostDb {
 
         return {
             id: post_id, 
-            user_id,
-            category_id,
+            user_id: userId,
+            category_id: categoryId,
             title,
             content,
             status,

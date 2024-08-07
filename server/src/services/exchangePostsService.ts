@@ -5,38 +5,44 @@ import { Filters, PostCreationData, PostUpdateData, Status } from "@_/customType
 import FavoriteModel from "@_/models/favoriteModel";
 import CommentModel from "@_/models/commentModel";
 import { Paginations } from "@_/customTypes/postType";
+import PostGetDTO from "@_/middlewares/DTOs/postGetDTO";
+import ExchangeGetDTO from "@_/middlewares/DTOs/exchangeGetDTO";
+import ExchangeCreateDTO from "@_/middlewares/DTOs/exchangeCreateDTO";
+import ExchangeUpdateDTO from "@_/middlewares/DTOs/exchangeUpdateDTO";
 
 
 // 중고거래 게시판 서비스
 class ExchangePostsService {
     // 현재 조회하려는 필터에 맞게 전체 게시글 수
-    static async getPostsCount({
-        paginations, 
-        filters, 
-        postId, 
-        userId,
-    }: {
-        paginations: Paginations;
-        filters: Filters|undefined;
-        postId: number|undefined;
-        userId: number|undefined;
-    }) {
-        return await PostModel.getPostsCount(paginations.categoryId, filters);
+    static async getPostsCount(data: ExchangeGetDTO) {
+        const filters:Filters = {
+            item: data.item,
+            location: data.location,
+            price: data.price,
+            sort: data.sort,
+            status: data.status,
+            target: data.target
+        }
+        return await PostModel.getPostsCount(data.categoryId, filters);
     }
-    static async getPosts({
-        paginations,
-        filters,
-        postId,
-        userId,
-    }: {
-        paginations: Paginations;
-        filters: Filters|undefined;
-        postId: number|undefined;
-        userId: number|undefined;
-    }) {
-        const foundPosts = await PostModel.getPosts(paginations, filters, postId);
+    static async getPosts(data: ExchangeGetDTO) {
+        const paginations: Paginations = {
+            categoryId: data.categoryId,
+            page: data.page,
+            perPage: data.perPage
+        };
+        const filters: Filters = {
+            item: data.item,
+            location: data.location,
+            price: data.price,
+            sort: data.sort,
+            status: data.status,
+            target: data.target
+        };
+
+        const foundPosts = await PostModel.getPosts(paginations, filters, data.postId);
         const posts = await Promise.all(foundPosts.map(async (foundPost) => {
-            const isMyFavorite = userId ? await FavoriteModel.findOneByUserId(foundPost.id, userId) : false;
+            const isMyFavorite = data.userId ? await FavoriteModel.findOneByUserId(foundPost.id, data.userId) : false;
             const [foundMainImage, commentsCount, foundImages] = await Promise.all([
                 PhotoModel.getMainPhotoByPostId(foundPost.id),
                 CommentModel.findCountByPostId(foundPost.id),
@@ -114,8 +120,8 @@ class ExchangePostsService {
         return foundFavorite;
     }
     // 중고거래 게시글 생성
-    static async createPost(postContent: PostCreationData) {
-		const createdPost = await PostModel.createPost(postContent);
+    static async createPost(data: ExchangeCreateDTO) {
+		const createdPost = await PostModel.createPost(data);
 		if (!createdPost) {
 			throw new InternalServerError('게시글을 생성하는 데 실패했습니다.');
 		}
@@ -132,36 +138,47 @@ class ExchangePostsService {
 	}
 
     // 게시글 수정
-    static async updatePost(postId: number, userId: number, updateData: PostUpdateData, newImages?: string[]): Promise<void> {
+    static async updatePost(data: ExchangeUpdateDTO): Promise<void> {
         // 게시글 존재 유무 판단 및 권한 확인
-        const post = await PostModel.findById(postId);
+        const post = await PostModel.findById(data.postId);
         if (!post) {
             throw new NotFoundError('게시글을 찾을 수 없습니다.');
         }
-        if (post.user_id !== userId) {
+        if (post.user_id !== data.userId) {
             throw new ForbiddenError('게시글을 수정할 권한이 없습니다.');
         }
 
+        const updateData: PostUpdateData = {
+            content: data.content,
+            item: data.item,
+            location: data.location,
+            price: data.price,
+            sort: data.sort,
+            status: data.status,
+            target: data.target,
+            title: data.title
+        };
+
         // 게시글 정보 업데이트
-        const updatedPost = await PostModel.updatePost(postId, updateData);
+        const updatedPost = await PostModel.updatePost(data.postId, updateData);
         if (!updatedPost) {
             throw new InternalServerError('게시글 업데이트에 실패했습니다.');
         }
 
         // 이미지 업데이트(photoModel 사용)
-        if (newImages !== undefined) {
+        if (data.images !== undefined) {
             // 기존 이미지 조회
-            const existingPhotos = await PhotoModel.getPhotosByPostId(postId);
+            const existingPhotos = await PhotoModel.getPhotosByPostId(data.postId);
 
             // newimage 비어있으면 삭제
             // 기존이랑 비교 후 삭제할 이미지와 추가할 이미지 확인
-            if (newImages.length === 0) {
+            if (data.images.length === 0) {
                 // 모든 이미지 삭제(photomodel)
-                await PhotoModel.deleteByPostId(postId);
+                await PhotoModel.deleteByPostId(data.postId);
             } else {
                 // 삭제할 이미지 처리
                 for (const photo of existingPhotos) {
-                    if (!newImages.includes(photo.url)) {
+                    if (!data.images.includes(photo.url)) {
                         await PhotoModel.deletePhoto(photo.id);
                     }
                 }
@@ -171,9 +188,9 @@ class ExchangePostsService {
                 // imgaesToAdd는 새로 추가하는 사진 url
                 // photoModel 사용해서 내용 판별 후 이미지 추가
                 const existingUrls = existingPhotos.map(photo => photo.url);
-                const imagesToAdd = newImages.filter(url => !existingUrls.includes(url));
+                const imagesToAdd = data.images.filter(url => !existingUrls.includes(url));
                 if (imagesToAdd.length > 0) {
-                    await PhotoModel.createPhotos(postId, imagesToAdd);
+                    await PhotoModel.createPhotos(data.postId, imagesToAdd);
                 }
             }
         }
