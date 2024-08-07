@@ -50,9 +50,9 @@ const Header = () => {
             <li className="nav-item">
               <Link to="/certification">의류수거함 인증</Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link to="/">리폼 정보</Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
 

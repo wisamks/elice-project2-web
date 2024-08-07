@@ -33,7 +33,7 @@ export const deleteExchangePost = async (apiClient, postId) => {
     return response;
 };
 
-export const getExchangeList = async (apiClient, page, perPage, filters) => {
+export const getExchangeList = async (apiClient, page, perPage, filters = {}) => {
     const params = new URLSearchParams({
         page,
         perPage,

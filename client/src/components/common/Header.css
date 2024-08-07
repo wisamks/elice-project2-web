@@ -23,7 +23,6 @@
 .nav-list {
     display: flex;
     gap: 60px;
-    width: 556px;
 }
 
 .nav-item a {
