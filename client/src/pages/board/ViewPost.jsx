@@ -9,6 +9,7 @@ import ViewItemInfo from '../../components/board/view/ViewItemInfo';
 import ViewItemDescription from '../../components/board/view/ViewItemDescription';
 import ViewComment from '../../components/board/comment/ViewComment';
 import ViewSimilarItem from '../../components/board/view/ViewSimilarItem';
+import LikeBtn from '../../components/buttons/LikeBtn';
 
 import { getExchangePost, deleteExchangePost, getExchangeList, updatePostStatus } from '../../controllers/exchangePostController';
 import { apiService } from '../../services/apiService';
@@ -153,6 +154,10 @@ const ViewPost = () => {
                         closeModal={handleCloseModal}
                     />
                 }
+                <LikeBtn 
+                    postId={postData.post.postId}
+                    isMyFavorite={postData.isMyFavorite}
+                />
             </div>
             <div className="view-post-row3">
                 <ViewItemInfo
