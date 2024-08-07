@@ -6,6 +6,7 @@ import CommentModel from "@_/models/commentModel";
 import FavoriteModel from "@_/models/favoriteModel";
 import PhotoModel from "@_/models/photoModel";
 import PostModel from "@_/models/postModel";
+import ViewModel from "@_/models/viewModel";
 import { ForbiddenError, InternalServerError, NotFoundError } from "@_/utils/customError";
 
 class PostsService {
@@ -76,6 +77,16 @@ class PostsService {
         const foundFavorite = await FavoriteModel.findOneByUserId(postId, userId);
         return foundFavorite;
     }
+    static async findViews(postId: number, userId: number|undefined) {
+        const [createdView, foundViews] = await Promise.all([
+            ViewModel.create(postId, userId),
+            ViewModel.getCount(postId)
+        ]);
+        if (!createdView || !foundViews) {
+            throw new InternalServerError('조회수를 가져오는 데 실패했습니다.');
+        }
+        return foundViews;
+    } 
 
     static async createPost(data: PostCreateDTO) {
         const createdPostId = await PostModel.createNormalPost(data);
