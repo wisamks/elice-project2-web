@@ -126,7 +126,7 @@ class ExchangePostsService {
             ViewModel.create(postId, userId),
             ViewModel.getCount(postId)
         ]);
-        if (!createdView || !foundViews) {
+        if (foundViews === undefined) {
             throw new InternalServerError('조회수를 가져오는 데 실패했습니다.');
         }
         return foundViews;
