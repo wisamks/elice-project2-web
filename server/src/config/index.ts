@@ -1,9 +1,20 @@
 // 설정
 import pool from '@_config/db';
 import dotenv from 'dotenv';
-dotenv.config();
+import path from 'path';
 
-const clientDomain = process.env.LOCAL_CLIENT_DOMAIN as string;
+// dotenv.config();
+
+// const clientDomain = process.env.LOCAL_CLIENT_DOMAIN as string;
+
+const envFile = process.env.NODE_ENV === 'production' ? 'prod.env' : 'dev.env';
+dotenv.config({ path: path.resolve(__dirname, `../../../${envFile}`) });
+
+
+const clientDomain = process.env.NODE_ENV === 'develop'
+    ? process.env.LOCAL_CLIENT_DOMAIN as string
+    : process.env.GLOBAL_CLIENT_DOMAIN as string;
+
 
 const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
 const googleClientPw = process.env.REACT_APP_GOOGLE_CLIENT_SECRET as string;
@@ -16,6 +27,8 @@ const naverRedirectUri = process.env.REACT_APP__NAVER_REDIRECT_URI as string;
 const serverPort = process.env.SERVER_PORT as string;
 const jwtAccessTokenSecret = process.env.JWT_ACCESS_TOKEN_SECRET as string;
 const jwtRefreshTokenSecret = process.env.JWT_REFRESH_TOKEN_SECRET as string;
+
+console.log(envFile, clientDomain, serverPort);
 
 const pointMap = {
     '출석': 30,
