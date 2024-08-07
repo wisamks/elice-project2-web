@@ -29,7 +29,6 @@ const ViewComment = () => {
     setLoading(true);
     try {
       const data = await fetchComments(postId, page, perPage);
-      console.log('로딩댓글 data', data);
       setComments(data.comments);
     } catch (error) {
       console.error('Error loading comments:', error);

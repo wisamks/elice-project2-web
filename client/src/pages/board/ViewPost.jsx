@@ -65,6 +65,8 @@ const ViewPost = () => {
                 status: status,
             },
         }));
+
+        await apiService((apiClient) => updatePostStatus(apiClient, postIdToNum, status));
     };
 
     const handleDeletePost = async () => {
