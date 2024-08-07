@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { loginState } from "../../../atom/userState";
 
 import { apiService } from "../../../services/apiService";
 import { signInController } from "../../../controllers/signInController";
@@ -7,15 +9,14 @@ import { signInController } from "../../../controllers/signInController";
 const SnsCallback = ({ platform }) => {
     const location = useLocation();
     const navigate = useNavigate();
+    const setIsLoggedIn = useSetRecoilState(loginState);
 
     const redirectHome = () => {
         navigate('/');
-        window.location.reload();
     }
 
     const redirectSignUp = () => {
         navigate('/sign-up');
-        window.location.reload();
     }
 
     const handleSignInPost = async (code) => {
@@ -25,7 +26,12 @@ const SnsCallback = ({ platform }) => {
         };
 
         const res = await apiService((apiClient) => signInController(apiClient, data));
-        res.hasUser ? redirectHome() : redirectSignUp();
+        if (res.hasUser) {
+            setIsLoggedIn(true);
+            redirectHome();
+        } else {
+            redirectSignUp();
+        }
     };
 
     useEffect(() => {

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-
 import { useLocation } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { userState, loginState } from '../../atom/userState';
@@ -13,13 +12,10 @@ const UserProfileLoader = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    //       null/undefined
-    // object undefined boolean
-    console.log('state!!!', location.state);
     if (location.state?.refresh) {
       setIsLoggedIn(true);
     }
-  }, [location]);
+  }, [location, setIsLoggedIn]);
 
   useEffect(() => {
     if (location.state?.refresh) {
@@ -44,8 +40,6 @@ const UserProfileLoader = ({ children }) => {
           nickname: data.nickname || '',
           profileImage: data.profileImage || '',
         });
-        console.log(data);
-
       } catch (error) {
         setUserState({
           name: '',
