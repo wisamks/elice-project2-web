@@ -4,6 +4,7 @@ import { formatDateToString } from "../../utils";
 import './ItemCardVertical257.css';
 
 const ItemCardVertical257 = ({item}) => {
+    
     const getStatusClass = (sort, status) => {
         if (sort === '나눔') {
             if (status === '진행') return 'item-status item-status-free-ing';

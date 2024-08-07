@@ -1,4 +1,3 @@
-import apiClient from "../services/apiClient";
 import { baseURI } from "./baseURI";
 
 export const getExchangePost = async (apiClient, postId) => {
@@ -34,15 +33,20 @@ export const deleteExchangePost = async (apiClient, postId) => {
     return response;
 };
 
-export const getExchangeList = async (apiClient, page, perPage, filters) => {
+export const getExchangeList = async (apiClient, page, perPage, filters = {}) => {
     const params = new URLSearchParams({
         page,
         perPage,
         categoryId: 1,
-        ...filters
-    }).toString();
+    });
 
-    const fetchURI = baseURI + `/api/exchange-posts?${params}`;
+    Object.keys(filters).forEach(key => {
+        if(filters[key] && filters[key] !== '전체'){
+            params.append(key, filters[key]);
+        }
+    });
+
+    const fetchURI = baseURI + `/api/exchange-posts?${params.toString()}`;
     const response = await apiClient.get(fetchURI, {
         withCredentials: true,
     });
@@ -56,7 +60,6 @@ export const updatePostStatus = async (apiClient, postId, status) =>{
         status,        
     }, {
         withCredentials: true,
-    })
-    console.log('업데이트 컨트롤러', response.config.data);
+    });
     return response.config.data;
 };
