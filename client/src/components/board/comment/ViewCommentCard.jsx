@@ -54,7 +54,7 @@ const ViewCommentCard = ({ comment, setComments, user }) => {
         />
       ) : (
         <p className="comment-txt">
-          {comment.secret && comment.userId !== user.id ? '비밀 댓글입니다' : comment.content}
+          {comment.secret && comment.userId !== user.id ? '********' : comment.content}
         </p>
       )}
       <div className="comment-info">
