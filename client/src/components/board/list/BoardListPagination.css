@@ -1,0 +1,28 @@
+.BoardListPagination{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 60px;
+}
+
+
+.BoardListPagination button{
+    width: 32px;
+    height: 32px;
+    border: 0;
+    font-size: 15px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.BoardListPagination .prev, .BoardListPagination .next{
+    padding-top: 2px;
+}
+
+.BoardListPagination button:disabled{
+    opacity: 0.6;
+}
+
+.BoardListPagination button.active{
+    font-weight: 700;
+}
