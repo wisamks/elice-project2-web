@@ -2,14 +2,20 @@ FROM node:20.14.0-alpine
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+# package.json 및 package-lock.json 복사
+COPY server/package*.json ./
 
+# npm 의존성 설치
 RUN npm ci
 
-COPY . .
+# 전체 프로젝트 소스 코드 복사
+COPY server .
 
+# 서버 애플리케이션 빌드
 RUN npm run build
 
+# 8080 포트 노출
 EXPOSE 8080
 
+# 서버 실행
 CMD ["npm", "start"]

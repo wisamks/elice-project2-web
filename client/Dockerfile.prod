@@ -1,21 +1,35 @@
+# 빌드 스테이지
 FROM node:20.14.0-alpine as build
 
 WORKDIR /app
 
-COPY package*.json ./
+# package.json 및 package-lock.json 복사
+COPY client/package*.json ./
 
+# npm 의존성 설치
 RUN npm ci
 
-COPY . .
+# 전체 프로젝트 소스 코드 복사
+COPY client .
 
+# prod.env 파일 복사
+COPY prod.env .env
+
+# 빌드 스크립트를 실행하여 환경 변수 적용
+RUN npm install env-cmd --save
 RUN npm run build
 
+# nginx 스테이지
 FROM nginx:alpine
 
+# 빌드된 파일들을 Nginx에 복사
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Nginx 설정 파일 복사
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
+# 80 포트 노출
 EXPOSE 80
 
+# Nginx 실행
 CMD ["nginx", "-g", "daemon off;"]
