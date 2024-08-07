@@ -1,3 +1,4 @@
+import UserUpdateDTO from "@_/middlewares/DTOs/userUpdateDTO";
 import UserModel from "@_/models/userModel";
 import { NotFoundError } from "@_/utils/customError";
 
@@ -15,11 +16,8 @@ class UsersService {
             image: foundUser.image,
         }
     }
-    static async updateProfile(userId: number, data: {
-        nickname: string;
-        image: string;
-    }) {
-        await UserModel.updateUser(userId, data);
+    static async updateProfile(data: UserUpdateDTO) {
+        await UserModel.updateUser(data);
         return;
     }
 }

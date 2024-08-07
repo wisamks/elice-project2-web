@@ -1,11 +1,12 @@
 import { ReqUser } from '@_/customTypes/express';
+import AuthUserDTO from '@_/middlewares/DTOs/authUserDTO';
+import UserUpdateDTO from '@_/middlewares/DTOs/userUpdateDTO';
 import UsersService from '@_/services/usersService';
 import { Request, Response, NextFunction } from 'express';
 
 class UsersController {
     static async getProfile(req: Request, res: Response, next: NextFunction) {
-        const user = req.user as ReqUser;
-        const userId = user.userId;
+        const { userId }: AuthUserDTO = req.body;
         try {
             const foundProfile = await UsersService.getProfile(userId);
             return res.status(200).json(foundProfile);
@@ -15,12 +16,9 @@ class UsersController {
     }
 
     static async updateProfile(req: Request, res: Response, next: NextFunction) {
-        const user = req.user as ReqUser;
-        const userId = user.userId;
-        const { nickname, image } = req.body;
-        const data = { nickname, image };
+        const data: UserUpdateDTO = req.body;
         try {
-            await UsersService.updateProfile(userId, data);
+            await UsersService.updateProfile(data);
             return res.status(204).end();
         } catch(err) {
             return next(err);
