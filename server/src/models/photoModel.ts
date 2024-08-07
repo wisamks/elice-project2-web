@@ -2,6 +2,9 @@ import PostDb from "@_models/postDb";
 
 class PhotoModel extends PostDb {  
     public static async createPhotos(postId: number, images: Array<string>) {
+        if (images.every(image => image.length === 0)) {
+            return;
+        }
         const qs = new Array(images.length).fill('(?, ?)').join(', ');
         const sql = `INSERT INTO photo(post_id, url) VALUES ${qs}`;
         const data = images.reduce((arr, image): any => [...arr, postId, image], []);
