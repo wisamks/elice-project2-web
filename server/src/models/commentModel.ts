@@ -1,8 +1,9 @@
 import { CreationComment, PaginationComment, UpdateComment, Comment } from "@_/customTypes/commentType";
+import CommentPostDTO from "@_/middlewares/DTOs/commentPostDTO";
 import PostDb from "@_models/postDb";
 
 class CommentModel extends PostDb {  
-    public static async create({postId, content, secret, userId}: CreationComment) {
+    public static async create({postId, content, secret, userId}: CommentPostDTO) {
         const sql = `INSERT INTO comment(post_id, content, secret, user_id) VALUES(?, ?, ?, ?)`;
         const data = [postId, content, secret, userId];
         return await this.insert(sql, data);
