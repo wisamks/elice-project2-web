@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import LikeBtn from "../buttons/LikeBtn";
 import { formatDateToString } from "../../utils";
 
 import './ItemCardVertical257.css';
@@ -37,8 +38,6 @@ const ItemCardVertical257 = ({item}) => {
     const thumbnailUrl = item.thumbnail.url || defaultThumbnail;
     const imgFrameClass = `imgFrame item-photo ${!item.thumbnail.url ? 'default' : ''}`;
 
-
-
     return (
         <div className="ItemCardVertical257">
             <Link to={`/board/view/${item.postId}`}>
@@ -66,6 +65,7 @@ const ItemCardVertical257 = ({item}) => {
                 <div className="item-like">
                     <img src="images/ico-like.png" alt="좋아요 등록하기" />
                 </div>
+                <LikeBtn postId={item.postId} isMyFavorite={item.isMyFavorite} />
             </Link>
         </div>
     );

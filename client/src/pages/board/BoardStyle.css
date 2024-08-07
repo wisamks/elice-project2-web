@@ -134,7 +134,12 @@
     color: var(--primary-color);
 }
 
-.view-post-row2, .view-post-row3{
+.view-post-row2{
+    position: relative;
+    margin-bottom: 60px;
+}
+
+.view-post-row3{
     margin-bottom: 60px;
 }
 

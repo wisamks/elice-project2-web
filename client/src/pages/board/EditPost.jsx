@@ -32,8 +32,6 @@ const EditPost = () => {
         return <div>게시글 정보를 로딩중입니다.</div>
     };
 
-    console.log('수정페이지', postData);
-
     return (
         <div className="edit-post">
             <h1 className="page-title">게시글 수정하기</h1>
