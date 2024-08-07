@@ -2,7 +2,7 @@ import PostDb from "@_models/postDb";
 
 class PhotoModel extends PostDb {  
     public static async createPhotos(postId: number, images: Array<string>) {
-        if (images.every(image => image.length === 0)) {
+        if (images.every(image => image.length === 0) || !images) {
             return;
         }
         const qs = new Array(images.length).fill('(?, ?)').join(', ');
