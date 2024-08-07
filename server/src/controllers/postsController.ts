@@ -1,22 +1,19 @@
 import { ReqUser } from '@_/customTypes/express';
 import { Paginations, PostCreation } from '@_/customTypes/postType';
+import PostCreateDTO from '@_/middlewares/DTOs/postCreateDTO';
+import PostGetDTO from '@_/middlewares/DTOs/postGetDTO';
+import PostGetOneDTO from '@_/middlewares/DTOs/postGetOneDTO';
+import PostUpdateDTO from '@_/middlewares/DTOs/postUpdateDTO';
 import PostsService from '@_/services/postsService';
 import { Request, Response, NextFunction } from 'express';
 
 class PostsController {
     static async getAllPosts(req: Request, res: Response, next: NextFunction) {
-        const { categoryId, page, perPage } = req.query;
-        const user = req.user as ReqUser;
-        const userId = user?.userId;
-        const data: Paginations = {
-            categoryId: Number(categoryId),
-            page: page ? Number(page) : 1,
-            perPage: perPage ? Number(perPage) : 40,
-        };
+        const data: PostGetDTO = req.body;
         try {
             const [totalPostsCount, foundPosts] = await Promise.all([
                 PostsService.getPostsCount(data),
-                PostsService.getPosts(data, userId),
+                PostsService.getPosts(data),
             ]);
             return res.status(200).json({
                 totalPostsCount,
@@ -27,10 +24,7 @@ class PostsController {
         }
     }
     static async getPost(req: Request, res: Response, next: NextFunction) {
-        const { postId } = req.params;
-        const user = req.user as ReqUser|undefined;
-        const userId = user?.userId;
-        const _postId = Number(postId);
+        const {postId, userId}: PostGetOneDTO = req.body;
         try {
             const [
                 foundPost,
@@ -41,13 +35,13 @@ class PostsController {
                 foundFavoriteCount,
                 isMyFavorite,
             ] = await Promise.all([
-                PostsService.getPost(_postId),
-                PostsService.getPhotos(_postId),
-                PostsService.getPhotosCount(_postId),
-                PostsService.getMainImage(_postId),
-                PostsService.getCommentsCount(_postId),
-                PostsService.getFavoriteCount(_postId),
-                PostsService.checkMyFavorite(_postId, userId),
+                PostsService.getPost(postId),
+                PostsService.getPhotos(postId),
+                PostsService.getPhotosCount(postId),
+                PostsService.getMainImage(postId),
+                PostsService.getCommentsCount(postId),
+                PostsService.getFavoriteCount(postId),
+                PostsService.checkMyFavorite(postId, userId),
             ]);
             return res.status(200).json({
                 post: {
@@ -81,36 +75,25 @@ class PostsController {
         }
     }
     static async createPost(req: Request, res: Response, next: NextFunction) {
-        const { categoryId, title, images, content } = req.body;
-        const user = req.user as ReqUser;
-        const userId = user.userId;
-        
-        const data: PostCreation = { title, content, category_id: Number(categoryId), user_id: userId }
+        const data: PostCreateDTO = req.body;
         try {
-            const createdPostId = await PostsService.createPost(data, images);
+            const createdPostId = await PostsService.createPost(data);
             return res.status(201).json({postId: createdPostId});
         } catch(err) {
             return next(err);
         }
     }
     static async updatePost(req: Request, res: Response, next: NextFunction) {
-        const { categoryId, title, images, content } = req.body;
-        const { postId } = req.params;
-        const user = req.user as ReqUser;
-        const userId = user.userId;
-
-        const data: PostCreation = { title, content, category_id: Number(categoryId), user_id: userId };
+        const data: PostUpdateDTO = req.body;
         try {
-            const updatedPost = await PostsService.updatePost(data, images, Number(postId));
+            const updatedPost = await PostsService.updatePost(data);
             return res.status(204).end();
         } catch(err) {
             return next(err);
         }
     }
     static async deletePost(req: Request, res: Response, next: NextFunction) {
-        const { postId } = req.params;
-        const user = req.user as ReqUser;
-        const userId = user.userId;
+        const {postId, userId}: PostGetOneDTO = req.body;
         try {
             await PostsService.deletePost(Number(postId), userId);
             return res.status(204).end();

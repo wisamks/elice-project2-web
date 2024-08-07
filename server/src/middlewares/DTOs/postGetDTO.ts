@@ -1,7 +1,8 @@
 import { Type } from "class-transformer";
 import { IsInt, IsNotEmpty, IsPositive } from "class-validator";
+import AuthUserDTO from "./authUserDTO";
 
-class PostGetDTO {
+class PostGetDTO extends AuthUserDTO {
     @Type(() => Number)
     @IsNotEmpty({ message: 'categoryId는 필수값입니다.' })
     @IsInt({ message: 'categoryId는 정수입니다.' })
