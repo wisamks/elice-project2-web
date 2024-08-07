@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import CertificationListCard from "../../components/certification/CertificationListCard";
-import CertificationModal from "../../components/certification/CertificationModal";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import CertificationListCard from '../../components/certification/CertificationListCard';
+import CertificationModal from '../../components/certification/CertificationModal';
 import './CertificationPage.css';
 
 const CertificationPage = () => {
@@ -14,16 +14,18 @@ const CertificationPage = () => {
   const postsPerPage = 40; // 한 페이지에 표시할 게시글 수
   const categoryId = 2; // 조회할 카테고리 ID
 
-  // 게시글 목록을 가져오는 함수
   const fetchPosts = async (page) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/posts?perPage=${postsPerPage}&page=${page}&categoryId=${categoryId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
+      const response = await fetch(
+        `http://localhost:8080/api/posts?perPage=${postsPerPage}&page=${page}&categoryId=${categoryId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        }
+      );
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -32,27 +34,25 @@ const CertificationPage = () => {
       }
 
       const data = await response.json();
-      console.log(data); // 서버 응답 데이터 확인
+    //   console.log('Posts data:', data);
 
       if (Array.isArray(data.posts) && data.posts.length > 0) {
-        setPosts(data.posts); // 게시글 목록 설정
-        setTotalPosts(data.totalPostsCount); // 총 게시글 수 설정
+        setPosts(data.posts);
+        setTotalPosts(data.totalPostsCount); 
       } else {
         console.error('게시글 데이터가 유효하지 않거나 비어 있습니다.');
         setPosts([]);
         setTotalPosts(0);
       }
-
     } catch (error) {
       console.error('게시글을 가져오는 중 오류 발생:', error);
     }
   };
 
   useEffect(() => {
-    fetchPosts(currentPage); // 현재 페이지에 해당하는 게시글 가져오기
+    fetchPosts(currentPage); 
   }, [currentPage]);
 
-  // 선택된 게시글의 상세 정보를 가져오는 함수
   const fetchPostDetail = async (postId) => {
     try {
       const response = await fetch(`http://localhost:8080/api/posts/${postId}`, {
@@ -70,10 +70,10 @@ const CertificationPage = () => {
       }
 
       const data = await response.json();
-      console.log(data); // 상세 정보 확인
+      console.log('Post detail data:', data);
 
-      setSelectedPost(data); // 선택된 게시글 상세 정보 설정
-      setIsModalOpen(true); // 모달 열기
+      setSelectedPost(data);
+      setIsModalOpen(true);
     } catch (error) {
       console.error('게시글 상세 정보를 가져오는 중 오류 발생:', error);
     }
@@ -81,7 +81,7 @@ const CertificationPage = () => {
 
   const handleOpenModal = (postId) => {
     setSelectedPostId(postId);
-    fetchPostDetail(postId); // 게시글 상세 정보 가져오기
+    fetchPostDetail(postId);
   };
 
   const handleCloseModal = () => {
@@ -94,7 +94,25 @@ const CertificationPage = () => {
     setCurrentPage(pageNumber);
   };
 
-  const totalPages = Math.ceil(totalPosts / postsPerPage); // 총 페이지 수 계산
+  // 게시글 삭제 후 목록 갱신 함수
+  const handlePostDeleted = (deletedPostId) => {
+    // 삭제된 게시글을 제외한 새로운 게시글 목록 생성
+    const updatedPosts = posts.filter((post) => post.postId !== deletedPostId);
+
+    setPosts(updatedPosts);
+    setTotalPosts(totalPosts - 1);
+  };
+
+  // 게시글 수정 후 목록 갱신 함수
+  const handlePostUpdated = (updatedPost) => {
+    const updatedPosts = posts.map((post) =>
+      post.postId === updatedPost.postId ? { ...post, ...updatedPost } : post
+    );
+
+    setPosts(updatedPosts);
+  };
+
+  const totalPages = Math.ceil(totalPosts / postsPerPage);
 
   return (
     <div className="CertificationPage">
@@ -102,7 +120,9 @@ const CertificationPage = () => {
         <h1 className="page-title">의류수거함 인증</h1>
         <div className="btn-go-create">
           <Link to="/certification/create">
-            <span><img src="images/ico-edit.png" alt="등록하기" /></span>
+            <span>
+              <img src="images/ico-edit.png" alt="등록하기" />
+            </span>
             <span>등록하기</span>
           </Link>
         </div>
@@ -117,23 +137,24 @@ const CertificationPage = () => {
       <div className="certification-list-list">
         <ul>
           {posts.map((post) => (
-            <li key={post.id} onClick={() => handleOpenModal(post.id)}>
+            <li key={post.postId} onClick={() => handleOpenModal(post.postId)}>
               <CertificationListCard post={post} />
             </li>
           ))}
         </ul>
       </div>
-      {
-        isModalOpen && selectedPost &&
+      {isModalOpen && selectedPost && (
         <CertificationModal
-          post={selectedPost} // 선택된 게시글 정보 전달
+          post={selectedPost}
           handleCloseModal={handleCloseModal}
+          handlePostDeleted={handlePostDeleted}
+          handlePostUpdated={handlePostUpdated}
         />
-      }
+      )}
       <div className="pagination">
         {[...Array(totalPages)].map((_, index) => (
           <button
-            key={index} // 페이지네이션 버튼에 고유한 key 설정
+            key={index}
             onClick={() => handlePageChange(index + 1)}
             disabled={index + 1 === currentPage}
           >
