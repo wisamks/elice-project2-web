@@ -9,6 +9,7 @@ import PostGetDTO from "@_/middlewares/DTOs/postGetDTO";
 import ExchangeGetDTO from "@_/middlewares/DTOs/exchangeGetDTO";
 import ExchangeCreateDTO from "@_/middlewares/DTOs/exchangeCreateDTO";
 import ExchangeUpdateDTO from "@_/middlewares/DTOs/exchangeUpdateDTO";
+import ViewModel from "@_/models/viewModel";
 
 
 // 중고거래 게시판 서비스
@@ -119,6 +120,17 @@ class ExchangePostsService {
         const foundFavorite = await FavoriteModel.findOneByUserId(postId, userId);
         return foundFavorite;
     }
+    // 조회수를 올리고 확인하는 서비스
+    static async findViews(postId: number, userId: number|undefined) {
+        const [createdView, foundViews] = await Promise.all([
+            ViewModel.create(postId, userId),
+            ViewModel.getCount(postId)
+        ]);
+        if (!createdView || !foundViews) {
+            throw new InternalServerError('조회수를 가져오는 데 실패했습니다.');
+        }
+        return foundViews;
+    } 
     // 중고거래 게시글 생성
     static async createPost(data: ExchangeCreateDTO) {
 		const createdPost = await PostModel.createPost(data);

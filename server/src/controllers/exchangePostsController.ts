@@ -38,6 +38,7 @@ class ExchangePostsController {
                 foundCommentsCount,
                 foundFavoriteCount,
                 isMyFavorite,
+                foundViews,
             ] = await Promise.all([
                 ExchangePostsService.getPost(postId),
                 ExchangePostsService.getPhotos(postId),
@@ -46,6 +47,7 @@ class ExchangePostsController {
                 ExchangePostsService.getCommentsCount(postId),
                 ExchangePostsService.getFavoriteCount(postId),
                 ExchangePostsService.checkMyFavorite(postId, userId),
+                ExchangePostsService.findViews(postId, userId)
             ]);
             const foundFilteredPosts = await ExchangePostsService.getPosts({
                 page: 1,
@@ -86,6 +88,7 @@ class ExchangePostsController {
                     imagesCount: foundPhotosCount,
                     commentsCount: foundCommentsCount,
                     favoriteCount: foundFavoriteCount,
+                    viewsCount: foundViews,
                 },
                 thumbnail: {
                     thumbnailId: foundPhotos[0]?.id,

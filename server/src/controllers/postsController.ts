@@ -34,6 +34,7 @@ class PostsController {
                 foundCommentsCount,
                 foundFavoriteCount,
                 isMyFavorite,
+                foundViews,
             ] = await Promise.all([
                 PostsService.getPost(postId),
                 PostsService.getPhotos(postId),
@@ -42,6 +43,7 @@ class PostsController {
                 PostsService.getCommentsCount(postId),
                 PostsService.getFavoriteCount(postId),
                 PostsService.checkMyFavorite(postId, userId),
+                PostsService.findViews(postId, userId)
             ]);
             return res.status(200).json({
                 post: {
@@ -63,6 +65,7 @@ class PostsController {
                     imagesCount: foundPhotosCount,
                     commentsCount: foundCommentsCount,
                     favoriteCount: foundFavoriteCount,
+                    viewsCount: foundViews,
                 },
                 thumbnail: {
                     thumbnailId: foundPhotos[0]?.id,
