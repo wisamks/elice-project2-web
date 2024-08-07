@@ -2,23 +2,18 @@ import {Request, Response, NextFunction} from 'express';
 import ExchangePostsService from '@_services/exchangePostsService';
 import { BadRequestError, UnauthorizedError, ForbiddenError } from '@_/utils/customError';
 import { ReqUser } from '@_/customTypes/express';
-import { PostStatus, PostSort, PostUpdateData } from '@_/customTypes/postType';
+import { PostStatus, PostSort, PostUpdateData, Paginations } from '@_/customTypes/postType';
+import ExchangeGetDTO from '@_/middlewares/DTOs/exchangeGetDTO';
+import PostGetOneDTO from '@_/middlewares/DTOs/postGetOneDTO';
+import ExchangeCreateDTO from '@_/middlewares/DTOs/exchangeCreateDTO';
+import ExchangeUpdateDTO from '@_/middlewares/DTOs/exchangeUpdateDTO';
+import ExchangeStatusDTO from '@_/middlewares/DTOs/exchangeStatusDTO';
 
 // 중고거래 게시판 컨트롤러
 class ExchangePostsController {
     // 목록 조회
     static async findPosts(req: Request, res: Response, next: NextFunction) {        
-        if (req.paginations === undefined) {
-            throw new BadRequestError('입력값이 올바르지 않습니다.');
-        }
-        const user = req.user as ReqUser | undefined;
-        const userId = user ? user.userId : undefined;
-        const data = {
-            paginations: req.paginations, 
-            filters: req.filters, 
-            postId: undefined, 
-            userId,
-        };
+        const data: ExchangeGetDTO = req.body;
         try {
             const totalPostsCount = await ExchangePostsService.getPostsCount(data);
             const foundPosts = await ExchangePostsService.getPosts(data);
@@ -33,10 +28,7 @@ class ExchangePostsController {
     // 게시글 조회
     static async findOnePost(req: Request, res: Response, next: NextFunction) {
         // 댓글은 따로 클라이언트에게 api조회 시키기
-        const { postId } = req.params;
-        const _postId = +postId;
-        const user = req.user as ReqUser | undefined;
-        const _userId = user?.userId;
+        const { postId, userId }: PostGetOneDTO = req.body;
         try {
             const [
                 foundPost,
@@ -47,31 +39,25 @@ class ExchangePostsController {
                 foundFavoriteCount,
                 isMyFavorite,
             ] = await Promise.all([
-                ExchangePostsService.getPost(_postId),
-                ExchangePostsService.getPhotos(_postId),
-                ExchangePostsService.getPhotosCount(_postId),
-                ExchangePostsService.getMainImage(_postId),
-                ExchangePostsService.getCommentsCount(_postId),
-                ExchangePostsService.getFavoriteCount(_postId),
-                ExchangePostsService.checkMyFavorite(_postId, _userId),
+                ExchangePostsService.getPost(postId),
+                ExchangePostsService.getPhotos(postId),
+                ExchangePostsService.getPhotosCount(postId),
+                ExchangePostsService.getMainImage(postId),
+                ExchangePostsService.getCommentsCount(postId),
+                ExchangePostsService.getFavoriteCount(postId),
+                ExchangePostsService.checkMyFavorite(postId, userId),
             ]);
-            const paginations = {
+            const foundFilteredPosts = await ExchangePostsService.getPosts({
                 page: 1,
                 perPage: 8,
                 categoryId: 1,
-            };
-            const filters = {
                 sort: foundPost.sort,
                 target: foundPost.target,
                 item: foundPost.item,
                 location: foundPost.location,
                 price: foundPost.price,
-            };
-            const foundFilteredPosts = await ExchangePostsService.getPosts({
-                paginations,
-                filters,
-                postId: _postId,
-                userId: _userId,
+                postId: postId,
+                userId: postId,
             });
             return res.status(200).json({
                 post: {
@@ -115,16 +101,11 @@ class ExchangePostsController {
     // 게시글 생성
     static async createPost(req: Request, res: Response, next: NextFunction) {
         // sort에 따라 activityId 조회 -> 포인트 구현 시
-        const currUser = req.user as ReqUser;
-        const userId = currUser.userId;
-        const {sort, target, item, location, title, price, images, content} = req.body;
-        const category_id = 1;
-        const status = '진행' as PostStatus;
-        const postContent = {user_id: userId, sort, category_id, title, content, status, item, target, location, price: +price};
+        const data: ExchangeCreateDTO = req.body;
         try {
-            const createdPost = await ExchangePostsService.createPost(postContent);
+            const createdPost = await ExchangePostsService.createPost(data);
             const postId = createdPost.id;
-            await ExchangePostsService.createImages(postId, images);
+            await ExchangePostsService.createImages(postId, data.images);
             return res.status(201).json({postId});
         } catch(err) {
             return next(err);
@@ -136,23 +117,8 @@ class ExchangePostsController {
     // 게시글 수정
     static async updatePost(req: Request, res: Response, next: NextFunction) {
         try {
-            const user = req.user as ReqUser;
-            const postId = req.params.postId;
-            const { sort, target, item, location, title, price, images, content, status } = req.body;
-
-            const updateData: PostUpdateData = {
-                sort: sort as PostSort,
-                target,
-                item,
-                location,
-                title,
-                price: price !== undefined ? +price : undefined,
-                content,
-                status: status as PostStatus
-            };
-
-            await ExchangePostsService.updatePost(+postId, user.userId, updateData, images);
-    
+            const data: ExchangeUpdateDTO = req.body;
+            await ExchangePostsService.updatePost(data);    
             return res.status(204).end();
         } catch (error) {
             return next(error);
@@ -162,10 +128,9 @@ class ExchangePostsController {
     // 게시글 삭제
     static async deletePost(req: Request, res: Response, next: NextFunction) {
         try {
-          const user = req.user as ReqUser;
-          const postId = req.params.postId;        // 타입에러 떠서 가이드 대로 변경 - 미들웨어에서 postId 검증 완료
+          const { postId, userId }: PostGetOneDTO = req.body;        // 타입에러 떠서 가이드 대로 변경 - 미들웨어에서 postId 검증 완료
           // model -> service 이용해서 게시글 삭제(비즈니스로직은 서비스로..분리)
-          await ExchangePostsService.deletePost(+postId, user.userId);
+          await ExchangePostsService.deletePost(postId, userId);
     
           return res.status(204).end();
         } catch (error) {
@@ -175,9 +140,7 @@ class ExchangePostsController {
 
     // 게시글 상태 수정
     static async updatePostStatus(req: Request, res: Response, next: NextFunction) {
-        const { postId, status } = req.body;
-        const user = req.user as ReqUser;
-        const userId = user.userId;
+        const {postId, userId, status}: ExchangeStatusDTO = req.body;
         try {
             await ExchangePostsService.updatePostStatus(status, Number(postId), userId);
             return res.status(204).end();

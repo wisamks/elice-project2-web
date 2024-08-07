@@ -1,10 +1,11 @@
 import { Router } from 'express';
 
 import FavoriteController from '@_/controllers/favoriteController';
-import { authenticateAccessToken } from '@_/middlewares';
+import { authenticateAccessToken, validator } from '@_/middlewares';
+import PostGetOneDTO from '@_/middlewares/DTOs/postGetOneDTO';
 
 const router = Router();
 
-router.post('/', authenticateAccessToken, FavoriteController.toggleFavorite);
+router.post('/', authenticateAccessToken, validator(PostGetOneDTO), FavoriteController.toggleFavorite);
 
 export default router;

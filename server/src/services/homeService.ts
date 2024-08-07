@@ -3,10 +3,10 @@ import PhotoModel from "@_/models/photoModel";
 import PostModel from "@_/models/postModel";
 
 class HomeService {
-    static async getExchangeByLimit(limit: string, userId: number|undefined) {
+    static async getExchangeByLimit(limit: number, userId: number|undefined) {
         const paginations = {
             page: 1,
-            perPage: Number(limit),
+            perPage: limit,
             categoryId: 1,
         }
         const foundPosts = await PostModel.getPosts(paginations);
@@ -36,10 +36,10 @@ class HomeService {
         return posts;
     }
 
-    static async getReformByLimit(limit: string, userId: number|undefined) {
+    static async getReformByLimit(limit: number, userId: number|undefined) {
         const paginations = {
             page: 1,
-            perPage: Number(limit),
+            perPage: limit,
             categoryId: 3,
         }
         const foundPosts = await PostModel.getNormalPosts(paginations);
@@ -63,10 +63,10 @@ class HomeService {
         return posts;
     }
 
-    static async getBinByLimit(limit: string, userId: number|undefined) {
+    static async getBinByLimit(limit: number, userId: number|undefined) {
         const paginations = {
             page: 1,
-            perPage: Number(limit),
+            perPage: limit,
             categoryId: 2,
         }
         const foundPosts = await PostModel.getNormalPosts(paginations);

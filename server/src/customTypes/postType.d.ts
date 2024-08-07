@@ -23,7 +23,7 @@ export type PostCreation = Omit<Post, 'id'|'created_at'|'updated_at'|'deleted_at
 
 // postExchangeDetail
 export interface PostExchangeDetail {
-    status: PostStatus;    
+    status: Status;    
     item: string;     
     target: string;   
     location: string; 
@@ -50,7 +50,7 @@ export type PostUpdateData = Partial<Pick<Post, 'title' | 'content' | 'status'>>
 export interface PostSearchCriteria {
     category_id?: number;
     user_id?: number;
-    status?: PostStatus;
+    status?: Status;
     start_date?: Date;
     end_date?: Date;
     keyword?: string;

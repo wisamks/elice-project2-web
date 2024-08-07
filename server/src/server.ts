@@ -1,10 +1,8 @@
-import dotenv from 'dotenv';
-dotenv.config(); // 환경 변수 로드
-
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
+import 'reflect-metadata';
 
 import { clientDomain, serverPort } from '@_config';
 import homeRouter from '@_routers/homeRouter';
