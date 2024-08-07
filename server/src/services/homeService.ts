@@ -13,7 +13,8 @@ class HomeService {
         const posts = await Promise.all(foundPosts.map(async (post) => {
             const isMyFavorite = userId ? await FavoriteModel.findOneByUserId(post.id, userId) : false;
             const foundMainImage = await PhotoModel.getMainPhotoByPostId(post.id);
-            const thumbnail = foundMainImage ? {id: foundMainImage.id, url: foundMainImage.url} : {id: undefined, url: undefined};
+            const foundImages = await PhotoModel.getPhotosByPostId(post.id);
+            const thumbnail = foundImages ? {id: foundImages[0].id, url: foundImages[0].url} : {id: undefined, url: undefined};
             return {
                 postId: post.id,
                 userId: post.user_id,
