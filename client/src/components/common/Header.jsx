@@ -2,49 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LoginButton from '../account/LoginButton';
 import LogoutButton from '../account/LogoutButton';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { loginState } from '../../atom/userState';
 
 import './Header.css';
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(loginState);
+  //const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState);
+  const isLoggedIn = useRecoilValue(loginState);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  // const location = useLocation();
-
-  // useEffect(() => {
-  //   if (location.state?.refresh) {
-  //     setIsLoggedIn(true);
-  //   }
-  // }, [location]);
-
-  // const checkLoginStatus = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:8080/api/auth/access', {
-  //       method: 'GET',
-  //       credentials: 'include',
-  //     });
-
-  //     if (response.ok) {
-  //       setIsLoggedIn(true);
-  //     } else if (response.status === 401) {
-  //       setIsLoggedIn(false);
-  //       // console.warn('401 Unauthorized: Access token is invalid or expired. User is not logged in.')
-  //     } else {
-  //       setIsLoggedIn(false);
-  //     }
-  
-  //   } catch (error) {
-  //     console.error('Error checking login status:', error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   checkLoginStatus();
-  // }, []);
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -62,8 +30,8 @@ const Header = () => {
 
   const handleSearchTermChange = (e) => {
     setSearchTerm(e.target.value);
-  };
-
+  }; 
+  
   return (
     <header id="header">
       <div className="header-wrap">

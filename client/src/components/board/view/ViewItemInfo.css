@@ -18,6 +18,7 @@
 
 .view-post-item-info .row1 .item-info .item-status-cate{
     display: flex;
+    align-items: center;
     gap: 8px;
 }
 
