@@ -4,24 +4,15 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { signOutController } from '../../controllers/signOutController'; 
 import { apiService } from '../../services/apiService';
+import LogoutButton from '../../components/account/LogoutButton';
 
 import './Home.css';
 
 const Home = () => {
-  const handleLogout = async () => {
-    try {
-      const response = await apiService(signOutController);
-
-      if (response) {
-        window.location.href = '/sign-in';
-      }
-    } catch (error) {
-      console.error('로그아웃 오류:', error);
-    }
-  };
 
   return (
-    <div className="Home">
+    <div className="Home">      
+      <LogoutButton />
       <div className='Home-main01'>
         <div className='image'><p><img src='images/home-img01.jpg' alt='' /></p></div>
         <div className='text'>
@@ -30,7 +21,6 @@ const Home = () => {
         </div>
       </div>
       <BarChart />
-      <button onClick={handleLogout}>로그아웃</button>
     </div>
   );
 };

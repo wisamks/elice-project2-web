@@ -2,6 +2,7 @@ import CommentModel from "@_/models/commentModel";
 import { CreationComment, PaginationComment, UpdateComment, Comment } from "@_/customTypes/commentType";
 import { ForbiddenError, InternalServerError, NotFoundError } from "@_/utils/customError";
 import PostModel from "@_/models/postModel";
+import CommentPutDTO from "@_/middlewares/DTOs/commentPutDTO";
 
 class CommentsService {
     static async getCommentsByPostId(data: PaginationComment) {
@@ -11,7 +12,17 @@ class CommentsService {
         }
         const foundComments = await CommentModel.findAllByPostId(data);
         const commentsCount = await CommentModel.findCountByPostId(data.postId);
-        return {foundComments, commentsCount};
+        const comments = foundComments.map(comment => ({
+            commentId: comment.commentId,
+            userId: comment.userId,
+            content: comment.content,
+            createdAt: comment.createdAt,
+            updatedAt: comment.updatedAt,
+            secret: !!comment.secret,
+            nickname: comment.nickname,
+            image: comment.image,
+        }));
+        return {comments, commentsCount};
     }
     static async createComment(data: CreationComment) {
         const foundPost = await PostModel.findById(data.postId);
@@ -25,16 +36,19 @@ class CommentsService {
         return createdCommentId;
     }
 
-    static async updateComment(commentId: number, userId: number, updateData: UpdateComment): Promise<Comment | null> {
-        const comment = await CommentModel.findOneById(commentId);
+    static async updateComment(data: CommentPutDTO): Promise<Comment | null> {
+        const comment = await CommentModel.findOneById(data.commentId);
         if (!comment) {
             throw new NotFoundError('댓글을 찾을 수 없습니다.');
         }
-        if (comment.user_id !== userId) {
+        if (comment.user_id !== data.userId) {
             throw new ForbiddenError('댓글을 수정할 권한이 없습니다.');
         }
         
-        const updatedComment = await CommentModel.updateOneById(commentId, updateData);
+        const updatedComment = await CommentModel.updateOneById(data.commentId, {
+            content: data.content,
+            secret: data.secret,
+        });
         if (!updatedComment) {
             throw new InternalServerError('댓글 수정에 실패했습니다.');
         }

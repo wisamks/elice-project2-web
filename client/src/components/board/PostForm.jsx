@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import FilterSection from './FilterSection';
 import InputImageFile from '../input/InputImageFile';
-import InputRadioGroup from '../input/InputRadioGroup';
 
 import { formatNumberToCommaString, formatCommaStringToNumber, focusInput, scrollToSection } from '../../utils';
-import { setImgSrc, resetImgSrc, uploadImages } from '../../utils/imageUtils';
+import { resetImgSrc, uploadImages } from '../../utils/imageUtils';
 
 import './PostForm.css';
 
@@ -129,7 +128,6 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
         if (!validateSubmit(!isValidImg, '이미지를 한 장 이상 업로드해주세요.', imgSectionRef, true)) return;
         if (!validateSubmit(!content, '내용을 입력해주세요.', contentRef)) return;
 
-        // Upload images first
         const uploadedImageUrls = await uploadImages(images.filter(image => !image.isDefault && image.file));
 
         const data = {
@@ -140,7 +138,7 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
             price: Number(price),
             location: locations[selectedLocationType],
             sort: sortTypes[selectedSortType],
-            images: uploadedImageUrls
+            images: uploadedImageUrls.concat(images.filter(image => !image.isDefault && !image.file).map(image => image.imgSrc))
         };
 
         onSubmit(data);
