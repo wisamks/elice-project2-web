@@ -88,10 +88,12 @@ const ViewPost = () => {
     const handleOpenModal = (photo) => {
         setSelectedPhoto(photo);
         setIsModalOpen(true);
+        document.body.classList.add('modal-open');
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        document.body.classList.remove('modal-open');
     };
 
     const handlePhotoClick = (photo) => {

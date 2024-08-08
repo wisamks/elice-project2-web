@@ -82,6 +82,7 @@ const CertificationPage = () => {
 
       setSelectedPost(data);
       setIsModalOpen(true);
+      document.body.classList.add('modal-open');
     } catch (error) {
       console.error('게시글 상세 정보를 가져오는 중 오류 발생:', error);
     }
@@ -96,6 +97,7 @@ const CertificationPage = () => {
     setIsModalOpen(false);
     setSelectedPostId(null);
     setSelectedPost(null);
+    document.body.classList.remove('modal-open');
   };
 
   const handlePageChange = (newPage) => {
