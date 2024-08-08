@@ -56,7 +56,7 @@ const ItemCardVertical257 = ({item}) => {
                 </div>
                 <div className="item-location-date-comment">
                     <p className="item-location dot">{item.location}</p>
-                    <p className="item-update dot">{formatDateToString(item.updatedAt)}</p>
+                    <p className="item-update dot">{formatDateToString(item.createdAt)}</p>
                     <p className="item-comment-count">
                         <span><img src="images/ico-comment.png" alt="댓글 수" /></span>
                         <span className="item-comment-count-num">{item.commentsCount}</span>
