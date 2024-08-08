@@ -1,3 +1,4 @@
+import { baseURI } from '../../controllers/baseURI';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -32,7 +33,7 @@ const MapComponent = () => {
 
             const fetchClothingBins = async () => {
                 try {
-                    const response = await axios.get('http://localhost:8080/api/clothing-bins');
+                    const response = await axios.get(`${baseURI}/api/clothing-bins`);
                     const bins = response.data;
 
                     bins.forEach(bin => {

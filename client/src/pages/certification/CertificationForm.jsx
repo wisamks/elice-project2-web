@@ -1,3 +1,4 @@
+import { baseURI } from '../../controllers/baseURI';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import imageCompression from 'browser-image-compression';
@@ -64,7 +65,7 @@ const CertificationForm = () => {
     formDataToUpload.append('images', formData.imageFile); // 이미지 파일 추가
 
     try {
-      const response = await fetch('http://localhost:8080/api/images/upload', {
+      const response = await fetch(`${baseURI}/api/images/upload`, {
         method: 'POST',
         body: formDataToUpload,
         credentials: 'include',
@@ -97,7 +98,7 @@ const CertificationForm = () => {
         images: imageUrl ? [imageUrl] : [''], // 업로드된 이미지 URL 사용, 없으면 빈 문자열 배열
       };
 
-      const response = await fetch('http://localhost:8080/api/posts', {
+      const response = await fetch(`${baseURI}/api/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

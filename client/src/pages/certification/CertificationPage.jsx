@@ -1,3 +1,4 @@
+import { baseURI } from '../../controllers/baseURI';
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import CertificationListCard from '../../components/certification/CertificationListCard';
@@ -7,14 +8,14 @@ import './CertificationPage.css';
 
 const CertificationPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [posts, setPosts] = useState([]); // 게시글 목록 상태
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-  const [selectedPostId, setSelectedPostId] = useState(null); // 선택된 게시글 ID
-  const [selectedPost, setSelectedPost] = useState(null); // 선택된 게시글 상세 정보
-  const [totalPosts, setTotalPosts] = useState(0); // 총 게시글 수
-  const postsPerPage = 20; // 한 페이지에 표시할 게시글 수
-  const categoryId = 2; // 조회할 카테고리 ID
-  const page = parseInt(searchParams.get('page')) || 1; // 현재 페이지
+  const [posts, setPosts] = useState([]); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null); 
+  const [totalPosts, setTotalPosts] = useState(0); 
+  const postsPerPage = 20; 
+  const categoryId = 2;
+  const page = parseInt(searchParams.get('page')) || 1;
 
   useEffect(() => {
     if (!searchParams.has('page')) {
@@ -25,7 +26,7 @@ const CertificationPage = () => {
   const fetchPosts = async (page) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/posts?perPage=${postsPerPage}&page=${page}&categoryId=${categoryId}`,
+        `${baseURI}/api/posts?perPage=${postsPerPage}&page=${page}&categoryId=${categoryId}`,
         {
           method: 'GET',
           headers: {
@@ -62,7 +63,7 @@ const CertificationPage = () => {
 
   const fetchPostDetail = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+      const response = await fetch(`${baseURI}/api/posts/${postId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +106,6 @@ const CertificationPage = () => {
 
   // 게시글 삭제 후 목록 갱신 함수
   const handlePostDeleted = (deletedPostId) => {
-    // 삭제된 게시글을 제외한 새로운 게시글 목록 생성
     const updatedPosts = posts.filter((post) => post.postId !== deletedPostId);
 
     setPosts(updatedPosts);

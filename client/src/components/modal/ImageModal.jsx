@@ -14,16 +14,6 @@ const ImageModal = ({ photos, selectedPhoto, closeModal }) => {
         setMainPhoto(photo.url);
     };
 
-    
-    // const handleClickClose = (e) => () => {
-    //     e.stopPropagation();
-    //     closeModal();
-    // };
-
-    // const handleClickModalWrap = (e) => () => {
-    //     e.stopPropagation();
-    // };
-
     return(
         <div className="ImageModal">
             <div className="modal-wrap">

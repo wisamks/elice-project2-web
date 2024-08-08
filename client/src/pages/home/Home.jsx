@@ -1,23 +1,21 @@
+import { baseURI } from '../../controllers/baseURI';
 import React, { useState, useEffect } from 'react';
 import BarChart from '../../components/chart/BarChart';
 
 import './Home.css';
 
 const Home = () => {
-    // 상태 정의
     const [postsExchange, setPostsExchange] = useState([]);
     const [postsCertification, setPostsCertification] = useState([]);
     const [error, setError] = useState(null);
 
-    // 데이터 가져오는 로직
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                // 교환 게시판과 인증 게시판의 데이터 제한 수를 쿼리 파라미터로 설정
                 const exchangeLimit = 4; // 교환 게시판에 표시할 게시물 수
                 const binLimit = 12;     // 인증 게시판에 표시할 게시물 수
 
-                const response = await fetch(`http://localhost:8080/api/home?exchangeLimit=${exchangeLimit}&binLimit=${binLimit}`);
+                const response = await fetch(`${baseURI}/api/home?exchangeLimit=${exchangeLimit}&binLimit=${binLimit}`);
 
                 if (!response.ok) {
                     throw new Error('데이터를 가져오는 중 문제가 발생했습니다.');

@@ -1,6 +1,8 @@
+import { baseURI } from "../controllers/baseURI";
+
 export const fetchUserProfile = async () => {
     try {
-        const response = await fetch('http://localhost:8080/api/users/profile', {
+        const response = await fetch(`${baseURI}/api/users/profile`, {
             method: 'GET',
             credentials: 'include',
         });

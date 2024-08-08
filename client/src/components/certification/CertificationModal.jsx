@@ -1,4 +1,5 @@
 import './CertificationModal.css';
+import { baseURI } from '../../controllers/baseURI';
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../atom/userState';
@@ -7,7 +8,7 @@ import ViewComment from '../board/comment/ViewComment';
 // 게시글 수정 함수
 const updatePost = async (postId, content) => {
   try {
-    const response = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+    const response = await fetch(`${baseURI}/api/posts/${postId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +35,7 @@ const updatePost = async (postId, content) => {
 // 게시글 삭제 함수
 const deletePost = async (postId) => {
   try {
-    const response = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+    const response = await fetch(`${baseURI}/api/posts/${postId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +62,7 @@ const deletePost = async (postId) => {
 const toggleFavorite = async (postId) => {
   try {
     // 좋아요 요청 보내기
-    const response = await fetch(`http://localhost:8080/api/favorite`, {
+    const response = await fetch(`${baseURI}/api/favorite`, {
       method: 'POST', // 좋아요 요청 (좋아요 추가와 취소 모두 POST 요청)
       headers: {
         'Content-Type': 'application/json',
