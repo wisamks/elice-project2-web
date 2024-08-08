@@ -34,6 +34,7 @@ export const createComment = async (postId, content, secret) => {
     }
     
     const data = await response.json();
+    console.log('createComment', createComment);
     return data;
   } catch (error) {
     console.error('Error creating comment:', error);

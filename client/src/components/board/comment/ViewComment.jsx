@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../../atom/userState';
 import ViewCommentCard from './ViewCommentCard';
 import { fetchComments, createComment } from './comment';
 import './ViewComment.css';
 
-const ViewComment = () => {
-  const { postId } = useParams();
+const ViewComment = ({postId}) => {
   const [page, setPage] = useState(1);
   const [perPage] = useState(10);
 

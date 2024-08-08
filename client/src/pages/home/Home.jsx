@@ -182,7 +182,7 @@ const Home = () => {
             </div>
             <div className="Home-main03">
                 <div className="Home-main03-1">
-                    <p className='bg'><img src="/images/home-img031.jpg" alt='옷무덤' /></p>
+                    <p className="bg imgFrame"><img src="/images/home-img031.jpg" alt='옷무덤' /></p>
                     <div className='content'>
                         <p className='txt1'>
                             <span>지구를 지키는 작은 한 걸음,</span>
@@ -224,7 +224,7 @@ const Home = () => {
                     </p>
                 </div>
                 <div className="Home-main03-3">
-                    <p className="bg"><img src="/images/home-img032.jpg" /></p>
+                    <p className="bg imgFrame"><img src="/images/home-img032.jpg" /></p>
                     <div className="text">
                         <p className="txt1">옷의 <strong>순환</strong>이 곧 지구의 <strong>기쁨</strong>입니다
                         </p>

@@ -158,6 +158,7 @@
 
     width: 100%;
     height: 100%;
+    border-radius: 8px;
 }
 
 .Home-main03-1 .bg img{
@@ -256,6 +257,10 @@
 .Home-main03-3{
     position: relative;
     margin-top: 80px;
+}
+
+.Home-main03-3 .bg{
+    border-radius: 8px;
 }
 
 .Home-main03-3 .text{

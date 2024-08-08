@@ -1,18 +1,26 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import CertificationListCard from '../../components/certification/CertificationListCard';
 import CertificationModal from '../../components/certification/CertificationModal';
+import BoardListPagination from '../../components/board/list/BoardListPagination';
 import './CertificationPage.css';
 
 const CertificationPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [posts, setPosts] = useState([]); // 게시글 목록 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
   const [selectedPostId, setSelectedPostId] = useState(null); // 선택된 게시글 ID
   const [selectedPost, setSelectedPost] = useState(null); // 선택된 게시글 상세 정보
   const [totalPosts, setTotalPosts] = useState(0); // 총 게시글 수
-  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-  const postsPerPage = 40; // 한 페이지에 표시할 게시글 수
+  const postsPerPage = 5; // 한 페이지에 표시할 게시글 수
   const categoryId = 2; // 조회할 카테고리 ID
+  const page = parseInt(searchParams.get('page')) || 1; // 현재 페이지
+
+  useEffect(() => {
+    if (!searchParams.has('page')) {
+      setSearchParams({ page: '1' });
+    }
+  }, [searchParams, setSearchParams]);
 
   const fetchPosts = async (page) => {
     try {
@@ -34,11 +42,11 @@ const CertificationPage = () => {
       }
 
       const data = await response.json();
-    //   console.log('Posts data:', data);
+      //   console.log('Posts data:', data);
 
       if (Array.isArray(data.posts) && data.posts.length > 0) {
         setPosts(data.posts);
-        setTotalPosts(data.totalPostsCount); 
+        setTotalPosts(data.totalPostsCount);
       } else {
         console.error('게시글 데이터가 유효하지 않거나 비어 있습니다.');
         setPosts([]);
@@ -50,8 +58,8 @@ const CertificationPage = () => {
   };
 
   useEffect(() => {
-    fetchPosts(currentPage); 
-  }, [currentPage]);
+    fetchPosts(page);
+  }, [page]);
 
   const fetchPostDetail = async (postId) => {
     try {
@@ -90,8 +98,8 @@ const CertificationPage = () => {
     setSelectedPost(null);
   };
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = (newPage) => {
+    setSearchParams({ page: newPage });
   };
 
   // 게시글 삭제 후 목록 갱신 함수
@@ -111,8 +119,6 @@ const CertificationPage = () => {
 
     setPosts(updatedPosts);
   };
-
-  const totalPages = Math.ceil(totalPosts / postsPerPage);
 
   return (
     <div className="CertificationPage">
@@ -143,6 +149,12 @@ const CertificationPage = () => {
           ))}
         </ul>
       </div>
+      <BoardListPagination
+        total={totalPosts}
+        page={page}
+        perPage={postsPerPage}
+        handlePageChange={handlePageChange}
+      />
       {isModalOpen && selectedPost && (
         <CertificationModal
           post={selectedPost}
@@ -151,17 +163,6 @@ const CertificationPage = () => {
           handlePostUpdated={handlePostUpdated}
         />
       )}
-      <div className="pagination">
-        {[...Array(totalPages)].map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handlePageChange(index + 1)}
-            disabled={index + 1 === currentPage}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div>
     </div>
   );
 };
