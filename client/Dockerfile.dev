@@ -1,0 +1,14 @@
+FROM node:20.14.0
+
+WORKDIR /app
+
+COPY client/package*.json ./
+
+RUN npm install
+
+COPY client .
+COPY dev.env ./.env
+
+EXPOSE 3000
+
+CMD ["npm", "start"]

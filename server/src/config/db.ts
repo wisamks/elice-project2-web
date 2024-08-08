@@ -1,8 +1,11 @@
 // mysql db 설정
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
+import path from 'path'
 
-dotenv.config();
+const envFile = process.env.NODE_ENV === 'production' ? 'prod.env' : 'dev.env';
+dotenv.config({ path: path.resolve(__dirname, `../../../${envFile}`) });
+
 
 const dbConfig = {
     host: process.env.MYSQL_HOST,

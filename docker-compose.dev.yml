@@ -1,0 +1,35 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - ./dev.env:/app/.env
+    environment:
+      - NODE_ENV=develop
+
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile.dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./server:/usr/src/app
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - dev.env
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx-dev.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    depends_on:
+      - client
+      - server
