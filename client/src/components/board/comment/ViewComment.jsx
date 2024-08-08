@@ -16,7 +16,7 @@ const ViewComment = ({postId}) => {
   const [isCheckboxActive, setIsCheckboxActive] = useState(false);
 
   const user = useRecoilValue(userState);
-  console.log(user);
+  // console.log(user);
 
   const loadComments = async () => {
     if (!postId) {
