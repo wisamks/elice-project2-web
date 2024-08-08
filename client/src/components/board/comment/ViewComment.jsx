@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../../atom/userState';
 import ViewCommentCard from './ViewCommentCard';

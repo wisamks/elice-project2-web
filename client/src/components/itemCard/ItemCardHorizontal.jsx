@@ -16,7 +16,7 @@ const ItemCardHorizontal = ({
     return (
         <div className="ItemCardHorizontal">
             <Link to={linkURL}>
-                <p className="item-photo imgFrame"><img src={itemPhotoSrc} alt={itemName} /></p>
+                <p className="item-photo imgFrame"><img src={itemPhotoSrc.url} alt={itemName} /></p>
                 <div className="item-sale-info">
                     <div className="item-info">
                         <p className={`item-status ${itemStatus}`}>{itemStatusTxt}</p>

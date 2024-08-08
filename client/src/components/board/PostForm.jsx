@@ -140,14 +140,17 @@ const PostForm = ({ initialPost, onSubmit, formType }) => {
             sort: sortTypes[selectedSortType],
             images: uploadedImageUrls.concat(images.filter(image => !image.isDefault && !image.file).map(image => image.imgSrc))
         };
-
-        onSubmit(data);
+        if (window.confirm('작성을 완료하시겠습니까?')) {
+            onSubmit(data);
+        }
     };
 
     const handleResetForm = () => {
         if (formType === 'edit') {
-            navigate(`/board/view/${initialPost.post.postId}`);
-            return;
+            if (window.confirm('수정을 취소하시겠습니까?')) {
+                navigate(`/board/view/${initialPost.post.postId}`);
+                return;
+            }
         }
 
         if (!title && !price && !content && images.every(image => image.isDefault)) {
