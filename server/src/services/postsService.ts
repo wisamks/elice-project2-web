@@ -17,10 +17,12 @@ class PostsService {
         const foundPosts = await PostModel.getNormalPosts(data);
         const posts = await Promise.all(foundPosts.map(async (foundPost) => {
             const isMyFavorite = data.userId ? await FavoriteModel.findOneByUserId(foundPost.id, data.userId) : false;
-            const [foundMainImage, commentsCount, foundImages] = await Promise.all([
+            const [foundMainImage, commentsCount, foundImages, foundFavoriteCount, foundViews] = await Promise.all([
                 PhotoModel.getMainPhotoByPostId(foundPost.id),
                 CommentModel.findCountByPostId(foundPost.id),
-                PhotoModel.getPhotosByPostId(foundPost.id)
+                PhotoModel.getPhotosByPostId(foundPost.id),
+                FavoriteModel.findCountByPostId(foundPost.id),
+                ViewModel.getCount(foundPost.id),
             ])
             const thumbnail = foundImages ? {id: foundImages[0]?.id, url: foundImages[0]?.url} : {id: undefined, url: undefined};
             return {
@@ -33,8 +35,12 @@ class PostsService {
                 createdAt: foundPost.created_at,
                 updatedAt: foundPost.updated_at,
                 isMyFavorite: !!isMyFavorite,
-                commentsCount,
-                thumbnail            
+                thumbnail,
+                counts: {
+                    commentsCount,
+                    favoriteCount: foundFavoriteCount,
+                    viewsCount: foundViews,
+                },            
             }
         }))
         return posts;
