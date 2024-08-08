@@ -6,14 +6,14 @@ import { userState } from '../../atom/userState';
 import ViewComment from '../board/comment/ViewComment';
 
 // 게시글 수정 함수
-const updatePost = async (postId, content) => {
+const updatePost = async (postId, content, categoryId) => {
   try {
     const response = await fetch(`${baseURI}/api/posts/${postId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ content }), // 요청에 수정된 content 포함
+      body: JSON.stringify({ content, categoryId }), // 요청에 수정된 content 포함
       credentials: 'include', // 사용자 인증 필요 시 사용
     });
 
@@ -120,16 +120,13 @@ const CertificationModal = ({
   // 수정 내용을 서버에 전송하는 함수
   const handleSaveEdit = async () => {
     try {
-      // postId 추출
       const postId = post.post?.postId;
+      const categoryId = 2;
 
-      // 게시글 수정 요청 함수 호출
-      const success = await updatePost(postId, editedContent);
+      const success = await updatePost(postId, editedContent, categoryId);
 
       if (success) {
-        // 수정 성공 시
         setIsEditing(false);
-        // 화면에 수정된 내용을 반영
         post.post.content = editedContent;
         handlePostUpdated(post.post); // 수정된 게시글을 업데이트
       }

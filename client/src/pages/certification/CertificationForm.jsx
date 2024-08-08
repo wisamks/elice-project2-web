@@ -89,7 +89,11 @@ const CertificationForm = () => {
   // 게시글 등록 함수
   const submitPost = async () => {
     try {
-      // 이미지 업로드 및 URL 획득
+      if (!formData.imageFile) {
+        alert('인증 사진을 업로드해 주세요.');
+        return;
+      }
+      
       const imageUrl = await uploadImage();
 
       const data = {
