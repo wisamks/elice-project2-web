@@ -1,0 +1,27 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  SSH_USER: "name"
+  SSH_HOST: "IP"
+  SSH_PASSWORD: "pw"
+
+before_script:
+  - apt-get update && apt-get install -y sshpass
+  - echo "$SSH_PASSWORD" > /tmp/sshpassfile
+
+build:
+  stage: build
+  script:
+    - sshpass -f /tmp/sshpassfile ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "docker-compose -f /path/to/docker-compose.prod.yml build"
+  only:
+    - exchange-docker  
+
+deploy:
+  stage: deploy
+  script:
+    - sshpass -f /tmp/sshpassfile ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "docker-compose -f /path/to/docker-compose.prod.yml down"
+    - sshpass -f /tmp/sshpassfile ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "docker-compose -f /path/to/docker-compose.prod.yml up -d"
+  only:
+    - exchange-docker  
