@@ -1,7 +1,9 @@
 // 조회
+import { baseURI } from "../../../controllers/baseURI";
+
 export const fetchComments = async (postId, page = 1, perPage = 10) => {
   try {
-    const response = await fetch(`http://localhost:8080/api/comments/?postId=${postId}&page=${page}&perPage=${perPage}`, {
+    const response = await fetch(`${baseURI}/api/comments/?postId=${postId}&page=${page}&perPage=${perPage}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -21,7 +23,7 @@ export const fetchComments = async (postId, page = 1, perPage = 10) => {
   // 생성
 export const createComment = async (postId, content, secret) => {
   try {
-    const response = await fetch('http://localhost:8080/api/comments/', {
+    const response = await fetch(`${baseURI}/api/comments/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +47,7 @@ export const createComment = async (postId, content, secret) => {
 // 수정
 export const updateComment = async (commentId, content, secret) => {
   try {
-    const response = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+    const response = await fetch(`${baseURI}/api/comments/${commentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +70,7 @@ export const updateComment = async (commentId, content, secret) => {
 // 삭제
 export const deleteComment = async (commentId) => {
   try {
-    const response = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
+    const response = await fetch(`${baseURI}/api/comments/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
     });

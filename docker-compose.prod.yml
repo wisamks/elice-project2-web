@@ -3,10 +3,9 @@ services:
     build:
       context: .
       dockerfile: client/Dockerfile.prod
-    environment:
-      - NODE_ENV=production
     volumes:
       - client_build:/app/build
+    command: sh -c "npm run build && tail -f /dev/null"
 
   server:
     build:
