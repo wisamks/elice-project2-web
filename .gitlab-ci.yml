@@ -1,0 +1,29 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  SSH_USER: $SSH_USER
+  SSH_HOST: $SSH_HOST
+  SSH_PASSWORD: $SSH_PASSWORD
+  DEPLOY_PATH: "/path/to/your/project"
+
+before_script:
+  - 'apt-get update -qq && apt-get install -qq -y sshpass'
+  - 'echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+build:
+  stage: build
+  script:
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && git pull origin dev"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml build"
+  only:
+    - dev
+
+deploy:
+  stage: deploy
+  script:
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml down"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml up -d"
+  only:
+    - dev
