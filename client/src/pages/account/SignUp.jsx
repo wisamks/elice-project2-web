@@ -69,7 +69,7 @@ const SignUp = () => {
                 });
                 if (res.ok) {
                     console.log('Nickname submission');
-                    navigate('/');
+                    navigate('/sign-in');
                 } else {
                     console.error('Signup failed:', res.status);
                 }
