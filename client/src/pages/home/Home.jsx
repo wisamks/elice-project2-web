@@ -188,7 +188,7 @@ const Home = () => {
                             <span>지구를 지키는 작은 한 걸음,</span>
                             <strong>중고 의류 구매</strong>
                         </p>
-                        <p className='txt2'>매년 엄청난 양의 <span>의류 폐기물</span>이 매년 발생하고 있다는 걸 아십니까?</p>
+                        <p className='txt2'>엄청난 양의 <span>의류 폐기물</span>이 매년 발생하고 있다는 걸 아십니까?</p>
                         <div className='chart1'>
                             <BarChart
                                 chartPeriod={d1_years}
@@ -207,7 +207,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="Home-main03-2">
-                    <p className="text1">새롭게 판매되는 의류와 함께 온실가스도 늘어갑니다!</p>
+                    <p className="text1">새롭게 판매되는 의류와 함께 <span>온실가스</span>도 늘어갑니다!</p>
                     <div className="charts">
                         <BarChart
                             chartPeriod={d2_years}
