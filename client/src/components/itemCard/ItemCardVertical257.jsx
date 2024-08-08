@@ -62,9 +62,6 @@ const ItemCardVertical257 = ({item}) => {
                         <span className="item-comment-count-num">{item.commentsCount}</span>
                     </p>
                 </div>
-                <div className="item-like">
-                    <img src="images/ico-like.png" alt="좋아요 등록하기" />
-                </div>
                 <LikeBtn postId={item.postId} isMyFavorite={item.isMyFavorite} />
             </Link>
         </div>
