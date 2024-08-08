@@ -178,7 +178,7 @@ const ViewPost = () => {
                         <ViewItemDescription content={postData.post.content} />
                     </div>
                     <div className="view-post-row4-column1-2">
-                        <ViewComment />
+                        <ViewComment postId={postData.post.postId}/>
                     </div>
                 </div>
                 <div className="view-post-row4-column2">

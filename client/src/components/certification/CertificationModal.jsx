@@ -247,7 +247,7 @@ const CertificationModal = ({
             )}
             <p className="user-content-date">{formatDate(post.post?.createdAt)}</p>
           </div>
-          <ViewComment postId={post.post?.postId} />
+          <ViewComment postId={post.post.postId} />
           <div className="reaction">
             <p className="like" onClick={handleFavoriteClick}>
               <span className="icon">
