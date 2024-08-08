@@ -7,10 +7,9 @@ services:
       - "3000:3000"
     volumes:
       - ./client:/app
+      - ./dev.env:/app/.env
     environment:
-      - NODE_ENV=development
-    env_file:
-      - dev.env
+      - NODE_ENV=develop
 
   server:
     build:
