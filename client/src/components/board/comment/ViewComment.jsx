@@ -7,12 +7,9 @@ import { fetchComments, createComment } from './comment';
 import './ViewComment.css';
 
 const ViewComment = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-
-  const postId = queryParams.get('postId'); // URL 쿼리 파라미터에서 postId 추출
-  const page = queryParams.get('page') || 1; // 기본값을 1로 설정
-  const perPage = queryParams.get('perPage') || 10; // 기본값을 10으로 설정
+  const { postId } = useParams();
+  const [page, setPage] = useState(1);
+  const [perPage] = useState(10);
 
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,6 +18,7 @@ const ViewComment = () => {
   const [isCheckboxActive, setIsCheckboxActive] = useState(false);
 
   const user = useRecoilValue(userState);
+  console.log(user);
 
   const loadComments = async () => {
     if (!postId) {
@@ -32,6 +30,7 @@ const ViewComment = () => {
     setLoading(true);
     try {
       const data = await fetchComments(postId, page, perPage);
+      console.log('로딩댓글 data', data);
       setComments(data.comments);
     } catch (error) {
       console.error('Error loading comments:', error);
@@ -42,7 +41,7 @@ const ViewComment = () => {
 
   useEffect(() => {
     loadComments();
-  }, [postId]);
+  }, [postId, page, perPage]);
 
   const handleNewCommentChange = (e) => {
     setNewComment(e.target.value);

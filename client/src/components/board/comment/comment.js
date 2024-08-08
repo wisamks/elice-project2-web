@@ -42,14 +42,14 @@ export const createComment = async (postId, content, secret) => {
 };
   
 // 수정
-export const updateComment = async (commentId, content) => {
+export const updateComment = async (commentId, content, secret) => {
   try {
     const response = await fetch(`http://localhost:8080/api/comments/${commentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ content }),
+      body: JSON.stringify({ content, secret }),
       credentials: 'include',
     });
 

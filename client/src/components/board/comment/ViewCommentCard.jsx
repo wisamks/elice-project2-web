@@ -20,7 +20,7 @@ const ViewCommentCard = ({ comment, setComments, user }) => {
     if (editedContent.trim() === '') return;
 
     try {
-      const success = await updateComment(comment.commentId, editedContent);
+      const success = await updateComment(comment.commentId, editedContent, comment.secret);
 
       if (success) {
         setComments((prevComments) =>
