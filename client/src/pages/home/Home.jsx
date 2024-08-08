@@ -31,7 +31,6 @@ const Home = () => {
                     // 응답 데이터에서 교환 및 인증 게시판 데이터 설정
                     setPostsExchange(data.exchangePosts || []);
                     setPostsCertification(data.binPosts || []);
-                    console.log(data); // 콘솔에 데이터 출력
                 }
             } catch (err) {
                 console.error('데이터 가져오기 오류:', err);
@@ -41,7 +40,6 @@ const Home = () => {
 
         fetchPosts();
     }, []);
-
 
     const getStatusClass = (sort, status) => {
         if (sort === '나눔') {
@@ -129,20 +127,6 @@ const Home = () => {
     const d2_data_value = [1025, 1067, 1110, 1155, 1202, 1251, 1301, 1354, 1409, 1466, 1526, 1588];
     const d2_backgroundColors = 'rgba(139, 198, 74, 0.3)';
     const d2_borderColors = 'rgba(139, 198, 74, 0.5)';
-
-    // const d2_years = [2020, 2021, 2022, 2023, 2024];
-    // const d2_chart_name = '의류 판매량';
-    // const d2_data_value = [51798172, 60183548, 64236055, 68757856, 73005128];
-    // const d2_backgroundColors = 'rgba(139, 198, 74, 0.3)';
-    // const d2_borderColors = 'rgba(139, 198, 74, 0.5)';
-
-    // // 차트3번 데이터
-    // const d3_years = [2005, 2010, 2016, '2030(추정)']
-    // const d3_chart_name = '의류산업에서 배출되는 온실가스'
-    // const d3_data_value = [2440000000, 2840000000, 3290000000, 4910000000]
-    // const d3_backgroundColors = 'rgba(0, 160, 64, 0.2)'
-    // const d3_borderColors = 'rgba(0, 160, 64, 0.5)'
-
 
     return (
         <div className="Home">

@@ -68,7 +68,6 @@ const SignUp = () => {
                     credentials: "include"
                 });
                 if (res.ok) {
-                    console.log('Nickname submission');
                     navigate('/sign-in');
                 } else {
                     console.error('Signup failed:', res.status);
