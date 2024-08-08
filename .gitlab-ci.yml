@@ -17,6 +17,8 @@ build:
   script:
     - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && git pull origin dev"
     - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml build"
+  tags:
+    - web
   only:
     - dev
 
@@ -25,5 +27,7 @@ deploy:
   script:
     - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml down"
     - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml up -d"
+  tags:
+    - web
   only:
     - dev
