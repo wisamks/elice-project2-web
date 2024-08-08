@@ -6,7 +6,7 @@ import CommentPutDTO from "@_/middlewares/DTOs/commentPutDTO";
 
 class CommentsService {
     static async getCommentsByPostId(data: PaginationComment) {
-        const foundPost = await PostModel.findById(data.postId);
+        const foundPost = await PostModel.findNormalById(data.postId);
         if (!foundPost) {
             throw new NotFoundError('게시글이 존재하지 않습니다.');
         }
