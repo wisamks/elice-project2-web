@@ -12,7 +12,7 @@ const CertificationPage = () => {
   const [selectedPostId, setSelectedPostId] = useState(null); // 선택된 게시글 ID
   const [selectedPost, setSelectedPost] = useState(null); // 선택된 게시글 상세 정보
   const [totalPosts, setTotalPosts] = useState(0); // 총 게시글 수
-  const postsPerPage = 5; // 한 페이지에 표시할 게시글 수
+  const postsPerPage = 40; // 한 페이지에 표시할 게시글 수
   const categoryId = 2; // 조회할 카테고리 ID
   const page = parseInt(searchParams.get('page')) || 1; // 현재 페이지
 
