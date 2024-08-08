@@ -49,7 +49,7 @@
 }
 
 
-.Home-main02, .Home-main03, .Home-main04 {
+.Home-main02, .Home-main04 {
     width: 1440px; 
     margin: 0 auto;
 }
@@ -141,6 +141,135 @@
     margin-top: 5px;
 }
 
+.Home-main03{
+    width: 1440px;
+    margin: 0 auto;
+}
+
+.Home-main03-1{
+    position: relative;
+    padding: 120px 0;
+}
+
+.Home-main03-1 .bg{
+    position: absolute;
+    top: 0px;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+.Home-main03-1 .bg img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.Home-main03-1 .content{
+    position: relative;
+    margin: 0 160px;
+    padding: 60px 0;
+    border-radius: 8px;
+
+    text-align: center;
+    background-color: rgba(255,255,255,0.9);
+}
+
+.Home-main03-1 .content .txt1{
+    display: inline-block;
+    border-bottom: 6px double #666;
+
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.Home-main03-1 .content .txt1 span{
+    color: #555;
+}
+
+.Home-main03-1 .content .txt1 strong{
+    padding-left: 8px;
+    color: var(--primary-color);
+}
+
+.Home-main03-1 .content .txt2{
+    margin-top: 32px;
+
+    font-size: 22px;
+    line-height: 1;
+}
+
+.Home-main03-1 .content .txt2 span{
+    color: var(--point-color);
+}
+
+.Home-main03-1 .content .chart1{
+    width: 680px;
+    margin: 60px auto 8px auto;
+}
+
+.Home-main03-1 .content .txt3{   
+    width: 680px;
+    margin: 0 auto;
+    text-align: right;
+    color: #888;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.Home-main03-2{
+    margin-top: 80px;
+}
+
+.Home-main03-2 .text1{
+    margin-bottom: 32px;
+
+    text-align: center;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.Home-main03-2 .charts{
+    width: 1040px;
+    margin: 0 auto;
+}
+
+.Home-main03-2 .text2{   
+    width: 1040px;
+    margin: 0 auto;
+    text-align: right;
+    color: #888;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.Home-main03-2 .text2 a{
+    color: #888;
+}
+
+.Home-main03-2 .text2 a:hover{
+    text-decoration: underline;
+}
+
+.Home-main03-3{
+    position: relative;
+    margin-top: 80px;
+}
+
+.Home-main03-3 .text{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    right: 60px;
+
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: right;
+}
+
 .Home-main04 .posts{
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -154,6 +283,7 @@
     border-radius: 8px;
     cursor: pointer;
 }
+
 .Home-main04 .posts .post-certification:nth-child(1), .Home-main04 .posts .post-certification:nth-child(6n), .Home-main04 .posts .post-certification:nth-child(7){
     width: 236px;
 }
