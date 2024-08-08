@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userState } from '../../../atom/userState';
 import ViewCommentCard from './ViewCommentCard';
@@ -7,9 +7,12 @@ import { fetchComments, createComment } from './comment';
 import './ViewComment.css';
 
 const ViewComment = () => {
-  const { postId } = useParams();
-  const [page, setPage] = useState(1);
-  const [perPage] = useState(10);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const postId = queryParams.get('postId'); // URL 쿼리 파라미터에서 postId 추출
+  const page = queryParams.get('page') || 1; // 기본값을 1로 설정
+  const perPage = queryParams.get('perPage') || 10; // 기본값을 10으로 설정
 
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +42,7 @@ const ViewComment = () => {
 
   useEffect(() => {
     loadComments();
-  }, [postId, page, perPage]);
+  }, [postId]);
 
   const handleNewCommentChange = (e) => {
     setNewComment(e.target.value);

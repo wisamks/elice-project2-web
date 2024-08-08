@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: 120px;
+    padding-bottom: 120px;
 }
 
 .Home-main01{
@@ -45,4 +46,122 @@
 
 .Home-main01 .text .txt2 strong{
     color: #F9E000;
+}
+
+
+.Home-main02, .Home-main03, .Home-main04 {
+    width: 1440px; 
+    margin: 0 auto;
+}
+
+.Home-main02 h2, .Home-main04 h2{
+    margin-bottom: 24px;
+
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.Home-main02 .posts{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+
+.Home-main02 .post {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.Home-main02 .post:hover {
+    transform: translateY(-5px);
+}
+
+.Home-main02 .post-thumbnail {
+    width: 340px;
+    height: 420px;
+    border-radius: 8px;
+}
+
+.Home-main02 .post-details{
+    padding: 20px 8px 0 8px;
+}
+
+.Home-main02 .post-details .post-status-item{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.Home-main02 .post-details .post-status-item .status-item {
+    color: #888;
+}
+
+.Home-main02 .post-details .post-title {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    margin-bottom: 8px;
+}
+
+.Home-main02 .post-details .post-price {
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.Home-main02 .post-details .author-info {
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.Home-main02 .post-details .post-profile{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.Home-main02 .post-details .post-profile .post-profile-img  {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.Home-main02 .post-details .post-profile .post-author {
+    color: #888;
+}
+
+.Home-main02 .post-details .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    background-color: #f0ad4e;
+    color: white;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.Home-main04 .posts{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    justify-content: space-between;
+    gap: 4px 0;
+}
+
+.Home-main04 .posts .post-certification {
+    width: 237px;
+    height: 236px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.Home-main04 .posts .post-certification:nth-child(1), .Home-main04 .posts .post-certification:nth-child(6n), .Home-main04 .posts .post-certification:nth-child(7){
+    width: 236px;
+}
+
+.Home-main04 .posts .post-certification img{
+    transition: transform 0.2s ease;
+}
+
+.post-certification:hover img {
+    transform: scale(1.2);
 }
