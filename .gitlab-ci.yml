@@ -19,7 +19,7 @@ before_script:
 build:
   stage: build
   script:
-    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && git pull origin dev"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && git pull https://oauth2:$GITLAB_TOKEN@kdt-gitlab.elice.io/ai_track/class_11/data_project/team01/earthcloset.git dev"
     - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml build"
   tags:
     - web
