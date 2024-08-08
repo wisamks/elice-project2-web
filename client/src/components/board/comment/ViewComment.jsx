@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { userState } from '../../../atom/userState';
+import { userState, loginState } from '../../../atom/userState';
 import ViewCommentCard from './ViewCommentCard';
 import { fetchComments, createComment } from './comment';
 import './ViewComment.css';
@@ -10,30 +11,26 @@ const ViewComment = ({postId}) => {
   const [perPage] = useState(10);
 
   const [comments, setComments] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
   const [isSecret, setIsSecret] = useState(false);
   const [isCheckboxActive, setIsCheckboxActive] = useState(false);
 
   const user = useRecoilValue(userState);
-  // console.log(user);
+  const isLoggedIn = useRecoilValue(loginState);
+  const navigate = useNavigate();
 
   const loadComments = async () => {
     if (!postId) {
       console.error('postId is undefined');
-      setLoading(false);
       return;
     }
 
-    setLoading(true);
     try {
       const data = await fetchComments(postId, page, perPage);
       console.log('로딩댓글 data', data);
       setComments(data.comments);
     } catch (error) {
       console.error('Error loading comments:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -55,14 +52,20 @@ const ViewComment = ({postId}) => {
   };
 
   const handleAddComment = async () => {
+    if (!isLoggedIn) {
+      alert('로그인이 필요합니다.');
+      navigate('/sign-in');
+      return;
+    }
+
     if (newComment.trim() === '') return;
 
     try {
-      const result = await createComment(postId, newComment, isSecret);
+      await createComment(postId, newComment, isSecret);
       setNewComment('');
       setIsSecret(false); 
       setIsCheckboxActive(false);
-      await loadComments(); // 댓글 추가 후 최신 댓글 목록 불러오기
+      await loadComments();
     } catch (error) {
       console.error('Error adding comment:', error);
     }
