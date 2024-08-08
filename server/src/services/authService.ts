@@ -11,7 +11,6 @@ import AxiosModel from '@_/models/axiosModel';
 import FavoriteModel from '@_/models/favoriteModel';
 import CommentModel from '@_/models/commentModel';
 import PostModel from '@_/models/postModel';
-import PhotoModel from '@_/models/photoModel';
 
 // authService를 모아두는 클래스
 class AuthService {
@@ -66,10 +65,6 @@ class AuthService {
     }
     static async deleteComments (userId: number) {
         await CommentModel.deleteByUserId(userId);
-        return;
-    }
-    static async deletePhotos (userId: number) {
-        await PhotoModel.deleteByUserId(userId);
         return;
     }
 

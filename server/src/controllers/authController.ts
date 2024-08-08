@@ -103,7 +103,6 @@ class AuthController {
                 AuthService.deleteFavorites(userId),
                 AuthService.deletePosts(userId),
                 AuthService.deleteComments(userId),
-                AuthService.deletePhotos(userId),
             ]);
             return res.status(204).end();
         } catch(err) {
