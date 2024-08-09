@@ -54,8 +54,8 @@ class PostsController {
                     userImage: foundPost.user_image,
                     title: foundPost.title,
                     content: foundPost.content,
-                    createdAt: foundPost.created_at,
-                    updateAt: foundPost.updated_at,
+                    createdAt: new Date(foundPost.created_at).toISOString().replace('Z', '+09:00'),
+                    updateAt: new Date(foundPost.updated_at).toISOString().replace('Z', '+09:00'),
                 },
                 images: foundPhotos.map(image => ({
                     imageId: image.id,
