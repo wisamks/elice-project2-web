@@ -32,8 +32,8 @@ class PostsService {
                 userImage: foundPost.user_image,
                 title: foundPost.title,
                 content: foundPost.content,
-                createdAt: foundPost.created_at,
-                updatedAt: foundPost.updated_at,
+                createdAt: new Date(foundPost.created_at).toISOString().replace('Z', '+09:00'),
+                updatedAt: new Date(foundPost.updated_at).toISOString().replace('Z', '+09:00'),
                 isMyFavorite: !!isMyFavorite,
                 thumbnail,
                 counts: {
