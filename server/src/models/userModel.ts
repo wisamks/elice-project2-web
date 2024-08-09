@@ -1,6 +1,7 @@
 import UserDb from "@_models/userDb";
 import { User, UserCreationData, UserUpdateData, OAuthUserInfo, SnsCode, JoinUser } from "@_/customTypes/userType";
 import { NotFoundError, BadRequestError, ConflictError, DataNotFoundError, QueryExecutionError } from "@_utils/customError";
+import UserUpdateDTO from "@_/middlewares/DTOs/userUpdateDTO";
 // low-level의 오류를 high-level로 전달해서 변환하기
 
 
@@ -113,18 +114,18 @@ class UserModel extends UserDb {
         }
     }
 
-    public static async updateUser(id: number, updatedData: UserUpdateData): Promise<User | null> {
+    public static async updateUser(data: UserUpdateDTO): Promise<User | null> {
         const updateFields: string[] = [];
         const updateValues: any[] = [];
         
-        if (updatedData.nickname !== undefined) {
+        if (data.nickname !== undefined) {
             updateFields.push('nickname = ?');
-            updateValues.push(updatedData.nickname);
+            updateValues.push(data.nickname);
         } 
         
-        if (updatedData.image !== undefined) {
+        if (data.image !== undefined) {
             updateFields.push('image = ?');
-            updateValues.push(updatedData.image);
+            updateValues.push(data.image);
         }
 
         if (updateFields.length === 0) return null;
@@ -135,11 +136,11 @@ class UserModel extends UserDb {
             WHERE id = ? AND deleted_at IS NULL
         `;
 
-        updateValues.push(id);
+        updateValues.push(data.userId);
 
         try {
             await super.update(sql, updateValues);
-            return this.findById(id);
+            return this.findById(data.userId);
         } catch (err) {
             if (err instanceof QueryExecutionError) {
                 throw new ConflictError('Failed to update user');

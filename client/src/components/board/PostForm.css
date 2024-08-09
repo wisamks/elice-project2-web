@@ -73,6 +73,10 @@
     font-size: 16px;
 }
 
+.board-form-content .price .readOnly{
+    opacity: 0.5;
+}
+
 .board-form-content .price .input-box{
     display: block;
     width: 260px;

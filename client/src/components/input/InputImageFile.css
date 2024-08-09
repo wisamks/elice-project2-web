@@ -7,13 +7,6 @@
     height: 188px;
     border-radius: 8px;
     background-color: #eee;
-    overflow: hidden;
-}
-
-.input-image-file .img-view img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
 .input-image-file .img-view.default{

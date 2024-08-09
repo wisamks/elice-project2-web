@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { loginState } from "../../../atom/userState";
 
 import { apiService } from "../../../services/apiService";
 import { signInController } from "../../../controllers/signInController";
@@ -7,33 +9,34 @@ import { signInController } from "../../../controllers/signInController";
 const SnsCallback = ({ platform }) => {
     const location = useLocation();
     const navigate = useNavigate();
+    const setIsLoggedIn = useSetRecoilState(loginState);
 
-    const redirectHome = () => {
-        navigate('/');
-        window.location.reload();
-    }
-
-    const redirectSignUp = () => {
-        navigate('/sign-up');
-        window.location.reload();
-    }
-
-    const handleSignInPost = async (code) => {
+    const handleSignInPost = async (code, redirect) => {
         const data = { 
             code, 
             sns_code: platform
         };
 
         const res = await apiService((apiClient) => signInController(apiClient, data));
-        res.hasUser ? redirectHome() : redirectSignUp();
+        if (res.hasUser) {
+            setIsLoggedIn(true);
+            if (redirect) {
+                navigate(redirect);
+            } else {
+                navigate('/');
+            }
+        } else {
+            navigate('/sign-up');
+        }
     };
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const code = params.get('code');
+        const redirect = params.get('state') ? decodeURIComponent(params.get('state')) : null;
         
         if(code){
-            handleSignInPost(code);
+            handleSignInPost(code, redirect);
         } else {
             console.log('로그인 재시도');
         }

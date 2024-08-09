@@ -1,26 +1,15 @@
-import { Router, Request, Response } from 'express';
+import UsersController from '@_/controllers/usersController';
+import { authenticateAccessToken, validator } from '@_/middlewares';
+import AuthUserDTO from '@_/middlewares/DTOs/authUserDTO';
+import UserUpdateDTO from '@_/middlewares/DTOs/userUpdateDTO';
+import { Router } from 'express';
 
 const router = Router();
 
 // 유저 프로필 조회
-router.get('/:userId', (req: Request, res: Response) => {
-    const { userId } = req.params;
-    res.send(`유저 프로필 조회: ${userId}`);
-});
+router.get('/profile', authenticateAccessToken, validator(AuthUserDTO), UsersController.getProfile);
 
-// 닉네임 변경
-router.put('/nickname', (req: Request, res: Response) => {
-    res.send('닉네임 변경');
-});
-
-// 휴대폰 번호 변경
-router.put('/phone', (req: Request, res: Response) => {
-    res.send('휴대폰 번호 변경');
-});
-
-// 프로필사진 변경
-router.put('/image', (req: Request, res: Response) => {
-    res.send('프로필사진 변경');
-});
+// 유저 프로필 변경
+router.put('/profile', authenticateAccessToken, validator(UserUpdateDTO), UsersController.updateProfile);
 
 export default router;

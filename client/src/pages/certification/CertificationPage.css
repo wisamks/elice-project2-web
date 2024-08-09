@@ -1,0 +1,51 @@
+.CertificationPage{
+    width: 1440px;
+    margin: 0 auto 120px auto;
+}
+
+.certification-list-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.certification-list-top .btn-go-create a{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.certification-list-top2{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.certification-list-top2 .certification-list-total .total-num{
+    margin-left: 4px;
+}
+
+.certification-list-top2 .certification-list-sort .active{
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    border-bottom: 1px solid #ccc;
+}
+
+.certification-list-list ul{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px 24px;
+}
+
+.certification-list-list li{
+    width: 342px;
+    cursor: pointer;
+}

@@ -7,5 +7,7 @@ export const signOutController = async (apiClient) => {
         withCredentials: true,
     });
 
-    return response;
-}
+    const isLoggedOut = response.status === 204;
+
+    return { data: isLoggedOut};
+};

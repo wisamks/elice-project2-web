@@ -8,6 +8,4 @@ const setToken = (userId: number, isRefresh = false) => {
     return jwtToken;
 }
 
-export {
-    setToken,
-};
+export default setToken;

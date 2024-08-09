@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import PostForm from '../../components/board/PostForm';
 import RecentPosts from '../../components/post/RecentPosts';
 
@@ -9,14 +7,14 @@ import { postExchangePost } from '../../controllers/exchangePostController';
 import './BoardStyle.css'
 
 const CreatePost = () => {
-    const navigate = useNavigate();
-
-    const onSubmit = async (formData) => {
-        const res = await apiService((apiClient) => postExchangePost(apiClient, formData));
-
-        if(res.status === 201){
-            const { postId } = res.data;
-            window.location.href=`/board/view/${postId}`;
+    const onSubmit = async (data) => {
+        const res = await apiService(postExchangePost, data);
+        if (res) {
+            const { postId } = res;
+            window.location.href = `/board/view/${postId}`;
+        } else {
+            console.error('Failed to create post');
+            // 추가적인 에러 처리 로직 작성 여기에서 작성
         }
     };
 
