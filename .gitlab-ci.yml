@@ -21,6 +21,7 @@ build:
   script:
     - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && git pull https://oauth2:$GITLAB_TOKEN@kdt-gitlab.elice.io/ai_track/class_11/data_project/team01/earthcloset.git dev"
     - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml build"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "docker system prune -af --volumes"
   tags:
     - web
   only:
@@ -29,8 +30,17 @@ build:
 deploy:
   stage: deploy
   script:
-    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml down"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml pull"
     - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml up -d"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "docker-compose -f docker-compose.prod.yml ps"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "docker-compose -f docker-compose.prod.yml logs --tail=20"
+    - |
+      if ! sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml ps | grep -q 'Up'"; then
+        echo "Deployment failed. Rolling back..."
+        sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml down"
+        sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml up -d --force-recreate"
+        exit 1
+      fi
   tags:
     - web
   only:
