@@ -1,6 +1,6 @@
 import { baseURI } from '../../controllers/baseURI';
 import { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useLocation } from 'react-router-dom';
 import CertificationListCard from '../../components/certification/CertificationListCard';
 import CertificationModal from '../../components/certification/CertificationModal';
 import BoardListPagination from '../../components/board/list/BoardListPagination';
@@ -16,12 +16,19 @@ const CertificationPage = () => {
   const postsPerPage = 20; 
   const categoryId = 2;
   const page = parseInt(searchParams.get('page')) || 1;
+  const modalPostId = searchParams.get('modalPostId');
 
   useEffect(() => {
     if (!searchParams.has('page')) {
       setSearchParams({ page: '1' });
     }
   }, [searchParams, setSearchParams]);
+
+  useEffect(() => {
+    if (modalPostId) {
+      handleOpenModal(modalPostId);
+    }
+  }, [modalPostId]);
 
   const fetchPosts = async (page) => {
     try {

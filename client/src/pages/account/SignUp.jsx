@@ -69,6 +69,7 @@ const SignUp = () => {
                     credentials: "include"
                 });
                 if (res.ok) {
+                    alert('환영합니다! 로그인 후 사용해주세요!');
                     navigate('/sign-in');
                 } else {
                     console.error('Signup failed:', res.status);

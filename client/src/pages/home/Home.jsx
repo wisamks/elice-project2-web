@@ -1,5 +1,6 @@
 import { baseURI } from '../../controllers/baseURI';
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import BarChart from '../../components/chart/BarChart';
 
 import './Home.css';
@@ -140,26 +141,34 @@ const Home = () => {
                 <div className="posts">
                     {postsExchange.map((post) => (
                         <div key={post.postId} className="post">
-                            <div className="post-thumbnail imgFrame">
-                                <img src={post.thumbnail?.url || "/images/ico-hanger.png"} alt={post.title} className="post-image" />
-                            </div>
-                            <div className="post-details">
-                                <div className="post-status-item">
-                                    <p className={getStatusClass(post.sort, post.status)}>
-                                        {getStatusText(post.sort, post.status)}
-                                    </p>
-                                    <p className="post-item">{post.item || 'N/A'}</p>
+                            <Link to={`/board/view/${post.postId}`}>
+                                <div className="post-thumbnail imgFrame">
+                                    <img src={post.thumbnail?.url || "/images/ico-hanger.png"} alt={post.title} className="post-image" />
                                 </div>
-                                <h3 className="post-title">{post.title}</h3>
-                                <p className="post-price">{formatPrice(post.price)}</p>
-                                <div className="post-profile">
-                                    <p className="post-profile-img imgFrame"><img src={post.userImage} alt="프로필사진" className="post-user" /></p>
-                                    <p className="post-author">{post.nickname}</p>
+                                <div className="post-details">
+                                    <div className="post-status-item">
+                                        <p className={getStatusClass(post.sort, post.status)}>
+                                            {getStatusText(post.sort, post.status)}
+                                        </p>
+                                        <p className="post-item">{post.item || 'N/A'}</p>
+                                    </div>
+                                    <h3 className="post-title">{post.title}</h3>
+                                    <p className="post-price">{formatPrice(post.price)}</p>
+                                    <div className="post-profile">
+                                        <p className="post-profile-img imgFrame"><img src={post.userImage} alt="프로필사진" className="post-user" /></p>
+                                        <p className="post-author">{post.nickname}</p>
+                                    </div>
+                                    {post.badge && <span className="badge">{post.badge}</span>}
                                 </div>
-                                {post.badge && <span className="badge">{post.badge}</span>}
-                            </div>
+                            </Link>
                         </div>
                     ))}
+                </div>
+                <div className="more">
+                    <Link to="/board?page=1">
+                        더보기
+                        <img src='/images/arr-next.png' alt='더보기' />
+                    </Link>
                 </div>
             </div>
             <div className="Home-main03">
@@ -201,7 +210,7 @@ const Home = () => {
                     </div>
                     <p className="text2">
                         출처 :  <br />
-                        <a href="https://www.daenews.co.kr/20763" target="_blank">동아경제 기사 발췌</a><br/>
+                        <a href="https://www.daenews.co.kr/20763" target="_blank">동아경제 기사 발췌</a><br />
                         스타티스타
                     </p>
                 </div>
@@ -219,10 +228,19 @@ const Home = () => {
                 <div className="posts">
                     {postsCertification.map((post) => (
                         <div key={post.postId} className="post-certification imgFrame">
-                            <img src={post.thumbnail?.url} alt={`Certification Post ${post.postId}`} className="post-certification-image" />
-                            {/* 인증 게시판의 경우 추가 정보가 필요하다면 여기에 추가 */}
+                            <Link
+                                to={`/certification?modalPostId=${post.postId}`}
+                            >
+                                <img src={post.thumbnail?.url} alt={`Certification Post ${post.postId}`} className="post-certification-image" />
+                            </Link>
                         </div>
                     ))}
+                </div>
+                <div className="more">
+                    <Link to="/certification?page=1">
+                        더보기
+                        <img src='/images/arr-next.png' alt='더보기' />
+                    </Link>
                 </div>
             </div>
         </div>

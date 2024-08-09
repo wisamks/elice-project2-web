@@ -26,8 +26,13 @@
 }
 
 .nav-item a {
-    color: black;
+    color: #333;
     font-size: 18px;
+    font-weight: 700;
+}
+
+.nav-item a:hover{
+    color: var(--primary-color);
 }
 
 .header-right {

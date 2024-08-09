@@ -6,7 +6,7 @@ import ViewCommentCard from './ViewCommentCard';
 import { fetchComments, createComment } from './comment';
 import './ViewComment.css';
 
-const ViewComment = ({postId}) => {
+const ViewComment = ({ postId }) => {
   const [page, setPage] = useState(1);
   const [perPage] = useState(10);
 
@@ -62,7 +62,7 @@ const ViewComment = ({postId}) => {
     try {
       await createComment(postId, newComment, isSecret);
       setNewComment('');
-      setIsSecret(false); 
+      setIsSecret(false);
       setIsCheckboxActive(false);
       await loadComments();
     } catch (error) {
@@ -111,6 +111,14 @@ const ViewComment = ({postId}) => {
             </li>
           ))}
         </ul>
+      </div>
+      <div className='row4'>
+        {/* <BoardListPagination
+          total={totalItems}
+          page={page}
+          perPage={perPage}
+          handlePageChange={handlePageChange}
+        /> */}
       </div>
     </div>
   );

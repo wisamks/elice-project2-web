@@ -7,16 +7,12 @@
 
 .Home-main01{
     position: relative;
-    overflow: hidden;
 }
 
-.Home-main01 .image{
-    width: 1440px;
-    margin: 0 auto;
-}
-
-.Home-main01 .image p{
-    margin-left: -240px;
+.Home-main01 .image img{
+    width: 100%;
+    height: 800px;
+    object-fit: cover;
 }
 
 .Home-main01 .text{
@@ -50,6 +46,7 @@
 
 
 .Home-main02, .Home-main04 {
+    position: relative;
     width: 1440px; 
     margin: 0 auto;
 }
@@ -71,6 +68,11 @@
 .Home-main02 .post {
     cursor: pointer;
     transition: transform 0.2s ease;
+}
+
+
+.Home-main02 .post a{
+    color: #222;
 }
 
 .Home-main02 .post:hover {
@@ -139,6 +141,26 @@
     border-radius: 12px;
     font-size: 12px;
     margin-top: 5px;
+}
+
+.Home-main02 .more, .Home-main04 .more{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.Home-main02 .more a, .Home-main04 .more a{
+    display: flex;
+    align-items: center;
+    color: #888;
+}
+
+.Home-main02 .more:hover, .Home-main04 .more:hover{
+    border-bottom: 1px solid #aaa;
+}
+
+.Home-main02 .more a img, .Home-main04 .more a img{
+    margin-left: 4px;
 }
 
 .Home-main03{

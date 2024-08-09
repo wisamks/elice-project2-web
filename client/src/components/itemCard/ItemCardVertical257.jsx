@@ -1,11 +1,13 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import LikeBtn from "../buttons/LikeBtn";
 import { formatDateToString } from "../../utils";
 
 import './ItemCardVertical257.css';
 
-const ItemCardVertical257 = ({item}) => {
-    
+const ItemCardVertical257 = ({ item }) => {
+    const [isImgError, setIsImgError] = useState(false);
+
     const getStatusClass = (sort, status) => {
         if (sort === '나눔') {
             if (status === '진행') return 'item-status item-status-free-ing';
@@ -36,17 +38,24 @@ const ItemCardVertical257 = ({item}) => {
     const setStatusText = getStatusText(item.sort, item.status);
     const defaultThumbnail = "/images/ico-hanger.png";
     const thumbnailUrl = item.thumbnail.url || defaultThumbnail;
-    const imgFrameClass = `imgFrame item-photo ${!item.thumbnail.url ? 'default' : ''}`;
+    const imgFrameClass = `imgFrame item-photo ${!item.thumbnail.url || isImgError ? 'default' : ''}`;
 
     return (
         <div className="ItemCardVertical257">
             <Link to={`/board/view/${item.postId}`}>
                 <p className={imgFrameClass}>
-                    <img src={thumbnailUrl} alt="" />
+                    <img
+                        src={thumbnailUrl}
+                        onError={(e) => {
+                            e.target.src = defaultThumbnail;
+                            setIsImgError(true);
+                          }}
+                        alt=""
+                    />
                 </p>
                 <div className="item-status-cate">
-                <p className={setStatusClass}>{setStatusText}</p>
-                <p className="item-cate">{item.item}</p>
+                    <p className={setStatusClass}>{setStatusText}</p>
+                    <p className="item-cate">{item.item}</p>
                 </div>
                 <p className="item-name">{item.title}</p>
                 <p className="item-price"><span>{Number(item.price).toLocaleString()}</span>원</p>
