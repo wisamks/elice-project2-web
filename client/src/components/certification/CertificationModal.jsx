@@ -286,7 +286,7 @@ const formatDate = (createdAt) => {
 
   const date = new Date(createdAt);
   const now = new Date();
-  const diffInSeconds = Math.floor((now - date) / 1000);
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
   if (diffInSeconds < 60) {
       return `${diffInSeconds}초 전`;
