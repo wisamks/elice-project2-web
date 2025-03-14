@@ -10,7 +10,7 @@ const ItemCardVertical205 = ({
     return (
         <div className="ItemCardVertical205">
             <Link to={linkURL}>
-                <p className="item-photo"><img src={itemPhotoSrc} alt={itemName} /></p>
+                <p className="item-photo imgFrame"><img src={itemPhotoSrc} alt={itemName} /></p>
                 <p className="item-name">{itemName}</p>
             </Link>
         </div>

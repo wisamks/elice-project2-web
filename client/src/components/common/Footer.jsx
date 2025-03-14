@@ -13,7 +13,7 @@ const Footer = () => {
                         <li><Link to="#">의류수거함 인증</Link></li>
                         <li><Link to="#">리폼정보</Link></li>
                         <li><Link to="#">공지사항</Link></li>
-                        <li><Link to="#">제휴문의</Link></li>
+                        <li><a href='#'>제휴문의</a></li>
                     </ul>
                 </div>
                 <div className="f-corp-info">

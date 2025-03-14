@@ -1,13 +1,16 @@
 import jwt from 'jsonwebtoken';
-import {Response} from 'express';
+import { Response } from 'express';
 
 import { setToken } from '@_utils';
 import UserModel from '@_models/userModel';
 import { ForbiddenError, InternalServerError } from '@_/utils/customError';
-import { SnsCode } from '@_/customTypes/userType';
+import { JoinUser, SnsCode } from '@_/customTypes/userType';
 import { jwtRefreshTokenSecret } from '@_config';
 import TokenModel from '@_models/tokenModel';
 import AxiosModel from '@_/models/axiosModel';
+import FavoriteModel from '@_/models/favoriteModel';
+import CommentModel from '@_/models/commentModel';
+import PostModel from '@_/models/postModel';
 
 // authService를 모아두는 클래스
 class AuthService {
@@ -15,9 +18,9 @@ class AuthService {
     static async getUserFromSns (code: string, sns_code: string) {
         try {
             let user: any;
-            if (sns_code === 'google') {
+            if (sns_code === SnsCode.google) {
                 user = AxiosModel.getProfileGoogle(code);
-            } else if (sns_code === 'naver') {
+            } else if (sns_code === SnsCode.naver) {
                 user = AxiosModel.getProfileNaver(code);
             }
             return user;
@@ -29,8 +32,8 @@ class AuthService {
         }
     }
     // 유저 생성
-    static async createUser (nickname: string, name: string, email: string, snsCode: SnsCode, image?: string) {
-        const createdUser = await UserModel.initiateUserFromOauth({nickname, name, email, image, snsCode});
+    static async createUser (joinUser: JoinUser) {
+        const createdUser = await UserModel.initiateUserFromOauth(joinUser);
         if (!createdUser) {
             throw new InternalServerError('유저를 생성하는 데 실패했습니다.');
         }
@@ -52,6 +55,19 @@ class AuthService {
         await UserModel.softDelete(userId);
         return;
     }
+    static async deleteFavorites (userId: number) {
+        await FavoriteModel.deleteByUserId(userId);
+        return;
+    }
+    static async deletePosts (userId: number) {
+        await PostModel.deleteByUserId(userId);
+        return;
+    }
+    static async deleteComments (userId: number) {
+        await CommentModel.deleteByUserId(userId);
+        return;
+    }
+
     // refresh 유효성 검증
     static async validateRefresh (refreshToken: string) {
         try {

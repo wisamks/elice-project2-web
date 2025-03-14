@@ -1,0 +1,35 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile.prod
+    volumes:
+      - client_build:/app/build
+    command: sh -c "npm run build && tail -f /dev/null"
+
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile.prod
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - prod.env
+    ports:
+      - "8080:8080"
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+      - client_build:/usr/share/nginx/html
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - client
+      - server
+
+volumes:
+  client_build:

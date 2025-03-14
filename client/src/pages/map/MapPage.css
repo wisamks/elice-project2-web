@@ -1,0 +1,43 @@
+.MapPage .page-title{
+    width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.MapPage .map-top{
+    display: flex;
+    align-items: center;
+
+    width: 1440px;
+    margin: 0 auto 20px auto;
+}
+
+.MapPage .map-top h2{
+    margin-right: 20px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.MapPage .map-top ul{
+    display: flex;
+    gap: 4px;
+}
+
+.MapPage .map-top li button{
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.MapPage .map-top li button.active{
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.MapPage #map{
+    width: 100%;
+    height: calc(100vh - 513px);
+    min-height: 600px;
+}

@@ -1,0 +1,50 @@
+.CertificationForm{
+    width: 1440px;
+    margin: 0 auto 120px auto;
+}
+
+.certification-form-wrap{
+    display: flex;
+    gap: 48px;
+
+    width: 1184px;
+    margin: 0 auto;
+}
+
+.certification-form-wrap .input-image-file{
+    width: 580px;
+    height: 680px;
+}
+
+.certification-form-wrap .input-image-file .img-view{
+    height: 680px;
+}
+
+.certification-form-wrap .form-right{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 24px;
+
+    width: 580px;
+}
+
+.certification-form-wrap .input-content-box textarea{
+    width: 530px;
+    height: 546px;
+    padding: 24px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.certification-form-wrap .btn-box{
+    display: flex;
+    gap: 8px;
+}
+
+.certification-form-wrap .btn-box p{
+    width: 286px;
+    height: 60px;
+    font-size: 18px;
+    font-weight: 600;
+}

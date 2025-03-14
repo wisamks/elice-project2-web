@@ -2,6 +2,9 @@ import PostDb from "@_models/postDb";
 
 class PhotoModel extends PostDb {  
     public static async createPhotos(postId: number, images: Array<string>) {
+        if (images.every(image => image.length === 0) || !images) {
+            return;
+        }
         const qs = new Array(images.length).fill('(?, ?)').join(', ');
         const sql = `INSERT INTO photo(post_id, url) VALUES ${qs}`;
         const data = images.reduce((arr, image): any => [...arr, postId, image], []);
@@ -9,12 +12,16 @@ class PhotoModel extends PostDb {
         return result;
     }
 
-    public static async deleteAllPhotos(postId: number) {
+    public static async deleteByPostId(postId: number) {
         const sql = `UPDATE photo SET deleted_at = CURRENT_TIMESTAMP WHERE post_id = ? AND deleted_at IS NULL`;
         const data = [postId];
         const result = await this.update(sql, data);
-        console.log(result);
         return;
+    }
+
+    public static async deleteByUserId(userId: number) {
+        const sql = `UPDATE photo SET deleted_at = CURRENT_TIMESTAMP WHERE user_id = ? AND deleted_at IS NULL`;
+        return await this.update(sql, [userId]);
     }
 
     public static async deletePhoto(photoId: number) {
@@ -23,15 +30,29 @@ class PhotoModel extends PostDb {
         return result;
     }
 
-    public static async getPhotosByPostId(postId: number) {
+    public static async getPhotosByPostId(postId: number, count?: number) {
         const sql = `SELECT * FROM photo WHERE post_id = ? AND deleted_at IS NULL`;
-        const result = await this.findMany(sql, [postId]);
+        const addSql = count ? ` LIMIT ?` : '';
+        const data = count ? [postId, count] : [postId];
+        const result = await this.findMany(sql + addSql, data);
         return result;
     }
 
     public static async getPhotoById(photoId: number) {
         const sql = `SELECT * FROM photo WHERE id = ? AND deleted_at IS NULL`;
         const result = await this.findOne(sql, [photoId]);
+        return result;
+    }
+
+    public static async getPhotosCount(postId: number) {
+        const sql = `SELECT COUNT(id) AS count FROM photo WHERE post_id = ? AND deleted_at IS NULL`;
+        const result = await this.findOne(sql, [postId]);
+        return result;
+    }
+
+    public static async getMainPhotoByPostId(postId: number) {
+        const sql = `SELECT * FROM photo WHERE post_id = ? AND is_main = TRUE AND deleted_at IS NULL`;
+        const result = await this.findOne(sql, [postId]);
         return result;
     }
 

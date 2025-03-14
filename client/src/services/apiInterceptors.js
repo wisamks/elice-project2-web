@@ -1,13 +1,8 @@
 import axios from "axios";
 import { baseURI } from "../controllers/baseURI";
+import apiClient from "./apiClient";
 
-const apiInterceptors = axios.create({
-    baseURL: baseURI,
-    headers:{
-        'Content-Type' : 'application/json',
-    },
-    withCredentials: true,
-});
+const apiInterceptors = apiClient;
 
 apiInterceptors.interceptors.request.use(
     (config) => {
@@ -28,7 +23,7 @@ apiInterceptors.interceptors.response.use(
             const status = error.response.status;
 
             if(status === 401){
-                if(requestPath.includes('auth/refresh')){
+                if(requestPath.includes('/api/auth/refresh')){
                     console.log('Refresh token is invalid. Redirecting to login...');
                     window.location.href = '/sign-in';
                 } else {
@@ -55,7 +50,7 @@ apiInterceptors.interceptors.response.use(
 
 async function handleTokenRefresh() {
     try {
-        const path = baseURI + '/auth/refresh';
+        const path = baseURI + '/api/auth/refresh';
         const response = await apiInterceptors.post(path);
         return response.data.token;
     } catch (error) {

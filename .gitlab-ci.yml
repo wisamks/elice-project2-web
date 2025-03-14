@@ -1,0 +1,40 @@
+image: node:20.14.0
+
+stages:
+  - build
+  - deploy
+
+variables:
+  SSH_USER: $SSH_USER
+  SSH_HOST: $SSH_HOST
+  SSH_PASSWORD: $SSH_PASSWORD
+  DEPLOY_PATH: "/path/to/your/project"
+
+before_script:
+  - 'apt-get update -qq && apt-get install -qq -y sshpass'
+  - 'mkdir -p ~/.ssh'
+  - 'echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - 'chmod 700 ~/.ssh && chmod 600 ~/.ssh/config'
+
+build:
+  stage: build
+  script:
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && git pull https://oauth2:$GITLAB_TOKEN@kdt-gitlab.elice.io/ai_track/class_11/data_project/team01/earthcloset.git dev"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml build"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "docker system prune -af --volumes"
+  tags:
+    - web
+  only:
+    - dev
+
+deploy:
+  stage: deploy
+  script:
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml pull"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml down"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml up -d"
+    - sshpass -p $SSH_PASSWORD ssh $SSH_USER@$SSH_HOST "cd $DEPLOY_PATH && docker-compose -f docker-compose.prod.yml ps"
+  tags:
+    - web
+  only:
+    - dev
